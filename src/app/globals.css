@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Variables CSS – Palette officielle CEQ ─────────────────────── */
+:root {
+  --ceq-dark:     #222F30;
+  --ceq-slate:    #434F66;
+  --ceq-cyan:     #63E3E5;
+  --ceq-cyan-dk:  #3ABFC1;
+  --ceq-ice:      #F3FAFF;
+  --ceq-ice-dk:   #E2F2FA;
+  --ceq-sci:      #1A5F7A;
+  --ceq-soc:      #2E8B57;
+  --ceq-env:      #0D7377;
+  --ceq-pol:      #5B4B8A;
+  --shadow-card:  0 4px 20px rgba(34,47,48,0.10);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--ceq-dark);
+  background: var(--ceq-ice);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--ceq-ice); }
+::-webkit-scrollbar-thumb { background: var(--ceq-cyan-dk); border-radius: 3px; }
+
+/* ── Composants ─────────────────────────────────────────────────── */
+@layer components {
+  .btn-primary {
+    @apply bg-ceq-dark hover:bg-ceq-slate text-white font-semibold px-6 py-3 rounded-xl
+           transition-all duration-200 shadow-ceq-sm active:scale-95
+           focus:outline-none focus:ring-2 focus:ring-ceq-cyan focus:ring-offset-2;
+  }
+  .btn-cyan {
+    @apply bg-ceq-cyan hover:bg-ceq-cyanDark text-ceq-dark font-semibold px-6 py-3 rounded-xl
+           transition-all duration-200 shadow-ceq-sm active:scale-95
+           focus:outline-none focus:ring-2 focus:ring-ceq-cyan focus:ring-offset-2;
+  }
+  .btn-ghost {
+    @apply border-2 border-ceq-dark text-ceq-dark font-semibold px-6 py-3 rounded-xl
+           hover:bg-ceq-ice transition-all duration-200 active:scale-95;
+  }
+  .card {
+    @apply bg-white rounded-2xl shadow-ceq-md border border-ceq-iceDark;
+  }
+  .card-hover {
+    @apply card hover:shadow-ceq-lg hover:-translate-y-0.5 transition-all duration-300;
+  }
+  .input-ceq {
+    @apply w-full px-4 py-3 rounded-xl border-2 border-ceq-iceDark bg-white text-ceq-dark
+           placeholder-ceq-slate/40 focus:border-ceq-cyan focus:ring-2 focus:ring-ceq-cyan/20
+           outline-none transition-all duration-200;
+  }
+  .label-ceq { @apply block text-sm font-semibold text-ceq-dark mb-1.5; }
+  .badge { @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold; }
+  .section-title { @apply font-display text-xl font-bold text-ceq-dark; }
+  .progress-bar { @apply h-2 rounded-full bg-ceq-iceDark overflow-hidden; }
+  .progress-fill { @apply h-full rounded-full bg-gradient-to-r from-ceq-cyan to-ceq-cyanDark transition-all duration-700; }
+  /* Likert */
+  .likert-btn {
+    @apply flex-1 min-w-[52px] py-2.5 px-1 rounded-xl text-xs font-semibold border-2
+           transition-all duration-150 text-center cursor-pointer;
+  }
+  .likert-btn.active { @apply bg-ceq-dark border-ceq-dark text-white shadow-ceq-sm; }
+  .likert-btn:not(.active) { @apply border-ceq-iceDark text-ceq-slate bg-white hover:border-ceq-cyan hover:text-ceq-dark; }
+  /* Tabs */
+  .tab-btn { @apply flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 whitespace-nowrap cursor-pointer; }
+  .tab-btn.active { @apply bg-ceq-dark text-white shadow-ceq-sm; }
+  .tab-btn:not(.active) { @apply text-ceq-slate hover:bg-ceq-iceDark hover:text-ceq-dark; }
+  /* Confidence */
+  .conf-high { @apply text-ceq-confHigh; }
+  .conf-med  { @apply text-ceq-confMed; }
+  .conf-low  { @apply text-ceq-confLow; }
+}
+
+/* ── Slider ─────────────────────────────────────────────────────── */
+input[type="range"] {
+  -webkit-appearance: none; appearance: none;
+  height: 6px; border-radius: 3px;
+  background: var(--ceq-ice-dk); outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 20px; height: 20px;
+  border-radius: 50%; background: var(--ceq-cyan-dk);
+  cursor: pointer; box-shadow: 0 2px 8px rgba(99,227,229,0.4); transition: transform .15s;
+}
+input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+/* ── Animations ─────────────────────────────────────────────────── */
+.animate-fade-up { animation: fadeUp 0.5s ease-out both; }
+.animate-fade-in { animation: fadeIn 0.35s ease-out both; }
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+/* ── Header gradient ────────────────────────────────────────────── */
+.ceq-header-bg {
+  background: linear-gradient(135deg, #222F30 0%, #2D3F41 60%, #1a4a4c 100%);
+}
+.water-hero-bg {
+  background: linear-gradient(135deg, #222F30 0%, #434F66 50%, #63E3E5 100%);
+}
+
+/* ── Print ──────────────────────────────────────────────────────── */
+@media print {
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+  body { background: white; font-size: 11px; }
+  .card { box-shadow: none !important; border: 1px solid #ddd !important; }
+  @page { margin: 1.5cm; }
+}
