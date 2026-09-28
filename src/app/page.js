@@ -289,12 +289,16 @@ export default function Home() {
       </main>
 
       <footer className="no-print mt-8 border-t border-ceq-iceDark py-5 text-center text-xs text-ceq-slate">
-        <div>© {new Date().getFullYear()} Collectif Eau Québec / G3E-EWAG · SPE-Eau V5 · MCDA · SROI · TEEB</div>
-        <div className="mt-1">
-          <a href="https://www.g3e-ewag.ca/collectif-eau-quebec/" target="_blank" rel="noopener noreferrer"
-            className="text-ceq-cyan hover:underline">g3e-ewag.ca/collectif-eau-quebec</a>
-        </div>
-      </footer>
-    </div>
+  <div>
+    © {new Date().getFullYear()} Collectif Eau Québec / G3E-EWAG 
+    {lang === 'fr' ? ' Tous droits réservés' : ' All rights reserved'}
+  </div>
+  <div className="mt-1">
+    <a href="https://www.g3e-ewag.ca/collectif-eau-quebec/" target="_blank" rel="noopener noreferrer"
+      className="text-ceq-cyan hover:underline">
+      {lang === 'fr' ? 'Visiter g3e-ewag.ca/collectif-eau-quebec' : 'Visit g3e-ewag.ca/collectif-eau-quebec'}
+    </a>
+  </div>
+</footer>
   )
 }
