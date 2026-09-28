@@ -35,7 +35,7 @@ const Dashboard       = dynamic(() => import('@/components/dashboard/Dashboard')
 const RapportPrint    = dynamic(() => import('@/components/report/RapportPrint'),   { ssr:false })
 const ReseauProvincial= dynamic(() => import('@/components/ReseauProvincial'),      { ssr:false })
 
-// ── ✅ SOURCE UNIQUE DE VÉRITÉ — aucun calcul ici ──────────────────
+// ── SOURCE UNIQUE DE VÉRITÉ — aucun calcul ici ──────────────────
 import { calculerAssessment } from '@/lib/calculations/index'
 import { completionParSection } from '@/lib/validation/assessmentSchema'
 
@@ -61,25 +61,23 @@ const ETAT_INITIAL = {
 // ── Labels traduits ────────────────────────────────────────────────
 const TR = {
   fr:{
-    titre:"Calculateur de valeur SPE-Eau V5",
-    sousTitre:"Évaluez la valeur économique, scientifique, sociale, environnementale et politique de votre projet de science participative de l'eau.",
+    titre:"CALCULATEUR DE VALEUR",
+    sousTitre:"Évaluez les valeurs dimensionnelles de vos projets de sciences participatives de l'eau",
     precedent:'Précédent', suivant:'Suivant',
     calculer:'Calculer la valeur', reset:'Recommencer',
     imprimer:'Imprimer / PDF', etape:'Étape',
     collectif:'Collectif Eau Québec',
     science:"Science participative de l'eau",
-    methodologie:'Méthodologie V5 : MCDA 25/25/25/25 · SROI · TEEB · Confiance',
     confirm:'Voulez-vous vraiment effacer toutes les données saisies ?',
   },
   en:{
-    titre:"SPE-Water Value Calculator V5",
-    sousTitre:"Evaluate the economic, scientific, social, environmental and political value of your participatory water science project.",
+    titre:"VALUE CALCULATOR",
+    sousTitre:"Evaluate the dimensional values of your participatory water science projects.",
     precedent:'Previous', suivant:'Next',
     calculer:'Calculate Value', reset:'Reset',
     imprimer:'Print / PDF', etape:'Step',
     collectif:'Collectif Eau Québec',
     science:'Participatory water science',
-    methodologie:'V5 Methodology: MCDA 25/25/25/25 · SROI · TEEB · Confidence',
     confirm:'Do you really want to erase all entered data?',
   }
 }
