@@ -1,8 +1,8 @@
 {
-  "name": "valeurs-spe-eau-v5",
+  "name": "CALCULATEUR DE VALEUR",
   "version": "5.0.0",
   "private": true,
-  "description": "Calculateur de valeur SPE-Eau V5 — Collectif Eau Québec / G3E-EWAG",
+  "description": "Calculateur de valeur des projets de sciences participatives de l'eau — Collectif Eau Québec / G3E-EWAG",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

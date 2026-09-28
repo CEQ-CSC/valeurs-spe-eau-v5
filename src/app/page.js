@@ -2,7 +2,24 @@
 import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import dynamic from 'next/dynamic'
-import { ChevronRight, ChevronLeft, Printer, RotateCcw, Globe } from 'lucide-react'
+import { 
+  ChevronRight, 
+  ChevronLeft, 
+  Printer, 
+  RotateCcw, 
+  Globe, 
+  Droplets, 
+  DollarSign, 
+  Microscope, 
+  Users, 
+  Leaf, 
+  Building2, 
+  ClipboardList, 
+  BarChart3, 
+  FileText, 
+  Network, 
+  Sparkles 
+} from 'lucide-react'
 
 // ── Importations des étapes (architecture V5 unifiée) ──────────────
 import StepInfo           from '@/components/assessment/StepInfo'
@@ -24,16 +41,16 @@ import { completionParSection } from '@/lib/validation/assessmentSchema'
 
 // ── Constantes ─────────────────────────────────────────────────────
 const ETAPES = [
-  { id:'info',            icon:'💧', fr:'Identification',       en:'Project Info' },
-  { id:'investissement',  icon:'💰', fr:'Investissements',      en:'Investment' },
-  { id:'scientifique',    icon:'🔬', fr:'Scientifique',         en:'Scientific' },
-  { id:'sociale',         icon:'🤝', fr:'Sociale',              en:'Social' },
-  { id:'environnementale',icon:'🌿', fr:'Environnementale',     en:'Environmental' },
-  { id:'politique',       icon:'🏛️', fr:'Politique',            en:'Political' },
-  { id:'preuves',         icon:'📋', fr:'Preuves',              en:'Evidence' },
-  { id:'resultats',       icon:'📊', fr:'Résultats',            en:'Results' },
-  { id:'rapport',         icon:'📄', fr:'Rapport',              en:'Report' },
-  { id:'reseau',          icon:'🌐', fr:'Réseau provincial',    en:'Provincial Network' },
+  { id:'info',           icon: Droplets,        fr:'Identification',       en:'Project Info' },
+  { id:'investissement',   icon: DollarSign,      fr:'Investissements',      en:'Investment' },
+  { id:'scientifique',     icon: Microscope,      fr:'Scientifique',         en:'Scientific' },
+  { id:'sociale',          icon: Users,           fr:'Sociale',              en:'Social' },
+  { id:'environnementale', icon: Leaf,            fr:'Environnementale',     en:'Environmental' },
+  { id:'politique',        icon: Building2,       fr:'Politique',            en:'Political' },
+  { id:'preuves',          icon: ClipboardList,   fr:'Preuves',              en:'Evidence' },
+  { id:'resultats',        icon: BarChart3,       fr:'Résultats',            en:'Results' },
+  { id:'rapport',          icon: FileText,        fr:'Rapport',              en:'Report' },
+  { id:'reseau',           icon: Network,         fr:'Réseau provincial',    en:'Provincial Network' },
 ]
 
 const ETAT_INITIAL = {
@@ -105,18 +122,18 @@ function Header({ lang, onToggle }) {
 
 // ── Stepper ────────────────────────────────────────────────────────
 function Stepper({ etapeId, onGo, completion, lang }) {
-  const idx = ETAPES.findIndex(e=>e.id===etapeId)
   return (
     <div className="flex gap-1 overflow-x-auto pb-1 no-print">
-      {ETAPES.map((e,i)=>{
+      {ETAPES.map((e)=>{
         const pct = completion[e.id]??0
         const isActive = e.id===etapeId
         const isDone   = pct>=80
+        const IconComponent = e.icon
         return (
           <button key={e.id} onClick={()=>onGo(e.id)}
             className={`flex flex-col items-center flex-1 min-w-[52px] p-1.5 rounded-xl transition-all duration-200 cursor-pointer
               ${isActive?'bg-ceq-dark text-white shadow-ceq-md':isDone?'bg-green-100 text-green-800 hover:bg-green-200':'bg-white text-ceq-slate hover:bg-ceq-iceDark'}`}>
-            <span className="text-base leading-none mb-0.5">{e.icon}</span>
+            <IconComponent size={18} className="mb-0.5" />
             <span className="text-[9px] font-semibold text-center leading-tight hidden sm:block">
               {lang==='fr'?e.fr:e.en}
             </span>
@@ -179,14 +196,15 @@ export default function Home() {
     if (prev) { setEtapeId(prev.id); window.scrollTo({top:0,behavior:'smooth'}) }
   }
 
-  const isFormStep = idxActif < 7  // steps 0-6 = form, 7+=results
+  const isLastFormStep = etapeId==='preuves'
+  const showPrint = etapeId==='rapport'
 
   // ── Rendu de l'étape ────────────────────────────────────────────
   const renderStep = () => {
     const d = formData
     const fn = (sec) => makeUpdater(sec)
     switch(etapeId) {
-      case 'info':            return <StepInfo data={d.info||{}} onChange={fn('info')} lang={lang} lang={lang}/>
+      case 'info':            return <StepInfo data={d.info||{}} onChange={fn('info')} lang={lang}/>
       case 'investissement':  return <StepInvestissement data={d.investissement||{}} onChange={fn('investissement')} lang={lang}/>
       case 'scientifique':    return <StepScientifique data={d.scientifique||{}} onChange={fn('scientifique')} lang={lang}/>
       case 'sociale':         return <StepSociale data={d.sociale||{}} onChange={fn('sociale')} lang={lang}/>
@@ -201,8 +219,7 @@ export default function Home() {
   }
 
   const titreEtape = ETAPES[idxActif]
-  const isLastFormStep = etapeId==='preuves'
-  const showPrint = etapeId==='rapport'
+  const CurrentIcon = titreEtape?.icon
 
   return (
     <div className="min-h-screen bg-ceq-ice">
@@ -217,7 +234,7 @@ export default function Home() {
         {/* Barre de progression */}
         <div className="flex items-center justify-between text-xs font-semibold text-ceq-slate bg-white px-4 py-2 rounded-xl border border-ceq-iceDark mb-5 shadow-ceq-sm">
           <span className="flex items-center gap-2">
-            <span className="text-base">{titreEtape?.icon}</span>
+            {CurrentIcon && <CurrentIcon size={18} className="text-ceq-cyanDark" />}
             {lang==='fr'?titreEtape?.fr:titreEtape?.en}
             <span className="text-ceq-slate/50">({tr.etape} {idxActif+1}/{ETAPES.length})</span>
           </span>
@@ -256,7 +273,7 @@ export default function Home() {
             {isLastFormStep ? (
               <button onClick={calculer}
                 className="btn-cyan flex items-center gap-2 text-sm px-5 py-2.5 cursor-pointer">
-                ✨ {tr.calculer} <ChevronRight size={17}/>
+                <Sparkles size={16} /> {tr.calculer} <ChevronRight size={17}/>
               </button>
             ) : idxActif < ETAPES.length-1 && !['resultats','rapport','reseau'].includes(etapeId) ? (
               <button onClick={goNext}
