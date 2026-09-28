@@ -30,8 +30,9 @@ module.exports = {
         },
       },
       fontFamily: {
-        display: ['"Raleway"', '"Owners Narrow"', 'sans-serif'],
-        body:    ['"Inter"', '"Format DJR Deck"', 'system-ui', 'sans-serif'],
+        // On configure Montserrat pour tous les rôles typographiques
+        display: ['"Montserrat"', 'sans-serif'],
+        body:    ['"Montserrat"', 'sans-serif'],
         mono:    ['"JetBrains Mono"', 'Consolas', 'monospace'],
       },
       boxShadow: {

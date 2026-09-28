@@ -6,7 +6,7 @@ export default function StepInvestissement({ data, onChange, lang }) {
   return (
     <div className="space-y-4">
       <div className="bg-ceq-ice border border-ceq-iceDark rounded-xl p-4 text-sm text-ceq-slate mb-2">
-        💡 {t?'Ces données serviront à calculer votre ratio SROI. Incluez toutes les sources : subventions, contributions en nature, temps du personnel, dons.':'This data will calculate your SROI ratio. Include all sources: grants, in-kind contributions, staff time, donations.'}
+        {t?'Ces données serviront à calculer votre retour social sur investissement (SROI). Incluez toutes les sources : subventions, contributions en nature, temps du personnel, dons.':'This data will calculate your social return of investiment (SROI). Include all sources: grants, in-kind contributions, staff time, donations.'}
       </div>
       <div className="grid grid-cols-2 gap-4">
         {[
@@ -37,7 +37,7 @@ export default function StepInvestissement({ data, onChange, lang }) {
         </div>
       </div>
       <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800">
-        <strong>SROI :</strong> {t?'Un ratio de 3:1 signifie que chaque $ investi génère 3 $ de valeur sociale estimée. La moyenne pour la SPE se situe entre 2,5 et 8.':'A ratio of 3:1 means every $1 invested generates $3 of estimated social value. The average for citizen science is 2.5–8.'}
+        <strong>SROI :</strong> {t?'Un SROI de 3:1 signifie que chaque $ investi génère 3 $ de valeur sociale estimée. La moyenne pour la SPE se situe entre 2,5 et 8.':'A SROI of 3:1 means every $1 invested generates $3 of estimated social value. The average for citizen science is 2.5–8.'}
       </div>
     </div>
   );

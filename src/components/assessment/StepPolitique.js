@@ -44,9 +44,9 @@ export default function StepPolitique({ data, onChange, lang }) {
         label={t?'Visibilité publique et médiatique':'Public and media visibility'} lang={lang} />
       <LikertScale name="mobilisationReseau" value={data.mobilisationReseau} onChange={onChange} options={opts}
         label={t?'Connexion et contribution au réseau de science participative':'Connection and contribution to the participatory science network'}
-        aide={t?'Facteur de diffusion et de mutualisation — n\'augmente pas le score intrinsèque':'Diffusion and pooling factor — does not increase intrinsic score'} lang={lang} />
+        aide={t?'Facteur de diffusion et de mutualisation (n\'augmente pas le score intrinsèque)':'Diffusion and pooling factor (does not increase intrinsic score)'} lang={lang} />
       <div className="border-t border-ceq-iceDark pt-4 mt-2">
-        <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">📊 {t?'Données quantitatives':'Quantitative Data'}</p>
+        <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">{t?'Données quantitatives':'Quantitative Data'}</p>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="label-ceq">{t?'Décisions institutionnelles influencées':'Institutional decisions influenced'}</label>
@@ -56,7 +56,7 @@ export default function StepPolitique({ data, onChange, lang }) {
             <input type="checkbox" id="membreCEQ" checked={!!data.membreCEQ} onChange={e=>onChange('membreCEQ',e.target.checked)} className="mt-1 w-5 h-5 accent-ceq-cyan rounded cursor-pointer" />
             <label htmlFor="membreCEQ" className="text-sm font-semibold text-ceq-dark cursor-pointer leading-tight">
               {t?'Membre du Collectif Eau Québec':'Member of Collectif Eau Québec'}
-              <span className="block text-xs text-ceq-slate font-normal mt-0.5">{t?'(facteur de diffusion — non inclus dans le score)':'(diffusion factor — not included in score)'}</span>
+              <span className="block text-xs text-ceq-slate font-normal mt-0.5">{t?'(facteur de diffusion (pas pris en compte dans le score)':'(diffusion factor (not included in score)'}</span>
             </label>
           </div>
         </div>

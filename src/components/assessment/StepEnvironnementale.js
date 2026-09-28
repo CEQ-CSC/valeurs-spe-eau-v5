@@ -5,15 +5,21 @@ import { useState } from 'react'
 const TYPES_RISQUES = {
   fr: [
     { v:'contamination_eau_potable', l:'Contamination eau potable' },
-    { v:'proliferation_algues',      l:'Prolifération de cyanobactéries' },
-    { v:'deversement_accidentel',    l:'Déversement accidentel' },
-    { v:'fermeture_plage',           l:'Fermeture de plage' },
+    { v:'proliferation_algues',       l:'Prolifération de cyanobactéries' },
+    { v:'deversement_accidentel',     l:'Déversement accidentel' },
+    { v:'fermeture_plage',            l:'Fermeture de plage' },
+    { v:'effondrement_espece',           l:'Effondrement d\'une espèce' },
+    { v:'invasion_espece',            l:'Invasion par une espèce' },
+    { v:'erosion_berges',             l:'Érosion des berges' },
   ],
   en: [
     { v:'contamination_eau_potable', l:'Drinking water contamination' },
-    { v:'proliferation_algues',      l:'Cyanobacteria bloom' },
-    { v:'deversement_accidentel',    l:'Accidental spill' },
-    { v:'fermeture_plage',           l:'Beach closure' },
+    { v:'proliferation_algues',       l:'Cyanobacteria bloom' },
+    { v:'deversement_accidentel',     l:'Accidental spill' },
+    { v:'fermeture_plage',            l:'Beach closure' },
+    { v:'effondrement_espece',           l:'Species collapse' },
+    { v:'invasion_espece',            l:'Species invasion' },
+    { v:'erosion_berges',             l:'Riverbank erosion' },
   ]
 };
 
@@ -44,7 +50,7 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
         label={t?'Contribution aux Plans directeurs de l\'eau (PDE) des OBV':'Contribution to watershed master plans (OBV)'} lang={lang} />
 
       <div className="border-t border-ceq-iceDark pt-4 mt-2">
-        <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">📊 {t?'Données quantitatives':'Quantitative Data'}</p>
+        <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">{t?'Données quantitatives':'Quantitative Data'}</p>
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div>
             <label className="label-ceq">{t?'Milieux humides surveillés (ha)':'Monitored wetlands (ha)'}</label>
@@ -56,18 +62,18 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
           </div>
         </div>
         <div className="mb-4">
-          <label className="label-ceq">{t?'Niveau de preuve — valeur écosystémique':'Evidence level — ecosystem value'}</label>
-          <p className="text-xs text-ceq-slate mb-2 italic">{t?'Ajuste la valeur estimée (mesure = 100%, inconnu = 20%)':'Adjusts estimated value (measured = 100%, unknown = 20%)'}</p>
+          <label className="label-ceq">{t?'Valeur écosystémique':'Ecosystem value'}</label>
+          <p className="text-xs text-ceq-slate mb-2 italic">{t?'Ajuste la valeur estimée (mesurée = 100%, inconnue = 20%)':'Adjusts estimated value (measured = 100%, unknown = 20%)'}</p>
           <select value={data.preuveEcosystemique||'declare'} onChange={e=>onChange('preuveEcosystemique',e.target.value)} className={inp+" cursor-pointer"}>
-            {(t?[['mesure','Mesurée — instruments calibrés'],['documente','Documentée — rapport ou archive'],['verifie','Estimée / vérifiée par un tiers'],['declare','Déclarative — sans documentation'],['inconnu','Non renseignée / inconnue']]:
-            [['mesure','Measured — calibrated instruments'],['documente','Documented — report or archive'],['verifie','Estimated / third-party verified'],['declare','Self-reported — no documentation'],['inconnu','Not specified / unknown']])
+            {(t?[['mesure','Mesurée (instruments calibrés)'],['documente','Documentée (rapport ou archive)'],['verifie','Estimée ou vérifiée par un tiers'],['declare','Déclarative (sans documentation)'],['inconnu','Non renseignée ou inconnue']]:
+            [['mesure','Measured (calibrated instruments)'],['documente','Documented (report or archive)'],['verifie','Estimated or third-party verified'],['declare','Self-reported (no documentation)'],['inconnu','Not specified or unknown']])
             .map(([v,l])=><option key={v} value={v}>{l}</option>)}
           </select>
         </div>
         {/* Risques probabilistes */}
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs font-bold text-amber-800">{t?'Coûts évités — modèle probabiliste':'Avoided costs — probabilistic model'}</p>
+            <p className="text-xs font-bold text-amber-800">{t?'Coûts évités':'Avoided costs'}</p>
             <button type="button" onClick={addRisque} className="text-xs bg-ceq-dark text-white px-3 py-1.5 rounded-lg hover:bg-ceq-slate transition-all">
               + {t?'Ajouter un risque':'Add risk'}
             </button>

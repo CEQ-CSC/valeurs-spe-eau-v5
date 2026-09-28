@@ -20,9 +20,9 @@ export default function StepScientifique({ data, onChange, lang }) {
         label={t?'Processus de contrôle qualité et validation des données':'Quality control and data validation process'}
         aide={t?'Double-saisie, vérification experte, comparaison données de référence':'Double entry, expert verification, reference data comparison'} lang={lang} />
       <LikertScale name="integrationBases" value={data.integrationBases} onChange={onChange} options={opts}
-        label={t?'Intégration dans des bases de données publiques (GBIF, DataStream, etc.)':'Integration in public databases (GBIF, DataStream, etc.)'} lang={lang} />
+        label={t?'Intégration dans des bases de données publiques (Données Québec, DataStream, etc.)':'Integration in public databases (Données Québec, DataStream, etc.)'} lang={lang} />
       <div className="border-t border-ceq-iceDark pt-4 mt-2">
-        <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">📊 {t?'Données quantitatives':'Quantitative Data'}</p>
+        <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">{t?'Données quantitatives':'Quantitative Data'}</p>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="label-ceq">{t?'Sites de surveillance actifs':'Active monitoring sites'}</label>
@@ -48,9 +48,9 @@ export default function StepScientifique({ data, onChange, lang }) {
         <div className="mt-4">
           <label className="label-ceq">{t?'Complexité des observations (pour calcul de valeur)':'Observation complexity (for value calculation)'}</label>
           <select value={data.complexiteEchantillons||'simple'} onChange={e=>onChange('complexiteEchantillons',e.target.value)} className={inp+" cursor-pointer"}>
-            <option value="simple">{t?'Simple — physico-chimie de base (35 $/obs.)':'Simple — basic physico-chemistry ($35/obs.)'}</option>
-            <option value="intermediaire">{t?'Intermédiaire — multiparamétrique (75 $/obs.)':'Intermediate — multi-parameter ($75/obs.)'}</option>
-            <option value="avancee">{t?'Avancée — analyses laboratoire complètes (185 $/obs.)':'Advanced — complete lab analysis ($185/obs.)'}</option>
+            <option value="simple">{t?'Simple (physico-chimie de base ≈ 35 $/obs.)':'Simple (basic physico-chemistry ≈$35/obs.)'}</option>
+            <option value="intermediaire">{t?'Intermédiaire (multiparamétrique ≈75 $/obs.)':'Intermediate (multi-parameter ≈$75/obs.)'}</option>
+            <option value="avancee">{t?'Avancée (analyses laboratoire complètes ≈185 $/obs.)':'Advanced (complete lab analysis ≈$185/obs.)'}</option>
           </select>
         </div>
       </div>

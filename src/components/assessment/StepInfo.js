@@ -4,22 +4,24 @@ const TYPES = {
   fr:[
     {v:'qualite_eau',   l:'Qualité de l\'eau'},
     {v:'biodiversite',  l:'Biodiversité aquatique'},
-    {v:'quantite',      l:'Quantité / débit hydrologique'},
+    {v:'quantite',      l:'Hydrologique (quantié, débit, etc.)'},
     {v:'sediments',     l:'Sédiments et turbidité'},
+    {v:'ecologique',     l:'Écosystèmes aquatiques'},
     {v:'mixte',         l:'Mixte / multiparamétrique'},
   ],
   en:[
     {v:'qualite_eau',   l:'Water Quality'},
     {v:'biodiversite',  l:'Aquatic Biodiversity'},
-    {v:'quantite',      l:'Quantity / Hydrological Flow'},
+    {v:'quantite',      l:'Hydrological Flow'},
     {v:'sediments',     l:'Sediments and Turbidity'},
+    {v:'ecology',     l:'Aquatic Ecosystems'},
     {v:'mixte',         l:'Mixed / Multi-parameter'},
   ]
 }
 
 const MATURITE = {
-  fr:[{v:'demarrage',l:'Démarrage (< 1 an)'},{v:'emergent',l:'Émergent (1–3 ans)'},{v:'actif',l:'Actif (3–7 ans)'},{v:'etabli',l:'Établi (7+ ans)'}],
-  en:[{v:'demarrage',l:'Starting (< 1 yr)'},{v:'emergent',l:'Emerging (1–3 yrs)'},{v:'actif',l:'Active (3–7 yrs)'},{v:'etabli',l:'Established (7+ yrs)'}],
+  fr:[{v:'demarrage',l:'Démarrage (< 1 an)'},{v:'emergent',l:'Émergent (1–3 ans)'},{v:'actif',l:'Actif (3–7 ans)'},{v:'etabli',l:'Établi (7+ ans)'}, {v:'cloture',l:'Terminé (projet clôturé)'}],
+  en:[{v:'demarrage',l:'Starting (< 1 yr)'},{v:'emergent',l:'Emerging (1–3 yrs)'},{v:'actif',l:'Active (3–7 yrs)'},{v:'etabli',l:'Established (7+ yrs)'}, {v:'close',l:'Closed (project closed)'}],
 }
 
 export default function StepInfo({ data, onChange, lang }) {
@@ -36,7 +38,7 @@ export default function StepInfo({ data, onChange, lang }) {
           className={inp}/>
       </div>
       <div>
-        <label className={lbl}>{t?'Organisation porteur':'Lead Organization'}</label>
+        <label className={lbl}>{t?'Organisation hôte ':'Host Organization'}</label>
         <input type="text" value={data.organisation||''} onChange={e=>onChange('organisation',e.target.value)}
           placeholder={t?"Ex: Groupe Environnement Beauport":"Ex: Beauport Environment Group"}
           className={inp}/>

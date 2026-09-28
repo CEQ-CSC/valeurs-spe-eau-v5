@@ -20,11 +20,11 @@ export default function StepPreuves({ data, onChange, lang }) {
             <label className="label-ceq">{label}</label>
             <select value={data[name]||''} onChange={e=>onChange(name,e.target.value)} className="input-ceq cursor-pointer">
               <option value="">{t?'— Non évalué —':'— Not assessed —'}</option>
-              <option value="mesure">{t?'✅ Mesuré — données instrumentées et calibrées':'✅ Measured — instrumented and calibrated data'}</option>
-              <option value="documente">{t?'📄 Documenté — rapport ou archive disponible':'📄 Documented — report or archive available'}</option>
-              <option value="verifie">{t?'🔍 Estimé / vérifié par un tiers':'🔍 Estimated / third-party verified'}</option>
-              <option value="declare">{t?'📝 Déclaratif — estimé sans documentation':'📝 Self-reported — estimated without documentation'}</option>
-              <option value="inconnu">{t?'❓ Non renseigné / inconnu':'❓ Not specified / unknown'}</option>
+              <option value="mesure">{t?'Mesuré — données instrumentées et calibrées':'Measured — instrumented and calibrated data'}</option>
+              <option value="documente">{t?'Documenté — rapport ou archive disponible':'Documented — report or archive available'}</option>
+              <option value="verifie">{t?'Estimé / vérifié par un tiers':'Estimated / third-party verified'}</option>
+              <option value="declare">{t?'Déclaratif — estimé sans documentation':'Self-reported — estimated without documentation'}</option>
+              <option value="inconnu">{t?'Non renseigné / inconnu':'Not specified / unknown'}</option>
             </select>
           </div>
         ))}
