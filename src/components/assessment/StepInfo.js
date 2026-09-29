@@ -34,7 +34,7 @@ export default function StepInfo({ data, onChange, lang }) {
       <div>
         <label className={lbl}>{t?'Nom du projet *':'Project Name *'}</label>
         <input type="text" value={data.nomProjet||''} onChange={e=>onChange('nomProjet',e.target.value)}
-          placeholder={t?"Ex: Surveillance de la rivière Beauport":"Ex: Beauport River Monitoring"}
+          placeholder={t?"Ex: Surveillance de la rivière Rimouski":"Ex: Rimouski River Monitoring"}
           className={inp}/>
       </div>
       <div>
