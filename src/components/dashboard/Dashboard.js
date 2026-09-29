@@ -157,7 +157,7 @@ export default function Dashboard({ resultats, lang='fr' }) {
       )}
       <div className="bg-ceq-ice border border-ceq-iceDark rounded-xl p-3 flex gap-2 text-xs text-ceq-slate">
         <Info className="w-4 h-4 shrink-0 mt-0.5"/>
-        <span><strong>V5 :</strong> MCDA 25/25/25/25 · SROI NPC UK · TEEB Canada 2021 · Collectif Eau Québec</span>
+        <span><strong>V5 :</strong> </span>
       </div>
     </div>
   );
