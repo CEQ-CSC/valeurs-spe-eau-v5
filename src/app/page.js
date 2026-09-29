@@ -101,7 +101,6 @@ function Header({ lang, onToggle }) {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="hidden sm:block text-[10px] text-white/40 italic">{tr.methodologie}</span>
           <button onClick={onToggle}
             className="flex items-center gap-1.5 bg-white/15 hover:bg-white/25 text-white px-3 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer">
             <Globe size={14}/>
