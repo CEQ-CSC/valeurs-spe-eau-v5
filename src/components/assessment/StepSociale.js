@@ -44,7 +44,7 @@ export default function StepSociale({ data, onChange, lang }) {
             <label className="label-ceq text-xs">{t?'Formation':'Training'}</label>
             <input type="number" min="0" value={data.heuresFormation??''} placeholder="0" onChange={e=>onChange('heuresFormation',e.target.value)} className={inp+" text-sm"} />
             <p className="text-[11px] text-ceq-slate/70 mt-1 leading-tight">
-              {t?'Heures consacrées à apprendre les protocoles et se former.':'Hours spent learning protocols and training.'}
+              {t?'Heures consacrées à développer, former et apprendre les protocoles.':'Hours spent, to design and implement learning protocols and training.'}
             </p>
           </div>
           <div>
