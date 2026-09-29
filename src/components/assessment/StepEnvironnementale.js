@@ -47,7 +47,7 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
       <LikertScale name="servicesEco" value={data.servicesEco} onChange={onChange} options={opts}
         label={t?'Documentation des services écosystémiques (épuration, régulation, biodiversité)':'Ecosystem services documentation (purification, regulation, biodiversity)'} lang={lang} />
       <LikertScale name="contributionPDE" value={data.contributionPDE} onChange={onChange} options={opts}
-        label={t?'Contribution aux Plans directeurs de l\'eau (PDE) des OBV':'Contribution to watershed master plans (OBV)'} lang={lang} />
+        label={t?'Contribution aux Plans directeurs de l\'eau (PDE)':'Contribution to watershed master plans (OBV)'} lang={lang} />
 
       <div className="border-t border-ceq-iceDark pt-4 mt-2">
         <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">{t?'Données quantitatives':'Quantitative Data'}</p>
