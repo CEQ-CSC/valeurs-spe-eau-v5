@@ -290,7 +290,7 @@ export default function Home() {
 
       <footer className="no-print mt-8 border-t border-ceq-iceDark py-5 text-center text-xs text-ceq-slate">
   <div>
-    © {new Date().getFullYear()} Collectif Eau Québec / G3E-EWAG 
+    © {new Date().getFullYear()} Collectif Eau Québec / Québec Water Collective
     {lang === 'fr' ? ' Tous droits réservés' : ' All rights reserved'}
   </div>
   <div className="mt-1">
