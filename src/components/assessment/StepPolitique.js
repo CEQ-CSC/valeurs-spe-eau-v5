@@ -24,7 +24,7 @@ export default function StepPolitique({ data, onChange, lang }) {
     <div className="space-y-1">
       <div className="bg-ceq-ice border border-ceq-iceDark rounded-xl p-4 text-xs text-ceq-slate mb-4">
         <strong>{t?'Échelle d\'influence :':'Influence scale:'}</strong>{' '}
-        {t?'Information → Consultation → Recommandation → Décision → Changement de politique. Un seul article médiatique et une décision municipale sont de natures très différentes.':'Information → Consultation → Recommendation → Decision → Policy change. A single media article and a municipal decision are very different in nature.'}
+        {t?'Information → Consultation → Recommandation → Décision → Changement de politique.':'Information → Consultation → Recommendation → Decision → Policy change.'}
       </div>
       <div className="mb-6">
         <label className="label-ceq">
