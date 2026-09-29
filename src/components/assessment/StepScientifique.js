@@ -20,7 +20,7 @@ export default function StepScientifique({ data, onChange, lang }) {
         label={t?'Processus de contrôle qualité et validation des données':'Quality control and data validation process'}
         aide={t?'Double-saisie, vérification experte, comparaison données de référence':'Double entry, expert verification, reference data comparison'} lang={lang} />
       <LikertScale name="integrationBases" value={data.integrationBases} onChange={onChange} options={opts}
-        label={t?'Intégration dans des bases de données publiques (Données Québec, DataStream, etc.)':'Integration in public databases (Données Québec, DataStream, etc.)'} lang={lang} />
+        label={t?'Intégration dans des bases de données publiques (Données Québec, DataStream, Water Rangers, etc.)':'Integration in public databases (Données Québec, DataStream, Water Rangers, etc.)'} lang={lang} />
       <div className="border-t border-ceq-iceDark pt-4 mt-2">
         <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">{t?'Données quantitatives':'Quantitative Data'}</p>
         <div className="grid grid-cols-2 gap-4">
