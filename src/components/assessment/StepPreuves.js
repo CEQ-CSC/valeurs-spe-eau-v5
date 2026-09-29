@@ -31,7 +31,7 @@ export default function StepPreuves({ data, onChange, lang }) {
       </div>
       <div className="bg-ceq-ice border border-ceq-iceDark rounded-xl p-4 text-xs text-ceq-slate">
         <strong>{t?'Note :':'Note:'}</strong>{' '}
-        {t?'Le niveau de confiance n\'est pas une sanction — c\'est une information. Un projet débutant avec des données déclaratives est tout aussi légitime qu\'un projet établi avec des données mesurées. La transparence renforce la crédibilité.':'The confidence level is not a penalty — it\'s information. A starting project with self-reported data is just as legitimate as an established project with measured data. Transparency strengthens credibility.'}
+        {t?'Le niveau de confiance ici est à titre informatif et non sanctionnel. Un projet débutant avec des données déclaratives est tout aussi légitime qu\'un projet établi avec des données mesurées. La transparence renforce la crédibilité.':'The confidence level is just for information not for penalty. A starting project with self-reported data is just as legitimate as an established project with measured data. Transparency strengthens credibility.'}
       </div>
     </div>
   );
