@@ -6,7 +6,7 @@ export default function StepInvestissement({ data, onChange, lang }) {
   return (
     <div className="space-y-4">
       <div className="bg-ceq-ice border border-ceq-iceDark rounded-xl p-4 text-sm text-ceq-slate mb-2">
-        {t?'Ces données serviront à calculer votre retour social sur investissement (SROI). Incluez toutes les sources : subventions, contributions en nature, temps du personnel, dons.':'This data will calculate your social return of investiment (SROI). Include all sources: grants, in-kind contributions, staff time, donations.'}
+        {t?'Veuillez inclure l'ensemble des ressources mobilisées, incluant les subventions, les contributions en nature, le temps alloué par le personnel ainsi que les dons car ils seront pris en compte dans le calcul du retour social sur investissement (SROI) de votre projet.':'Please include all resources mobilized, including grants, in-kind contributions, staff time, and donations, as they will be taken into account when calculating your project’s social return on investment (SROI).'}
       </div>
       <div className="grid grid-cols-2 gap-4">
         {[
