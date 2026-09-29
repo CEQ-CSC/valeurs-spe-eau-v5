@@ -298,7 +298,7 @@ export default function Home() {
       {lang === 'fr' ? 'Visiter g3e-ewag.ca/collectif-eau-quebec' : 'Visit g3e-ewag.ca/collectif-eau-quebec'}
     </a>
   </div>
-</footer>)
+</footer>
     </div>
   )
 }
