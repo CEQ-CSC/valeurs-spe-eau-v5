@@ -1,4 +1,5 @@
 'use client'
+import Image from 'next/image'
 import { formatMontant } from '@/lib/calculations/index'
 
 export default function RapportPrint({ resultats, lang = 'fr' }) {
@@ -50,9 +51,14 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
               </h1>
               {info?.organisation && <p className="text-white/70 text-sm mt-1 print:text-gray-600">{info.organisation}</p>}
             </div>
-            <div className="text-right text-xs text-white/60 shrink-0 print:text-gray-500">
-              <div className="font-display text-lg font-bold text-ceq-cyan print:text-blue-600">CEQ</div>
-              <div>Collectif Eau Québec</div>
+            <div className="flex flex-col items-end text-right text-xs text-white/60 shrink-0 print:text-gray-500">
+              <Image
+                src="/logo-ceq.png"
+                alt="Collectif Eau Québec / Québec Water Collective"
+                width={200}
+                height={120}
+                className="w-36 h-auto rounded-lg bg-white p-1 mb-2"
+              />
               <div className="mt-1">{dateStr}</div>
               {version && <div className="mt-1">V{version}</div>}
             </div>
