@@ -197,3 +197,21 @@ export const NIVEAUX_PREUVE = {
   declare:     { score: 0.45, label_fr: 'Déclaratif',               label_en: 'Self-reported' },
   inconnu:     { score: 0.20, label_fr: 'Non renseigné / inconnu',  label_en: 'Not specified' },
 };
+// src/data/referenceCosts.js
+
+export const EPISTEMOLOGIE = {
+  version: '5.0'
+  cadreTheorique: 'MCDA + SROI + éléments PathOS (DOI: 10.5281/zenodo.14651106)',
+  distinction: {
+    ceQueNousMesurons: 'uptake — mobilisation des ressources de SPE-Eau par les acteurs',
+    ceQueNousMesuronsNePAS: 'effet causal démontré de la SPE-Eau sur les enjeux environnementaux',
+    reference: 'PathOS Indicator Handbook, section Societal Impact, Venturini 2024',
+  },
+  niveauxDePreuve: {
+    mesure:       { label: 'Mesurée',        score: 1.0, couleur: '#2E8B57' },
+    documentee:   { label: 'Documentée',     score: 0.8, couleur: '#1B4F8A' },
+    estimee:      { label: 'Estimée',        score: 0.5, couleur: '#F5A623' },
+    declarative:  { label: 'Déclarative',    score: 0.3, couleur: '#8A9BB0' },
+    inconnue:     { label: 'Non renseignée', score: 0.0, couleur: '#D6E4F7' },
+  },
+}
