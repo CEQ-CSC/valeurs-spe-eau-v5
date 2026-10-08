@@ -147,6 +147,8 @@ function Stepper({ etapeId, onGo, completion, lang }) {
 
 // ── Page principale ─────────────────────────────────────────────────
 export default function Home() {
+  const inp = "ceq-input w-full text-sm"
+  const fi = (name) => (e) => setFormData(prev=>({...prev,[name]:e.target.value}))
   const [lang,    setLang]    = useState('fr')
   const [etapeId, setEtapeId] = useState('info')
   const [formData,setFormData]= useState(ETAT_INITIAL)
