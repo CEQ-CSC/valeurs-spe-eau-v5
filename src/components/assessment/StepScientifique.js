@@ -40,29 +40,20 @@ export default function StepScientifique({ data, onChange, lang }) {
             <label className="label-ceq">{t?'Publications / rapports scientifiques':'Scientific publications / reports'}</label>
             <input type="number" min="0" value={data.nbPublications??''} placeholder="0" onChange={e=>onChange('nbPublications',e.target.value)} className={inp} />
           </div>
-          // Après le champ nbPublications existant, ajouter :
-
-<div>
-  <label className="ceq-label flex items-center">
-    {lang === 'fr' ? 'Téléchargements / réutilisations des données' : 'Data downloads / reuses'}
-    <Tooltip text={lang === 'fr'
-      ? 'Nombre de fois où vos données ont été téléchargées ou réutilisées (DataStream, MELCCFP, etc.)'
-      : 'Number of times your data was downloaded or reused (DataStream, MELCCFP, etc.)'} />
-  </label>
-  <input type="number" className="ceq-input" min="0" placeholder={tr.nonRenseigne}
-    value={formData.nbTelechargements ?? ''} onChange={fi('nbTelechargements')} />
-</div>
-
-<div>
-  <label className="ceq-label flex items-center">
-    {lang === 'fr' ? 'Protocoles partagés et réutilisés par d\'autres organisations' : 'Protocols shared and reused by other organizations'}
-    <Tooltip text={lang === 'fr'
-      ? 'Nombre de protocoles que vous avez développés et que d\'autres groupes ont adoptés'
-      : 'Number of protocols you developed that other groups have adopted'} />
-  </label>
-  <input type="number" className="ceq-input" min="0" placeholder="0"
-    value={formData.nbProtocolesPartages ?? 0} onChange={fi('nbProtocolesPartages')} />
-</div>
+          <div>
+            <label className="label-ceq">
+              {t?'Téléchargements / réutilisations des données':'Data downloads / reuses'}
+            </label>
+            <input type="number" min="0" value={data.nbTelechargements??''} placeholder="0"
+              onChange={e=>onChange('nbTelechargements',e.target.value)} className={inp} />
+          </div>
+          <div>
+            <label className="label-ceq">
+              {t?'Protocoles partagés et réutilisés par d’autres organisations':'Protocols shared and reused by other organizations'}
+            </label>
+            <input type="number" min="0" value={data.nbProtocolesPartages??''} placeholder="0"
+              onChange={e=>onChange('nbProtocolesPartages',e.target.value)} className={inp} />
+          </div>
           <div>
             <label className="label-ceq">{t?'Bénévoles formés (total)':'Trained volunteers (total)'}</label>
             <input type="number" min="0" value={data.nbBenevoles??''} placeholder="0" onChange={e=>onChange('nbBenevoles',e.target.value)} className={inp} />
