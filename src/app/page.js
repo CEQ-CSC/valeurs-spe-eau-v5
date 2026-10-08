@@ -224,7 +224,7 @@ export default function Home() {
     <div className="min-h-screen bg-ceq-ice">
       <Header lang={lang} onToggle={()=>setLang(l=>l==='fr'?'en':'fr')}/>
 
-      <main className="max-w-5xl mx-auto px-4 py-6 no-print">
+      <main className="max-w-5xl mx-auto px-4 py-6">
         {/* Stepper */}
         <div className="mb-5">
           <Stepper etapeId={etapeId} onGo={setEtapeId} completion={completion} lang={lang}/>
@@ -304,4 +304,3 @@ export default function Home() {
     </div>
   )
 }
-
