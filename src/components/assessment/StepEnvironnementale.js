@@ -71,16 +71,16 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
           </select>
         </div>
         {/* Risques probabilistes */}
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+        <div className="rounded-xl border border-ceq-iceDark bg-ceq-ice p-4">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs font-bold text-amber-800">{t?'Coûts évités':'Avoided costs'}</p>
+            <p className="text-xs font-bold text-ceq-dark">{t?'Coûts évités':'Avoided costs'}</p>
             <button type="button" onClick={addRisque} className="text-xs bg-ceq-dark text-white px-3 py-1.5 rounded-lg hover:bg-ceq-slate transition-all">
               + {t?'Ajouter un risque':'Add risk'}
             </button>
           </div>
-          <p className="text-xs text-amber-700 mb-3 italic">{t?'N\'indiquez que les risques pour lesquels votre projet a joué un rôle de détection documenté.':'Only include risks for which your project has played a documented detection role.'}</p>
+          <p className="text-xs text-ceq-slate mb-3 italic">{t?'N\'indiquez que les risques pour lesquels votre projet a joué un rôle de détection documenté.':'Only include risks for which your project has played a documented detection role.'}</p>
           {risques.map((r,i)=>(
-            <div key={i} className="bg-white rounded-xl border border-amber-200 p-3 mb-2">
+            <div key={i} className="bg-white rounded-xl border border-ceq-iceDark p-3 mb-2">
               <div className="flex justify-between items-start mb-2">
                 <select value={r.type} onChange={e=>updateRisque(i,'type',e.target.value)} className="text-xs border rounded-lg px-2 py-1.5 text-ceq-dark flex-1 mr-2">
                   {TYPES_RISQUES[lang].map(opt=><option key={opt.v} value={opt.v}>{opt.l}</option>)}
