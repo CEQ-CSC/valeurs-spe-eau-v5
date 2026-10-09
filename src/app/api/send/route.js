@@ -91,6 +91,12 @@ export async function POST(req) {
       column,
       score(data.scoresParDimension?.[label] ?? data[`valeur${label}`], label),
     ]));
+    const scoresEnglish = {
+      scientific_score: scores.score_scientifique,
+      social_score: scores.score_social,
+      environmental_score: scores.score_environnemental,
+      political_score: scores.score_politique,
+    };
     const scoreGlobal = score(data.scoreGlobal, 'global');
     const valeurEconomique = amount(data.valeurEconomique ?? 0, 'économique');
     const valeurDonnees = amount(data.valeurDonnees ?? 0, 'des données');
@@ -111,6 +117,7 @@ export async function POST(req) {
         economic_value: valeurEconomique,
         data_value: valeurDonnees,
         ...scores,
+        ...scoresEnglish,
         consent: true,
         approval_token_hash: tokenHash(token),
       })
