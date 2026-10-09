@@ -5,22 +5,18 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts'
 import { 
-  Globe, ShieldCheck, Database, Landmark, HeartHandshake, 
-  Send, CheckCircle, ArrowUpRight, AlertTriangle
+  Globe, Landmark, HeartHandshake, Send, CheckCircle, ArrowUpRight, AlertTriangle
 } from 'lucide-react'
 
-// Valeurs de secours (fallback) le temps du chargement des données de l'API
-const DONNEES_PAR_DEFAUT = {
-  projetsEnregistres: 42,
-  valeurEconomiqueCumulee: 1345800,
-  coutsEvitesEstimes: 420000,
-  stationsSuivies: 185,
-  benevolesActifs: 1250,
+const DONNEES_VIDES = {
+  projetsEnregistres: 0,
+  valeurEconomiqueCumulee: 0,
+  scoreGlobalMoyen: 0,
   repartitionParDimension: [
-    { name: 'Scientifique', 'Impact Cumulé (/)': 78 },
-    { name: 'Sociale', 'Impact Cumulé (/)': 84 },
-    { name: 'Environnementale', 'Impact Cumulé (/)': 72 },
-    { name: 'Politique', 'Impact Cumulé (/)': 61 },
+    { name: 'Scientifique', 'Impact Cumulé (/)': 0 },
+    { name: 'Sociale', 'Impact Cumulé (/)': 0 },
+    { name: 'Environnementale', 'Impact Cumulé (/)': 0 },
+    { name: 'Politique', 'Impact Cumulé (/)': 0 },
   ]
 }
 
@@ -29,7 +25,8 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
   const currentYear = new Date().getFullYear()
   
   // État pour stocker les statistiques en temps réel depuis Supabase/API
-  const [statsDynamiques, setStatsDynamiques] = useState(DONNEES_PAR_DEFAUT)
+  const [statsDynamiques, setStatsDynamiques] = useState(DONNEES_VIDES)
+  const [erreurStats, setErreurStats] = useState(null)
   
   // Gestion de l'état du formulaire de contribution
   const [formSoumis, setFormSoumis] = useState(false)
@@ -42,26 +39,21 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
   })
 
   // Fonction pour récupérer les données consolidées depuis l'API /api/stats
-  const fetchStats = async () => {
-    try {
-      const response = await fetch('/api/stats')
-      const json = await response.json()
-      if (json.success && json.stats) {
-        return json.stats
-      }
-      return null
-    } catch (err) {
-      console.error("Erreur lors de la récupération des statistiques :", err)
-      return null
-    }
-  }
-
   // Charger les statistiques dès le premier rendu de la page
   useEffect(() => {
     let cancelled = false
-    fetchStats().then(stats => {
-      if (!cancelled && stats) setStatsDynamiques(stats)
-    })
+    fetch('/api/stats')
+      .then(async response => {
+        const json = await response.json()
+        if (!response.ok || !json.success || !json.stats) {
+          throw new Error(json.error || 'Les statistiques du réseau ne sont pas disponibles.')
+        }
+        if (!cancelled) setStatsDynamiques(json.stats)
+      })
+      .catch(err => {
+        console.error("Erreur lors de la récupération des statistiques :", err)
+        if (!cancelled) setErreurStats(err.message || 'Les statistiques du réseau ne sont pas disponibles.')
+      })
     return () => { cancelled = true }
   }, [])
 
@@ -82,6 +74,7 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
           organisation: resultatsCalculateur?.meta?.organisation || 'Sans organisation',
           nomPersonneRessource: formData.nomCompletRef,
           courrielContact: formData.courrielRef,
+          autorisationPartage: formData.autorisationPartage,
           scoreGlobal: resultatsCalculateur?.scoreGlobal ?? 'N/A',
           valeurEconomique: resultatsCalculateur?.valeurEconomique || 0,
           valeurScientifique: resultatsCalculateur?.scoresParDimension?.Scientifique || 0,
@@ -97,9 +90,6 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
 
       if (response.ok && result.success) {
         setFormSoumis(true)
-        // Mettre à jour immédiatement les statistiques du tableau de bord
-        const stats = await fetchStats()
-        if (stats) setStatsDynamiques(stats)
       } else {
         throw new Error(result.error || "Une erreur est survenue lors de l'envoi.")
       }
@@ -129,15 +119,22 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
           </p>
         </div>
 
+        {erreurStats && (
+          <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900" role="status">
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+            <p>Les statistiques provinciales sont temporairement indisponibles : {erreurStats}</p>
+          </div>
+        )}
+
         {/* Blocs KPI Provinciaux mis à jour en temps réel */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="bg-gradient-to-br from-ceq-dark to-ceq-slate text-white p-5 rounded-xl shadow-ceq-sm">
-            <div className="text-[11px] font-semibold text-ceq-cyan uppercase tracking-wider">Projets Actifs</div>
+            <div className="text-[11px] font-semibold text-ceq-cyan uppercase tracking-wider">Projets approuvés</div>
             <div className="text-3xl font-black mt-1 flex items-baseline gap-1">
               {statsDynamiques.projetsEnregistres}
-              <span className="text-xs font-normal text-gray-300">organisations</span>
+              <span className="text-xs font-normal text-gray-300">projets</span>
             </div>
-            <div className="text-[10px] text-white/65 mt-2">Mise à jour en temps réel</div>
+            <div className="text-[10px] text-white/65 mt-2">Contributions approuvées uniquement</div>
           </div>
 
           <div className="card p-5">
@@ -154,24 +151,12 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
 
           <div className="card p-5">
             <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-ceq-slate" /> Coûts Crises Évités
-            </div>
-            <div className="text-2xl font-bold text-emerald-600 mt-1">
-              {Number(statsDynamiques.coutsEvitesEstimes).toLocaleString('fr-CA')} $
-            </div>
-            <div className="text-[10px] text-gray-400 mt-1 italic">Grâce à la détection précoce des anomalies</div>
-          </div>
-
-          <div className="card p-5">
-            <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
-              <Database className="w-3.5 h-3.5 text-ceq-slate" /> Force Citoyenne
+              <ArrowUpRight className="w-3.5 h-3.5 text-ceq-slate" /> Indice global moyen
             </div>
             <div className="text-2xl font-bold text-ceq-dark mt-1">
-              {statsDynamiques.benevolesActifs}
+              {statsDynamiques.scoreGlobalMoyen}/100
             </div>
-            <div className="text-[10px] text-gray-400 mt-1 font-medium">
-              Gardiens de l&apos;eau sur {statsDynamiques.stationsSuivies} stations du Québec
-            </div>
+            <div className="text-[10px] text-gray-400 mt-1">Moyenne des projets approuvés</div>
           </div>
         </div>
 
@@ -222,7 +207,7 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
             <CheckCircle className="w-12 h-12 text-emerald-500 mx-auto" />
             <h4 className="font-bold text-emerald-900 font-display text-base">Projet enregistré avec succès !</h4>
             <p className="text-xs text-emerald-800 leading-relaxed">
-              Merci, <strong>{formData.nomCompletRef}</strong>. Les indicateurs du projet <strong>{resultatsCalculateur.meta?.nomProjet || 'votre projet'}</strong> ont été enregistrés et les statistiques du réseau ont été mises à jour.
+              Merci, <strong>{formData.nomCompletRef}</strong>. La demande pour le projet <strong>{resultatsCalculateur.meta?.nomProjet || 'votre projet'}</strong> a bien été reçue. Elle sera ajoutée aux statistiques provinciales après validation par l&apos;équipe du Collectif Eau Québec.
             </p>
           </div>
         ) : (

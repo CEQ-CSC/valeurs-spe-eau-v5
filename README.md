@@ -136,13 +136,21 @@ vercel --prod
 
 | Variable | Obligatoire | Description |
 |---|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Si réseau actif | URL de votre projet Supabase |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Si réseau actif | Clé publique Supabase |
-| `SUPABASE_SERVICE_ROLE_KEY` | Recommandé | Clé service Supabase (écriture) |
-| `RESEND_API_KEY` | Si notifications | Clé API Resend |
-| `NOTIFICATION_EMAIL` | Si notifications | Courriel de réception des soumissions |
+| `NEXT_PUBLIC_SUPABASE_URL` | Réseau provincial | URL de votre projet Supabase |
+| `SUPABASE_SERVICE_ROLE_KEY` | Réseau provincial | Clé service Supabase, conservée côté serveur |
+| `RESEND_API_KEY` | Contributions | Clé API Resend utilisée pour les avis de validation |
+| `NEXT_PUBLIC_SITE_URL` | Contributions | URL publique du site, sans chemin final |
+| `NOTIFICATION_EMAIL` | Facultatif | Adresse de l'équipe qui valide les demandes |
+| `RESEND_FROM_EMAIL` | Production | Adresse expéditrice vérifiée dans Resend |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Facultatif | Clé publique Supabase si elle est utilisée par d'autres fonctions client |
 
-**Sans ces variables**, l'outil fonctionne en mode local complet (calcul + rapport) — seule la soumission au réseau provincial est désactivée.
+### Validation des contributions au Réseau provincial
+
+Avant le déploiement, exécutez le script `supabase/migrations/20261009000000_create_network_submissions.sql` dans le SQL Editor de Supabase. La table créée est accessible uniquement avec la clé `SUPABASE_SERVICE_ROLE_KEY`.
+
+Une contribution autorisée est enregistrée avec le statut `pending`. Un courriel contenant un lien à usage unique permet à l'équipe d'approuver ou de refuser la demande. Seules les demandes approuvées sont ajoutées aux statistiques publiques; les contributions historiques de `projets_reseau` restent visibles. En production, configurez `RESEND_FROM_EMAIL` avec un domaine vérifié par Resend et définissez `NEXT_PUBLIC_SITE_URL` à l'adresse réelle du site.
+
+Sans les paramètres Supabase ou Resend requis, le calculateur et le rapport restent disponibles, mais les statistiques peuvent être signalées comme indisponibles et aucune nouvelle demande au réseau ne peut être transmise.
 
 ---
 

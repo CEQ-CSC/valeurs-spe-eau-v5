@@ -1,72 +1,184 @@
+import { createHash, randomBytes } from 'node:crypto';
 import { Resend } from 'resend';
 import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
+const DIMENSIONS = [
+  ['Scientifique', 'score_scientifique'],
+  ['Sociale', 'score_social'],
+  ['Environnementale', 'score_environnemental'],
+  ['Politique', 'score_politique'],
+];
+
+class InputError extends Error {}
+
+function requiredText(value, label, maxLength = 200) {
+  if (typeof value !== 'string' || !value.trim() || value.trim().length > maxLength) {
+    throw new InputError(`Le champ « ${label} » est invalide.`);
+  }
+  return value.trim();
+}
+
+function score(value, label) {
+  const numericValue = Number(value);
+  if (!Number.isFinite(numericValue) || numericValue < 0 || numericValue > 100) {
+    throw new InputError(`Le score « ${label} » doit être compris entre 0 et 100.`);
+  }
+  return numericValue;
+}
+
+function amount(value, label) {
+  const numericValue = Number(value);
+  if (!Number.isFinite(numericValue) || numericValue < 0) {
+    throw new InputError(`La valeur « ${label} » doit être un nombre positif ou nul.`);
+  }
+  return numericValue;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, character => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  })[character]);
+}
+
+function tokenHash(token) {
+  return createHash('sha256').update(token).digest('hex');
+}
 
 export async function POST(req) {
+  let supabase;
+  let submissionId;
+
   try {
     const data = await req.json();
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    const supabaseUrl  = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey  = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+      throw new InputError('Le contenu de la demande est invalide.');
+    }
+    if (data.autorisationPartage !== true) {
+      throw new InputError('Votre autorisation est requise pour transmettre ce projet.');
+    }
 
-    if (!supabaseUrl || !supabaseKey) throw new Error("Configuration Supabase manquante.");
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    if (!supabaseUrl || !serviceRoleKey) {
+      throw new Error('La configuration Supabase (URL et clé service) est manquante.');
+    }
+    if (!resendApiKey) {
+      throw new Error("La configuration RESEND_API_KEY est manquante; la demande n'a pas été enregistrée.");
+    }
+    if (!siteUrl) {
+      throw new Error("La configuration NEXT_PUBLIC_SITE_URL est manquante; la demande n'a pas été enregistrée.");
+    }
 
-    const nomProjet      = data.nomProjet      || 'Projet non nommé';
-    const organisation   = data.organisation   || 'Organisation non spécifiée';
-    const personneRef    = data.nomPersonneRessource || 'Non renseigné';
-    const courrielContact= data.courrielContact      || 'Non renseigné';
+    const nomProjet = requiredText(data.nomProjet, 'nom du projet');
+    const organisation = requiredText(data.organisation, 'organisation');
+    const personneRef = requiredText(data.nomPersonneRessource, 'personne ressource');
+    const courrielContact = requiredText(data.courrielContact, 'courriel', 254);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(courrielContact)) {
+      throw new InputError('Le courriel de contact est invalide.');
+    }
 
-    // Insertion Supabase — compatible V4 + V5
-    const { error: dbError } = await supabase.from('projets_reseau').insert([{
-      nom_projet:       nomProjet,
-      organisation:     organisation,
-      valeur_economi:   Number(data.valeurEconomique || 0),
-      valeur_scientific:Number(data.scoresParDimension?.Scientifique || data.valeurScientifique || 0),
-      valeur_sociale:   Number(data.scoresParDimension?.Sociale || data.valeurSociale || 0),
-      valeur_environn:  Number(data.scoresParDimension?.Environnementale || data.valeurEnvironnementale || 0),
-      valeur_politique: Number(data.scoresParDimension?.Politique || data.valeurPolitique || 0),
-      valeur_donnees:   Number(data.valeurDonnees || 0),
-      score_global:     Number(data.scoreGlobal || 0),
-      version_methodo:  data.version || '1.0',
-      year:             new Date().getFullYear(),
-    }]);
-    if (dbError) throw new Error("Erreur base de données : " + dbError.message);
+    const scores = Object.fromEntries(DIMENSIONS.map(([label, column]) => [
+      column,
+      score(data.scoresParDimension?.[label] ?? data[`valeur${label}`], label),
+    ]));
+    const scoreGlobal = score(data.scoreGlobal, 'global');
+    const valeurEconomique = amount(data.valeurEconomique ?? 0, 'économique');
+    const valeurDonnees = amount(data.valeurDonnees ?? 0, 'des données');
+    const token = randomBytes(32).toString('hex');
 
-    const recipientEmail = process.env.NOTIFICATION_EMAIL || 'notifications@g3e-ewag.ca';
-    const { error: emailError } = await resend.emails.send({
-      from: 'Calculateur SPE-Eau <onboarding@resend.dev>',
-      to:   [recipientEmail],
-      subject: `[CEQ] Nouvelle soumission V1.0 : ${nomProjet}`,
-      html: `
-        <div style="font-family:Arial,sans-serif;color:#222f3d;max-width:600px;margin:0 auto;border:1px solid #e1e8ed;padding:28px;border-radius:12px;">
-          <h2 style="color:#222f3d;border-bottom:2px solid #c7d8e5;padding-bottom:10px;">
-            Nouvelle soumission — Réseau Provincial SPE-Eau V1.0
-          </h2>
-          <p><strong>Projet :</strong> ${nomProjet}</p>
-          <p><strong>Organisation :</strong> ${organisation}</p>
-          <p><strong>Contact :</strong> ${personneRef} (${courrielContact})</p>
-          <hr style="border:none;border-top:1px solid #e2e8f0;margin:16px 0;"/>
-          <p><strong>Score global V1.0 :</strong> <strong>${data.scoreGlobal || 0}/100</strong></p>
-          <p><strong>Valeur économique :</strong> <span style="font-size:16px;font-weight:bold;color:#394f66;">${Number(data.valeurEconomique||0).toLocaleString('fr-CA')} $</span></p>
-          <ul style="background:#f8fafc;padding:12px 24px;border-radius:8px;font-size:14px;">
-            <li>Scientifique : ${data.scoresParDimension?.Scientifique||0}/100</li>
-            <li>Sociale : ${data.scoresParDimension?.Sociale||0}/100</li>
-            <li>Environnementale : ${data.scoresParDimension?.Environnementale||0}/100</li>
-            <li>Politique : ${data.scoresParDimension?.Politique||0}/100</li>
-          </ul>
-          <p style="font-size:11px;color:#64748b;margin-top:24px;">
-            Généré par SPE-Eau V1.0 · Collectif Eau Québec / G3E-EWAG
-          </p>
-        </div>`,
+    supabase = createClient(supabaseUrl, serviceRoleKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
     });
-    if (emailError) throw new Error("Erreur courriel : " + emailError.message);
 
-    return Response.json({ success: true });
+    const { data: inserted, error: insertError } = await supabase
+      .from('soumissions_reseau')
+      .insert({
+        project_name: nomProjet,
+        organization: organisation,
+        contact_name: personneRef,
+        contact_email: courrielContact,
+        global_score: scoreGlobal,
+        economic_value: valeurEconomique,
+        data_value: valeurDonnees,
+        ...scores,
+        consent: true,
+        approval_token_hash: tokenHash(token),
+      })
+      .select('id')
+      .single();
+
+    if (insertError) throw new Error(`Erreur base de données : ${insertError.message}`);
+    submissionId = inserted.id;
+
+    const escaped = {
+      nomProjet: escapeHtml(nomProjet),
+      organisation: escapeHtml(organisation),
+      personneRef: escapeHtml(personneRef),
+      courrielContact: escapeHtml(courrielContact),
+    };
+    const scoreRows = DIMENSIONS.map(([label, column]) =>
+      `<li>${escapeHtml(label)} : ${scores[column]}/100</li>`,
+    ).join('');
+    const approvalUrl = `${siteUrl.replace(/\/$/, '')}/validation?token=${token}`;
+
+    try {
+      const resend = new Resend(resendApiKey);
+      const { data: emailData, error: emailError } = await resend.emails.send({
+        from: process.env.RESEND_FROM_EMAIL || 'Calculateur SPE-Eau <onboarding@resend.dev>',
+        to: [process.env.NOTIFICATION_EMAIL || 'notifications@g3e-ewag.ca'],
+        subject: `[CEQ] Demande à valider — ${nomProjet}`,
+        html: `
+          <div style="font-family:Arial,sans-serif;color:#222f3d;max-width:600px;margin:0 auto;padding:28px;">
+            <h2 style="color:#222f3d;border-bottom:2px solid #c7d8e5;padding-bottom:10px;">
+              Demande de contribution au Réseau provincial
+            </h2>
+            <p>Une demande attend votre validation avant son ajout aux statistiques publiques.</p>
+            <p><strong>Projet :</strong> ${escaped.nomProjet}</p>
+            <p><strong>Organisation :</strong> ${escaped.organisation}</p>
+            <p><strong>Contact :</strong> ${escaped.personneRef} (${escaped.courrielContact})</p>
+            <p><strong>Indice global :</strong> ${scoreGlobal}/100</p>
+            <p><strong>Valeur économique :</strong> ${valeurEconomique.toLocaleString('fr-CA')} $</p>
+            <ul>${scoreRows}</ul>
+            <p>Les données ne seront agrégées au Réseau provincial qu'après approbation.</p>
+            <p><a href="${approvalUrl}" style="display:inline-block;background:#394f66;color:#fff;padding:12px 18px;text-decoration:none;border-radius:6px;">Examiner et valider la demande</a></p>
+            <p style="font-size:12px;color:#64748b;">Ce lien est à usage unique et permet d'approuver ou de refuser cette demande.</p>
+          </div>`,
+      });
+      if (emailError) throw new Error(emailError.message);
+      if (!emailData?.id) throw new Error('Le fournisseur n’a pas confirmé l’envoi du courriel.');
+    } catch (emailError) {
+      let cleanupError;
+      try {
+        const { error } = await supabase
+          .from('soumissions_reseau')
+          .delete()
+          .eq('id', submissionId);
+        cleanupError = error;
+      } catch (error) {
+        cleanupError = error;
+      }
+
+      if (cleanupError) {
+        console.error('Échec du nettoyage après erreur de notification:', cleanupError);
+        throw new Error(`La demande ${submissionId} a été enregistrée, mais le courriel de validation n'a pas pu être envoyé. Contactez l'équipe du réseau.`);
+      }
+      throw new Error(`Erreur courriel : ${emailError.message}. La demande n'a pas été enregistrée.`);
+    }
+
+    return Response.json({ success: true, status: 'pending' });
   } catch (error) {
-    console.error("Erreur API send:", error);
-    return Response.json({ success: false, error: error.message }, { status: 500 });
+    console.error('Erreur API send:', error);
+    const message = error instanceof Error ? error.message : "Une erreur inattendue est survenue.";
+    return Response.json({ success: false, error: message }, { status: error instanceof InputError ? 400 : 500 });
   }
 }
