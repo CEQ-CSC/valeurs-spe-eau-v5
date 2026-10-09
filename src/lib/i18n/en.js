@@ -3,7 +3,7 @@ const en = {
     titre:       'Participatory Water Science Value Assessment',
     sousTitre:   'Water Science',
     organisation:'Collectif Eau Québec / G3E-EWAG',
-    version:     'Version 5.0',
+    version:     'Version 1.0',
   },
   nav: {
     demarrer:    'Start Assessment',

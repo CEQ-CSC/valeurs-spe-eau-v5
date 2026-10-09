@@ -2,16 +2,16 @@ import './globals.css'
 
 export const metadata = {
   metadataBase: new URL('https://valeur-spe-eau.vercel.app'),
-  title: 'Calculateur de valeur SPE-Eau V5 | Collectif Eau Québec',
-  description: "Outil bilingue d'évaluation multidimensionnelle de la valeur des projets de science participative de l'eau — économique, scientifique, sociale, environnementale, politique. V5 — Collectif Eau Québec / G3E-EWAG.",
+  title: 'Calculateur de valeur SPE-Eau V1.0 | Collectif Eau Québec',
+  description: "Outil bilingue d'évaluation multidimensionnelle de la valeur des projets de science participative de l'eau — économique, scientifique, sociale, environnementale, politique. V1.0 — Collectif Eau Québec / G3E-EWAG.",
   keywords: 'science participative, eau, Québec, SROI, MCDA, OBV, Collectif Eau Québec, G3E-EWAG',
   authors: [{ name: 'Collectif Eau Québec / G3E-EWAG' }],
   openGraph: {
-    title: 'Calculateur de valeur SPE-Eau V5 | Collectif Eau Québec',
+    title: 'Calculateur de valeur SPE-Eau V1.0 | Collectif Eau Québec',
     description: "Évaluez la valeur multidimensionnelle de votre projet de science participative de l'eau.",
     url: 'https://valeur-spe-eau.vercel.app',
     siteName: 'Collectif Eau Québec',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Calculateur SPE-Eau CEQ V5' }],
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Calculateur SPE-Eau CEQ V1.0' }],
     locale: 'fr_CA',
     type: 'website',
   },

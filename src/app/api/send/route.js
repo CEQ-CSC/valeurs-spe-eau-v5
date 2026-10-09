@@ -30,7 +30,7 @@ export async function POST(req) {
       valeur_politique: Number(data.scoresParDimension?.Politique || data.valeurPolitique || 0),
       valeur_donnees:   Number(data.valeurDonnees || 0),
       score_global:     Number(data.scoreGlobal || 0),
-      version_methodo:  data.version || '5.0',
+      version_methodo:  data.version || '1.0',
       year:             new Date().getFullYear(),
     }]);
     if (dbError) throw new Error("Erreur base de données : " + dbError.message);
@@ -39,17 +39,17 @@ export async function POST(req) {
     const { error: emailError } = await resend.emails.send({
       from: 'Calculateur SPE-Eau <onboarding@resend.dev>',
       to:   [recipientEmail],
-      subject: `[CEQ] Nouvelle soumission V5 : ${nomProjet}`,
+      subject: `[CEQ] Nouvelle soumission V1.0 : ${nomProjet}`,
       html: `
         <div style="font-family:Arial,sans-serif;color:#222f3d;max-width:600px;margin:0 auto;border:1px solid #e1e8ed;padding:28px;border-radius:12px;">
           <h2 style="color:#222f3d;border-bottom:2px solid #c7d8e5;padding-bottom:10px;">
-            Nouvelle soumission — Réseau Provincial SPE-Eau V5
+            Nouvelle soumission — Réseau Provincial SPE-Eau V1.0
           </h2>
           <p><strong>Projet :</strong> ${nomProjet}</p>
           <p><strong>Organisation :</strong> ${organisation}</p>
           <p><strong>Contact :</strong> ${personneRef} (${courrielContact})</p>
           <hr style="border:none;border-top:1px solid #e2e8f0;margin:16px 0;"/>
-          <p><strong>Score global V5 :</strong> <strong>${data.scoreGlobal || 0}/100</strong></p>
+          <p><strong>Score global V1.0 :</strong> <strong>${data.scoreGlobal || 0}/100</strong></p>
           <p><strong>Valeur économique :</strong> <span style="font-size:16px;font-weight:bold;color:#394f66;">${Number(data.valeurEconomique||0).toLocaleString('fr-CA')} $</span></p>
           <ul style="background:#f8fafc;padding:12px 24px;border-radius:8px;font-size:14px;">
             <li>Scientifique : ${data.scoresParDimension?.Scientifique||0}/100</li>
@@ -58,7 +58,7 @@ export async function POST(req) {
             <li>Politique : ${data.scoresParDimension?.Politique||0}/100</li>
           </ul>
           <p style="font-size:11px;color:#64748b;margin-top:24px;">
-            Généré par SPE-Eau V5 · Collectif Eau Québec / G3E-EWAG
+            Généré par SPE-Eau V1.0 · Collectif Eau Québec / G3E-EWAG
           </p>
         </div>`,
     });

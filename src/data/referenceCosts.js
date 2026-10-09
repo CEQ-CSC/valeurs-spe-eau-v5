@@ -13,7 +13,7 @@
  * ═══════════════════════════════════════════════════════════════════
  */
 
-export const METHODOLOGIE_VERSION = '5.0';
+export const METHODOLOGIE_VERSION = '1.0';
 export const METHODOLOGIE_DATE    = '2025-01';
 export const MONNAIE              = 'CAD';
 export const ANNEE_REFERENCE      = 2024;
@@ -200,7 +200,7 @@ export const NIVEAUX_PREUVE = {
 // src/data/referenceCosts.js
 
 export const EPISTEMOLOGIE = {
-  version: '5.0',
+  version: '1.0',
   cadreTheorique: 'MCDA + SROI + éléments PathOS (DOI: 10.5281/zenodo.14651106)',
   distinction: {
     ceQueNousMesurons: 'uptake — mobilisation des ressources de SPE-Eau par les acteurs',

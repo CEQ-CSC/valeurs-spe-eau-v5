@@ -11,7 +11,7 @@
  * ═══════════════════════════════════════════════════════════
  */
 
-export const METHODOLOGIE_VERSION = '5.0';
+export const METHODOLOGIE_VERSION = '1.0';
 export const ANNEE_REFERENCE = 2024;
 
 // ── Pondérations MCDA (équipondérées) ──────────────────────────────

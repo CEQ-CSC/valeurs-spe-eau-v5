@@ -4,7 +4,7 @@ const fr = {
     titre:       'Évaluation de la valeur SPE',
     sousTitre:   'Science participative de l\'eau',
     organisation:'Collectif Eau Québec / G3E-EWAG',
-    version:     'Version 5.0',
+    version:     'Version 1.0',
   },
   nav: {
     demarrer:    'Commencer l\'évaluation',
