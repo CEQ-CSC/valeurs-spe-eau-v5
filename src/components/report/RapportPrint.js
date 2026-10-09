@@ -216,8 +216,8 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
           {/* Pied de page */}
           <footer className="border-t border-ceq-iceDark pt-4 text-xs text-ceq-slate text-center">
             <p>{t
-              ? `Rapport généré le ${dateStr} — Méthode CEQ-SPE V${version||1} · Collectif Eau Québec / G3E`
-              : `Report generated on ${dateStr} — QWC-WPS Method V${version||1} ·Québec Water Collective/EWAG`}
+              ? `Rapport généré le ${dateStr} — Méthode CEQ V1.0`
+              : `Report generated on ${dateStr} — CEQ Method V1.0`}
             </p>
             <p className="mt-1 opacity-60 text-[10px]">
               {t
