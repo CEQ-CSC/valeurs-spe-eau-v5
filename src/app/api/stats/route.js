@@ -3,10 +3,10 @@ import { createClient } from '@supabase/supabase-js';
 export const dynamic = 'force-dynamic';
 
 const DIMENSIONS = [
-  ['Scientifique', 'valeur_scientific', 'scientific_score'],
-  ['Sociale', 'valeur_sociale', 'social_score'],
-  ['Environnementale', 'valeur_environn', 'environmental_score'],
-  ['Politique', 'valeur_politique', 'political_score'],
+  ['Scientifique', 'valeur_scientific', 'score_scientifique'],
+  ['Sociale', 'valeur_sociale', 'score_social'],
+  ['Environnementale', 'valeur_environn', 'score_environnemental'],
+  ['Politique', 'valeur_politique', 'score_politique'],
 ];
 
 function sum(rows, key) {
@@ -32,22 +32,24 @@ export async function GET() {
         'valeur_economi,valeur_scientific,valeur_sociale,valeur_environn,valeur_politique,score_global',
       ),
       supabase.from('soumissions_reseau')
-        .select('economic_value,scientific_score,social_score,environmental_score,political_score,global_score')
+        .select('economic_value,score_scientifique,score_social,score_environnemental,score_politique,global_score')
         .eq('status', 'approved'),
     ]);
 
-    if (legacyResult.error) throw new Error(`Erreur de lecture des projets historiques : ${legacyResult.error.message}`);
     if (approvedResult.error) throw new Error(`Erreur de lecture des contributions approuvées : ${approvedResult.error.message}`);
+    if (legacyResult.error && legacyResult.error.code !== 'PGRST205') {
+      throw new Error(`Erreur de lecture des projets historiques : ${legacyResult.error.message}`);
+    }
 
     const rows = [
-      ...(legacyResult.data || []).map(row => ({
+      ...(!legacyResult.error ? (legacyResult.data || []).map(row => ({
         economic_value: row.valeur_economi,
         global_score: row.score_global,
-        scientific_score: row.valeur_scientific,
-        social_score: row.valeur_sociale,
-        environmental_score: row.valeur_environn,
-        political_score: row.valeur_politique,
-      })),
+        score_scientifique: row.valeur_scientific,
+        score_social: row.valeur_sociale,
+        score_environnemental: row.valeur_environn,
+        score_politique: row.valeur_politique,
+      })) : []),
       ...(approvedResult.data || []),
     ];
     const projectCount = rows.length;

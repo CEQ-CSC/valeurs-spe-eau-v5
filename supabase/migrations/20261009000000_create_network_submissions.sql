@@ -11,10 +11,10 @@ create table if not exists public.soumissions_reseau (
   global_score numeric not null check (global_score between 0 and 100),
   economic_value numeric not null default 0 check (economic_value >= 0),
   data_value numeric not null default 0 check (data_value >= 0),
-  scientific_score numeric not null check (scientific_score between 0 and 100),
-  social_score numeric not null check (social_score between 0 and 100),
-  environmental_score numeric not null check (environmental_score between 0 and 100),
-  political_score numeric not null check (political_score between 0 and 100),
+  score_scientifique numeric not null check (score_scientifique between 0 and 100),
+  score_social numeric not null check (score_social between 0 and 100),
+  score_environnemental numeric not null check (score_environnemental between 0 and 100),
+  score_politique numeric not null check (score_politique between 0 and 100),
   consent boolean not null check (consent),
   reviewed_at timestamptz
 );

@@ -146,9 +146,9 @@ vercel --prod
 
 ### Validation des contributions au Réseau provincial
 
-Avant le déploiement, exécutez le script `supabase/migrations/20261009000000_create_network_submissions.sql` dans le SQL Editor de Supabase. La table créée est accessible uniquement avec la clé `SUPABASE_SERVICE_ROLE_KEY`.
+Avant le déploiement, exécutez dans le SQL Editor de Supabase les migrations `supabase/migrations/20261009000000_create_network_submissions.sql` puis `supabase/migrations/20261009100000_align_network_score_columns.sql`, dans cet ordre. La seconde migration aligne également une table déjà créée avec les noms de colonnes attendus par l'application. La table des demandes est accessible uniquement avec la clé `SUPABASE_SERVICE_ROLE_KEY`.
 
-Une contribution autorisée est enregistrée avec le statut `pending`. Un courriel contenant un lien à usage unique permet à l'équipe d'approuver ou de refuser la demande. Seules les demandes approuvées sont ajoutées aux statistiques publiques; les contributions historiques de `projets_reseau` restent visibles. En production, configurez `RESEND_FROM_EMAIL` avec un domaine vérifié par Resend et définissez `NEXT_PUBLIC_SITE_URL` à l'adresse réelle du site.
+Une contribution autorisée est enregistrée avec le statut `pending`. Un courriel contenant un lien à usage unique permet à l'équipe d'approuver ou de refuser la demande. Seules les demandes approuvées sont ajoutées aux statistiques publiques; les contributions historiques de `projets_reseau` restent visibles si cette table existe. En production, configurez `RESEND_FROM_EMAIL` avec un domaine vérifié par Resend et définissez `NEXT_PUBLIC_SITE_URL` à l'adresse réelle du site.
 
 Sans les paramètres Supabase ou Resend requis, le calculateur et le rapport restent disponibles, mais les statistiques peuvent être signalées comme indisponibles et aucune nouvelle demande au réseau ne peut être transmise.
 
