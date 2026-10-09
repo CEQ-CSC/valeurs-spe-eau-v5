@@ -1,5 +1,6 @@
 'use client'
 import { useEffect } from 'react'
+import Link from 'next/link'
 import { RotateCcw, AlertTriangle } from 'lucide-react'
 
 export default function Error({ error, reset }) {
@@ -17,7 +18,7 @@ export default function Error({ error, reset }) {
         <button onClick={reset} className="btn-primary w-full flex items-center justify-center gap-2">
           <RotateCcw size={16} /> Réessayer
         </button>
-        <a href="/" className="block mt-3 text-sm text-ceq-cyan hover:underline">Retour à l'accueil</a>
+        <Link href="/" className="block mt-3 text-sm text-ceq-cyan hover:underline">Retour à l&apos;accueil</Link>
       </div>
     </div>
   )

@@ -164,7 +164,7 @@ export default function Home() {
       ...prev,
       [section]: { ...prev[section], [name]: value }
     }))
-  }, [])
+  }, [setFormData])
 
   const makeUpdater = useCallback((section) =>
     (name, value) => updateSection(section, name, value),
@@ -176,7 +176,7 @@ export default function Home() {
     setResultats(res)
     setEtapeId('resultats')
     window.scrollTo({ top:0, behavior:'smooth' })
-  }, [formData, lang])
+  }, [formData, lang, setEtapeId])
 
   const reset = useCallback(() => {
     if (window.confirm(tr.confirm)) {
@@ -184,7 +184,7 @@ export default function Home() {
       setResultats(null)
       setEtapeId('info')
     }
-  }, [tr.confirm])
+  }, [tr.confirm, setFormData, setResultats, setEtapeId])
 
   const goNext = () => {
     const next = ETAPES[Math.min(idxActif+1, ETAPES.length-1)]

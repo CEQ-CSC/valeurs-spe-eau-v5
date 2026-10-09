@@ -104,7 +104,7 @@ export const COUTS_EVITES = {
       par_1000_habitants: 85000,
       source: 'Analyse coûts crises eau potable, INSPQ 2019 + MSP QC 2021',
       annee:  2021,
-      methode:'Coût médian d'une interruption de service eau potable — 7 jours',
+      methode:"Coût médian d'une interruption de service eau potable — 7 jours",
       intervalle:[30000, 500000],
       confiance: 'moyenne',
       note:   'Dépend fortement de la durée, population, alternatives disponibles',
@@ -200,7 +200,7 @@ export const NIVEAUX_PREUVE = {
 // src/data/referenceCosts.js
 
 export const EPISTEMOLOGIE = {
-  version: '5.0'
+  version: '5.0',
   cadreTheorique: 'MCDA + SROI + éléments PathOS (DOI: 10.5281/zenodo.14651106)',
   distinction: {
     ceQueNousMesurons: 'uptake — mobilisation des ressources de SPE-Eau par les acteurs',

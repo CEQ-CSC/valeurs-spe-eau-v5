@@ -47,16 +47,22 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
       const response = await fetch('/api/stats')
       const json = await response.json()
       if (json.success && json.stats) {
-        setStatsDynamiques(json.stats)
+        return json.stats
       }
+      return null
     } catch (err) {
       console.error("Erreur lors de la récupération des statistiques :", err)
+      return null
     }
   }
 
   // Charger les statistiques dès le premier rendu de la page
   useEffect(() => {
-    fetchStats()
+    let cancelled = false
+    fetchStats().then(stats => {
+      if (!cancelled && stats) setStatsDynamiques(stats)
+    })
+    return () => { cancelled = true }
   }, [])
 
   const handleSoumission = async (e) => {
@@ -92,7 +98,8 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
       if (response.ok && result.success) {
         setFormSoumis(true)
         // Mettre à jour immédiatement les statistiques du tableau de bord
-        fetchStats()
+        const stats = await fetchStats()
+        if (stats) setStatsDynamiques(stats)
       } else {
         throw new Error(result.error || "Une erreur est survenue lors de l'envoi.")
       }
@@ -115,10 +122,10 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
             <span>Impact Collectif Provincial</span>
           </div>
           <h2 className="text-xl md:text-2xl font-bold font-montserrat text-[#0E3A5D]">
-            Valeur globale de la science participative de l'eau au Québec — {currentYear}
+            Valeur globale de la science participative de l&apos;eau au Québec — {currentYear}
           </h2>
           <p className="text-xs text-gray-500 mt-1 max-w-2xl leading-relaxed">
-            Ces indicateurs consolidés illustrent la force et la valeur multidimensionnelle générées par l'ensemble des acteurs du réseau à l'échelle de la province.
+            Ces indicateurs consolidés illustrent la force et la valeur multidimensionnelle générées par l&apos;ensemble des acteurs du réseau à l&apos;échelle de la province.
           </p>
         </div>
 
@@ -163,7 +170,7 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
               {statsDynamiques.benevolesActifs}
             </div>
             <div className="text-[10px] text-gray-400 mt-1 font-medium">
-              Gardiens de l'eau sur {statsDynamiques.stationsSuivies} stations du Québec
+              Gardiens de l&apos;eau sur {statsDynamiques.stationsSuivies} stations du Québec
             </div>
           </div>
         </div>
@@ -195,10 +202,10 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
           </div>
           <div>
             <h3 className="text-lg font-bold font-montserrat text-[#0E3A5D]">
-              Enregistrez votre projet et contribuez à l'impact collectif
+              Enregistrez votre projet et contribuez à l&apos;impact collectif
             </h3>
             <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">
-              En soumettant les indices de valeur calculés aujourd'hui, vous permettez au Collectif Eau Québec de légitimer la science participative auprès des instances gouvernementales et des bailleurs de fonds.
+              En soumettant les indices de valeur calculés aujourd&apos;hui, vous permettez au Collectif Eau Québec de légitimer la science participative auprès des instances gouvernementales et des bailleurs de fonds.
             </p>
           </div>
         </div>
@@ -207,7 +214,7 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
           /* Garde-fou si l'utilisateur n'a pas encore fait de simulation */
           <div className="bg-amber-50 border border-amber-200 text-amber-900 rounded-xl p-4 text-xs font-medium flex items-start gap-2">
             <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
-            <p><strong>Données introuvables :</strong> Vous devez d'abord remplir les sections précédentes du calculateur (Valeur économique, scientifique, etc.) pour pouvoir soumettre l'indice de valeur de votre projet au réseau provincial.</p>
+            <p><strong>Données introuvables :</strong> Vous devez d&apos;abord remplir les sections précédentes du calculateur (Valeur économique, scientifique, etc.) pour pouvoir soumettre l&apos;indice de valeur de votre projet au réseau provincial.</p>
           </div>
         ) : formSoumis ? (
           /* Message de succès après enregistrement */
@@ -232,7 +239,7 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
             {/* Rappel des données qui vont être transmises */}
             <div className="bg-[#0E3A5D]/5 p-3 rounded-xl border border-[#0E3A5D]/10 flex items-center justify-between text-xs">
               <div>
-                <span className="text-gray-400">Données prêtes à l'envoi :</span>
+                <span className="text-gray-400">Données prêtes à l&apos;envoi :</span>
                 <span className="font-bold text-[#0E3A5D] ml-1.5">
                   {resultatsCalculateur.meta?.nomProjet || 'Projet anonyme'} ({resultatsCalculateur.meta?.organisation || 'Sans organisation'})
                 </span>
@@ -276,7 +283,7 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
                 onChange={(e) => setFormData({...formData, autorisationPartage: e.target.checked})}
               />
               <span className="text-[11px] text-gray-500 leading-tight">
-                J'autorise le Collectif Eau Québec à agréger de manière anonyme les scores d'impact de mon projet à la valeur globale provinciale, conformément aux politiques de gestion des données du réseau.
+                J&apos;autorise le Collectif Eau Québec à agréger de manière anonyme les scores d&apos;impact de mon projet à la valeur globale provinciale, conformément aux politiques de gestion des données du réseau.
               </span>
             </label>
 
