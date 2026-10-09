@@ -91,12 +91,12 @@ function Header({ lang, onToggle }) {
         <a href="https://www.g3e-ewag.ca/collectif-eau-quebec/" target="_blank" rel="noopener noreferrer"
           className="brand-lockup hover:opacity-85 transition-opacity">
           <Image
-            src="/ceq-water-mark.png"
-            alt="Symbole graphique du Collectif Eau Québec"
-            width={48}
-            height={48}
+            src="/logo-ceq.png"
+            alt="Logo Collectif Eau Québec"
+            width={160}
+            height={44}
             priority
-            className="brand-logo"
+            className="h-11 w-auto rounded-lg bg-white p-1.5 object-contain"
           />
           <span className="brand-name">
             <span className="block text-sm font-semibold leading-tight text-ceq-dark">{tr.collectif}</span>
