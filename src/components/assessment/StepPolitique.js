@@ -60,6 +60,25 @@ export default function StepPolitique({ data, onChange, lang }) {
             </label>
           </div>
         </div>
+        <div className="mt-4 rounded-xl border border-ceq-iceDark bg-ceq-ice p-4">
+          <label className="label-ceq" htmlFor="preuve-influence">
+            {t ? 'Référence d’une consultation, décision ou politique (facultatif)' : 'Reference for a consultation, decision or policy (optional)'}
+          </label>
+          <p className="mb-2 text-xs text-ceq-slate">
+            {t
+              ? 'Indiquez le titre, l’organisme, la date ou le lien permettant de vérifier le niveau d’influence déclaré.'
+              : 'Add the title, organization, date or link to help verify the stated level of influence.'}
+          </p>
+          <textarea
+            id="preuve-influence"
+            rows={2}
+            maxLength={500}
+            value={data.referenceInfluence||''}
+            onChange={e=>onChange('referenceInfluence',e.target.value)}
+            placeholder={t ? 'Ex. procès-verbal, rapport, résolution ou URL' : 'E.g. minutes, report, resolution or URL'}
+            className={inp+" resize-y"}
+          />
+        </div>
       </div>
     </div>
   );

@@ -10,12 +10,12 @@ export default function StepPreuves({ data, onChange, lang }) {
       <div className="card p-5">
         <p className="font-semibold text-ceq-dark mb-4">{t?'Pour chaque affirmation, indiquez votre niveau de preuve :':'For each statement, indicate your evidence level:'}</p>
         {[
-          ['preuveProtocole', t?'Vos protocoles de collecte sont documentés':'Your collection protocols are documented'],
-          ['preuveFormation',  t?'La formation des bénévoles est tracée':'Volunteer training is tracked'],
-          ['preuveParticipants',t?'Les données de participation sont archivées':'Participation data is archived'],
-          ['preuveEcosystemique',t?'Les données sur les milieux surveillés sont vérifiables':'Data on monitored environments is verifiable'],
-          ['preuveInfluence',  t?'L\'utilisation de vos données par des décideurs est documentée':'Data use by decision-makers is documented'],
-        ].map(([name, label])=>(
+          ['preuveProtocole', 'referenceProtocole', t?'Vos protocoles de collecte sont documentés':'Your collection protocols are documented'],
+          ['preuveFormation', 'referenceFormation', t?'La formation des bénévoles est tracée':'Volunteer training is tracked'],
+          ['preuveParticipants', 'referenceParticipants', t?'Les données de participation sont archivées':'Participation data is archived'],
+          ['preuveEcosystemique', 'referenceEcosystemique', t?'Les données sur les milieux surveillés sont vérifiables':'Data on monitored environments is verifiable'],
+          ['preuveInfluence', 'referenceInfluence', t?'L\'utilisation de vos données par des décideurs est documentée':'Data use by decision-makers is documented'],
+        ].map(([name, referenceName, label])=>(
           <div key={name} className="mb-5">
             <label className="label-ceq">{label}</label>
             <select value={data[name]||''} onChange={e=>onChange(name,e.target.value)} className="input-ceq cursor-pointer">
@@ -26,6 +26,14 @@ export default function StepPreuves({ data, onChange, lang }) {
               <option value="declare">{t?'Déclaratif — estimé sans documentation':'Self-reported — estimated without documentation'}</option>
               <option value="inconnu">{t?'Non renseigné / inconnu':'Not specified / unknown'}</option>
             </select>
+            <input
+              type="text"
+              maxLength={300}
+              value={data[referenceName]||''}
+              onChange={e=>onChange(referenceName,e.target.value)}
+              placeholder={t?'Référence, nom de document ou lien (facultatif)':'Reference, document title or link (optional)'}
+              className="input-ceq mt-2 py-2 text-xs"
+            />
           </div>
         ))}
       </div>

@@ -9,7 +9,7 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
   const {
     info, scores, scoreGlobal, interpretation, composantes,
     valeurTotale, sroi, investissement, confianceGlobal,
-    recommandations, version
+    recommandations, transparence
   } = resultats
 
   const dimLabels = t
@@ -27,6 +27,27 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
   const dateStr = new Date().toLocaleDateString(t ? 'fr-CA' : 'en-CA', { year:'numeric', month:'long', day:'numeric' })
   const interp = interpretation || {}
   const confLabel = { fr:{élevé:'Élevée',moyen:'Moyenne',faible:'Faible',inconnu:'Inconnue'}, en:{élevé:'High',moyen:'Moderate',faible:'Low',inconnu:'Unknown'} }
+  const etapesParticipationLabels = t
+    ? { conception:'Définition des questions et objectifs', developpement:'Développement des méthodes', collecte:'Collecte des données', traitement:'Traitement et validation', analyse:'Analyse', interpretation:'Interprétation', diffusion:'Diffusion', partage:'Partage des ressources', reconnaissance:'Reconnaissance des contributions' }
+    : { conception:'Defining questions and objectives', developpement:'Developing methods', collecte:'Data collection', traitement:'Processing and validation', analyse:'Analysis', interpretation:'Interpretation', diffusion:'Communication', partage:'Sharing resources', reconnaissance:'Contributor recognition' }
+  const typesImplicationLabels = t
+    ? { contributeur:'Contributeur — réalise des tâches définies', collaborateur:'Collaborateur — participe aux choix ou à l’interprétation', responsable:'Responsable — initie ou dirige une partie du projet' }
+    : { contributeur:'Contributor — carries out defined tasks', collaborateur:'Collaborator — contributes to decisions or interpretation', responsable:'Project leader — initiates or leads part of the project' }
+  const parcoursLabels = t
+    ? { sensibilisation:'Sensibilisation / accès à l’information', apprentissage:'Apprentissage / attitudes', mobilisation:'Mobilisation / pratiques', decision:'Utilisation dans une décision ou action', changement:'Changement à long terme' }
+    : { sensibilisation:'Awareness / access to information', apprentissage:'Learning / attitudes', mobilisation:'Mobilization / practices', decision:'Use in a decision or action', changement:'Long-term change' }
+  const statusLabels = t
+    ? { non_observe:'Non observé / inconnu', plausible:'Plausible, à vérifier', observe:'Observé', documente:'Documenté' }
+    : { non_observe:'Not observed / unknown', plausible:'Plausible, to verify', observe:'Observed', documente:'Documented' }
+  const evidenceLabels = t
+    ? { mesure:'Mesuré', documente:'Documenté', verifie:'Vérifié par un tiers', declare:'Déclaratif', inconnu:'Inconnu' }
+    : { mesure:'Measured', documente:'Documented', verifie:'Third-party verified', declare:'Self-reported', inconnu:'Unknown' }
+  const riskLabels = t
+    ? { contamination_eau_potable:'Contamination de l’eau potable', proliferation_algues:'Prolifération de cyanobactéries', deversement_accidentel:'Déversement accidentel', fermeture_plage:'Fermeture de plage', effondrement_espece:'Effondrement d’une espèce', invasion_espece:'Invasion par une espèce', erosion_berges:'Érosion des berges' }
+    : { contamination_eau_potable:'Drinking water contamination', proliferation_algues:'Cyanobacteria bloom', deversement_accidentel:'Accidental spill', fermeture_plage:'Beach closure', effondrement_espece:'Species collapse', invasion_espece:'Species invasion', erosion_berges:'Riverbank erosion' }
+  const evidenceAreaLabels = t
+    ? { Protocole:'Protocole', Formation:'Formation', Participation:'Participation', Écosystèmes:'Écosystèmes', Influence:'Influence' }
+    : { Protocole:'Protocol', Formation:'Training', Participation:'Participation', Écosystèmes:'Ecosystems', Influence:'Policy influence' }
 
   return (
     <div className="print-container">
@@ -85,7 +106,7 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
               </div>
             )}
             <div className="report-confidence text-xs bg-white/20 px-3 py-1.5 rounded-full">
-              {t ? 'Confiance :' : 'Confidence:'} {confLabel[lang][confianceGlobal?.niveau] || '—'}
+              {t ? 'Renseignements :' : 'Information coverage:'} {confLabel[lang][confianceGlobal?.niveau] || '—'}
             </div>
           </div>
         </div>
@@ -116,10 +137,111 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
             )}
           </section>
 
-          {/* 2. Scores par dimension */}
+          {/* 2. Participation et parcours d'impact */}
           <section className="print-section">
             <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-slate pb-2 mb-4">
-              {t ? '2. Évaluation par dimension (MCDA 25/25/25/25)' : '2. Evaluation by Dimension (MCDA 25/25/25/25)'}
+              {t ? '2. Participation citoyenne et parcours des effets' : '2. Citizen Participation and Impact Pathway'}
+            </h2>
+            <h3 className="mb-2 text-sm font-semibold text-ceq-dark">
+              {t ? 'Type d’implication' : 'Type of involvement'}
+            </h3>
+            {transparence?.typesImplication?.length ? (
+              <ul className="mb-4 grid gap-2 sm:grid-cols-2">
+                {transparence.typesImplication.map(role => (
+                  <li key={role} className="rounded-lg border border-ceq-iceDark bg-ceq-ice px-3 py-2 text-xs text-ceq-dark">
+                    {typesImplicationLabels[role] || role}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mb-4 text-xs text-ceq-slate">{t ? 'Aucun rôle n’a été précisé.' : 'No roles were specified.'}</p>
+            )}
+            <h3 className="mb-2 text-sm font-semibold text-ceq-dark">
+              {t ? 'Étapes du cycle scientifique auxquelles les citoyennes et citoyens contribuent' : 'Research-cycle stages involving citizens'}
+            </h3>
+            {transparence?.etapesParticipation?.length ? (
+              <ul className="mb-5 grid gap-2 sm:grid-cols-2">
+                {transparence.etapesParticipation.map(stage => (
+                  <li key={stage} className="rounded-lg border border-ceq-iceDark bg-ceq-ice px-3 py-2 text-xs text-ceq-dark">
+                    {etapesParticipationLabels[stage] || stage}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mb-5 text-xs text-ceq-slate">{t ? 'Aucune étape n’a été précisée.' : 'No stages were specified.'}</p>
+            )}
+            <h3 className="mb-2 text-sm font-semibold text-ceq-dark">
+              {t ? 'Effets suivis dans le temps' : 'Effects tracked over time'}
+            </h3>
+            <div className="space-y-2">
+              {(transparence?.parcoursImpact || []).map(item => (
+                <div key={item.etape} className="rounded-lg border border-ceq-iceDark p-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-xs font-semibold text-ceq-dark">{parcoursLabels[item.etape] || item.etape}</span>
+                    <span className="rounded-full bg-ceq-ice px-2.5 py-1 text-[11px] text-ceq-slate">{statusLabels[item.niveau] || item.niveau}</span>
+                  </div>
+                  {item.preuve && <p className="mt-2 whitespace-pre-wrap text-xs text-ceq-slate">{item.preuve}</p>}
+                </div>
+              ))}
+            </div>
+            <p className="mt-3 rounded-lg bg-ceq-ice p-3 text-xs leading-relaxed text-ceq-slate">
+              {t
+                ? 'Le parcours décrit des observations et une contribution plausible du projet. Il ne démontre pas, à lui seul, une relation de causalité; d’autres facteurs peuvent expliquer les changements.'
+                : 'This pathway records observations and plausible project contribution. It does not by itself establish causality; other factors may explain observed changes.'}
+            </p>
+            {(transparence?.nbParticipantsAvantApres || transparence?.outilEvaluationApprentissage) && (
+              <div className="mt-3 rounded-lg border border-ceq-iceDark p-3 text-xs text-ceq-slate">
+                <strong>{t ? 'Évaluation des apprentissages :' : 'Learning assessment:'}</strong>{' '}
+                {transparence.nbParticipantsAvantApres
+                  ? `${transparence.nbParticipantsAvantApres} ${t ? 'participant(s) évalué(s) avant/après' : 'participant(s) assessed before/after'}`
+                  : (t ? 'Nombre de participants non précisé' : 'Number of participants not specified')}
+                {transparence.outilEvaluationApprentissage && (
+                  <p className="mt-1">{transparence.outilEvaluationApprentissage}</p>
+                )}
+              </div>
+            )}
+          </section>
+
+          {/* 3. Niveau et références des preuves */}
+          <section className="print-section">
+            <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-slate pb-2 mb-4">
+              {t ? '3. Niveau de preuve et références' : '3. Evidence Levels and References'}
+            </h2>
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-ceq-ice print:bg-gray-200">
+                  <th className="px-3 py-2 text-left font-semibold">{t ? 'Élément' : 'Evidence area'}</th>
+                  <th className="px-3 py-2 text-left font-semibold">{t ? 'Niveau déclaré' : 'Stated level'}</th>
+                  <th className="px-3 py-2 text-left font-semibold">{t ? 'Référence' : 'Reference'}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(transparence?.preuves || []).map(([area, level, reference]) => (
+                  <tr key={area} className="border-b border-ceq-iceDark">
+                    <td className="px-3 py-2">{evidenceAreaLabels[area] || area}</td>
+                    <td className="px-3 py-2">{evidenceLabels[level] || (t ? 'Non évalué' : 'Not assessed')}</td>
+                    <td className="px-3 py-2 break-words">{reference || '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {transparence?.referenceInfluence && (
+              <p className="mt-3 rounded-lg bg-ceq-ice p-3 text-xs text-ceq-slate">
+                <strong>{t ? 'Référence d’influence politique :' : 'Policy influence reference:'}</strong>{' '}
+                {transparence.referenceInfluence}
+              </p>
+            )}
+            <p className="mt-3 text-xs leading-relaxed text-ceq-slate">
+              {t
+                ? 'Le niveau « renseignements » du résumé reflète la complétude des champs saisis, et non une vérification indépendante de la qualité ou de l’exactitude des preuves.'
+                : 'The summary’s information-coverage level reflects completion of entered fields, not independent verification of evidence quality or accuracy.'}
+            </p>
+          </section>
+
+          {/* 4. Scores par dimension */}
+          <section className="print-section">
+            <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-slate pb-2 mb-4">
+              {t ? '4. Évaluation par dimension (MCDA 25/25/25/25)' : '4. Evaluation by Dimension (MCDA 25/25/25/25)'}
             </h2>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[480px] text-sm">
@@ -158,11 +280,11 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
             </div>
           </section>
 
-          {/* 3. Valeur économique */}
+          {/* 5. Valeur économique */}
           {valeurTotale > 0 && (
             <section className="print-section">
               <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-slate pb-2 mb-4">
-                {t ? '3. Valeur économique estimée' : '3. Estimated Economic Value'}
+                {t ? '5. Valeur économique estimée' : '5. Estimated Economic Value'}
               </h2>
               <table className="w-full text-sm mb-3">
                 <thead>
@@ -184,8 +306,60 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
                   </tr>
                 </tbody>
               </table>
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800 flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
+              {transparence?.risquesEvites?.length > 0 && (
+                <div className="mb-4">
+                  <h3 className="mb-2 text-sm font-semibold text-ceq-dark">
+                    {t ? 'Détail des coûts évités estimés' : 'Estimated avoided-cost breakdown'}
+                  </h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[520px] text-xs">
+                      <thead>
+                        <tr className="bg-ceq-ice print:bg-gray-200">
+                          <th className="px-3 py-2 text-left">{t ? 'Risque' : 'Risk'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Coût de référence' : 'Reference cost'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Probabilité' : 'Probability'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Contribution' : 'Contribution'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Estimation' : 'Estimate'}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {transparence.risquesEvites.map((risk, index) => (
+                          <tr key={`${risk.type}-${index}`} className="border-b border-ceq-iceDark">
+                            <td className="px-3 py-2">{riskLabels[risk.type] || risk.type}</td>
+                            <td className="px-3 py-2 text-right">{formatMontant(risk.base, lang)}</td>
+                            <td className="px-3 py-2 text-right">{Math.round(risk.prob * 100)} %</td>
+                            <td className="px-3 py-2 text-right">{Math.round(risk.contrib * 100)} %</td>
+                            <td className="px-3 py-2 text-right font-semibold">{formatMontant(risk.valeur, lang)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  {transparence.scenarioSansProjet && (
+                    <p className="mt-3 rounded-lg bg-ceq-ice p-3 text-xs text-ceq-slate">
+                      <strong>{t ? 'Scénario sans le projet :' : 'Counterfactual without the project:'}</strong>{' '}
+                      {transparence.scenarioSansProjet}
+                    </p>
+                  )}
+                  {transparence.sourceCoutsEvites && (
+                    <p className="mt-2 text-xs text-ceq-slate">
+                      <strong>{t ? 'Source des coûts :' : 'Cost source:'}</strong>{' '}
+                      {transparence.sourceCoutsEvites}
+                    </p>
+                  )}
+                  {transparence.risquesEvites.some(risk => risk.preuve) && (
+                    <ul className="mt-2 space-y-1 text-xs text-ceq-slate">
+                      {transparence.risquesEvites.filter(risk => risk.preuve).map((risk, index) => (
+                        <li key={`${risk.type}-evidence-${index}`}>
+                          <strong>{riskLabels[risk.type] || risk.type} — </strong>{risk.preuve}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
+              <div className="flex items-start gap-2 rounded-xl border border-ceq-iceDark bg-ceq-ice p-3 text-xs text-ceq-slate">
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-ceq-slate" aria-hidden="true" />
                 <span>{t
                   ? 'Ces valeurs sont des estimations à des fins de plaidoyer et de communication. Elles ne constituent pas une valeur comptable ou financière vérifiée.'
                   : 'These values are estimates for advocacy and communication purposes. They do not constitute verified accounting or financial values.'}</span>
@@ -193,11 +367,11 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
             </section>
           )}
 
-          {/* 4. Recommandations */}
+          {/* 6. Recommandations */}
           {recommandations?.length > 0 && (
             <section className="print-section">
               <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-slate pb-2 mb-4">
-                {t ? '4. Recommandations prioritaires' : '4. Priority Recommendations'}
+                {t ? '6. Recommandations prioritaires' : '6. Priority Recommendations'}
               </h2>
               <div className="space-y-3">
                 {recommandations.map((r,i)=>(

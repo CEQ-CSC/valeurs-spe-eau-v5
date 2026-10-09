@@ -172,10 +172,18 @@ Sans les paramètres Supabase ou Resend requis, le calculateur et le rapport res
 - Coûts évités : **modèle probabiliste** `coût × probabilité_détection × contribution`
 - SROI = valeur totale / investissement déclaré
 
-### Niveau de confiance
-- **Élevé** (≥75%) : données principalement mesurées/documentées
-- **Moyen** (45–74%) : mix documenté/estimé
-- **Faible** (<45%) : principalement déclaratif
+### Couverture des renseignements
+- **Élevée** (≥75%), **moyenne** (45–74%) ou **faible** (<45%) selon les champs utilisés pour calculer la complétude.
+- Cette indication ne constitue pas une vérification indépendante de la qualité, de l'exactitude ou de la force causale des preuves.
+
+### Participation, impacts et preuves
+- Les rôles (contributeur, collaborateur, responsable) et les étapes de participation citoyenne documentent la place des personnes dans le cycle de recherche; ils ne modifient pas les pondérations du score.
+- Le parcours d'impact décrit séparément la sensibilisation, l'apprentissage, la mobilisation, l'utilisation dans une décision et les changements de long terme. Il explicite qu'une contribution observée ne démontre pas à elle seule la causalité.
+- Pour l'apprentissage, le nombre de personnes évaluées avant/après et la méthode utilisée peuvent être rapportés séparément d'une appréciation autodéclarée.
+- Les niveaux de preuve peuvent être accompagnés d'une référence, d'un document ou d'un lien. Ils sont déclaratifs tant qu'aucune vérification indépendante n'est réalisée.
+- Les coûts évités affichent le scénario sans projet, la source et le détail du calcul probabiliste lorsqu'ils sont fournis. Il faut éviter de compter un même bénéfice à la fois comme coût évité, valeur bénévole ou autre composante économique.
+
+Ces éléments de transparence s'inspirent du [PathOS Open Science Impact Indicator Handbook](https://handbook.pathos-project.eu/) et des principes de la science citoyenne de l'ECSA. Ils complètent la méthode CEQ sans reprendre directement des indicateurs conçus pour l'évaluation de la science ouverte et sans modifier le score global.
 
 ---
 

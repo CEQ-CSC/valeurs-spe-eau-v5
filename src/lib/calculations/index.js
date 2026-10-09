@@ -229,7 +229,7 @@ function interpreter(score) {
 
 // ── POINT D'ENTRÉE UNIQUE ───────────────────────────────────────────
 export function calculerAssessment(formData) {
-  const { info={}, scientifique:sciD={}, sociale:socD={}, environnementale:envD={}, politique:polD={}, investissement:invD={} } = formData;
+  const { info={}, scientifique:sciD={}, sociale:socD={}, environnementale:envD={}, politique:polD={}, preuves:preuvesD={}, investissement:invD={} } = formData;
   const lang = info.langue||'fr';
 
   // Calculs dimensionnels
@@ -287,6 +287,30 @@ export function calculerAssessment(formData) {
     sroi, investissement: invTotal,
     confianceGlobal, confiances:{ scientifique:confianceSci, sociale:confianceSoc, environnementale:confianceEnv, politique:confiancePol },
     recommandations: genRecs(scores, resultats, lang),
+    transparence: {
+      etapesParticipation: Array.isArray(sciD.etapesParticipation) ? sciD.etapesParticipation : [],
+      typesImplication: Array.isArray(sciD.typesImplication) ? sciD.typesImplication : [],
+      nbParticipantsAvantApres: socD.nbParticipantsAvantApres || '',
+      outilEvaluationApprentissage: socD.outilEvaluationApprentissage || '',
+      parcoursImpact: [
+        'sensibilisation', 'apprentissage', 'mobilisation', 'decision', 'changement',
+      ].map(etape => ({
+        etape,
+        niveau: socD[`parcours_${etape}`] || 'non_observe',
+        preuve: socD[`preuve_${etape}`] || '',
+      })),
+      preuves: [
+        ['Protocole', preuvesD.preuveProtocole, preuvesD.referenceProtocole],
+        ['Formation', preuvesD.preuveFormation, preuvesD.referenceFormation],
+        ['Participation', preuvesD.preuveParticipants, preuvesD.referenceParticipants],
+        ['Écosystèmes', preuvesD.preuveEcosystemique, preuvesD.referenceEcosystemique],
+        ['Influence', preuvesD.preuveInfluence, preuvesD.referenceInfluence],
+      ],
+      referenceInfluence: polD.referenceInfluence || '',
+      scenarioSansProjet: envD.scenarioSansProjet || '',
+      sourceCoutsEvites: envD.sourceCoutsEvites || '',
+      risquesEvites: env.valeur_eco.detailRisques || [],
+    },
     chartRadar, chartRadarEN,
     // Format compatible V4 pour ReseauProvincial
     meta: { nomProjet:info.nomProjet||'', organisation:info.organisation||'', annee:info.anneeEvaluation||new Date().getFullYear() },

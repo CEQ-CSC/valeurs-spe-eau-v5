@@ -100,8 +100,57 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
                   <span className="text-xs font-bold text-ceq-dark w-8">{Math.round((r.contribution??0.5)*100)}%</span>
                 </div>
               </div>
+              <div className="mt-3">
+                <label className="text-xs text-ceq-slate" htmlFor={`preuve-risque-${i}`}>
+                  {t ? 'Preuve ou référence appuyant le rôle de détection (facultatif)' : 'Evidence or reference supporting the detection role (optional)'}
+                </label>
+                <input
+                  id={`preuve-risque-${i}`}
+                  type="text"
+                  maxLength={300}
+                  value={r.preuve||''}
+                  onChange={e=>updateRisque(i,'preuve',e.target.value)}
+                  placeholder={t?'Ex. avis aux autorités, rapport ou lien':'E.g. authority notice, report or link'}
+                  className="input-ceq mt-1 py-2 text-xs"
+                />
+              </div>
             </div>
           ))}
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="label-ceq text-xs" htmlFor="scenario-sans-projet">
+                {t ? 'Scénario sans le projet (facultatif)' : 'Counterfactual without the project (optional)'}
+              </label>
+              <textarea
+                id="scenario-sans-projet"
+                rows={2}
+                maxLength={500}
+                value={data.scenarioSansProjet||''}
+                onChange={e=>onChange('scenarioSansProjet',e.target.value)}
+                placeholder={t?'Quel coût ou dommage aurait plausiblement été engagé?':'What cost or damage might plausibly have occurred?'}
+                className="input-ceq resize-y py-2 text-xs"
+              />
+            </div>
+            <div>
+              <label className="label-ceq text-xs" htmlFor="source-couts-evites">
+                {t ? 'Source utilisée ou à vérifier (facultatif)' : 'Source used or to verify (optional)'}
+              </label>
+              <textarea
+                id="source-couts-evites"
+                rows={2}
+                maxLength={500}
+                value={data.sourceCoutsEvites||''}
+                onChange={e=>onChange('sourceCoutsEvites',e.target.value)}
+                placeholder={t?'Tarif, étude, rapport public ou référence':'Rate, study, public report or reference'}
+                className="input-ceq resize-y py-2 text-xs"
+              />
+            </div>
+          </div>
+          <p className="mt-3 text-[11px] leading-relaxed text-ceq-slate">
+            {t
+              ? 'Les coûts évités sont des estimations probabilistes fondées sur des valeurs de référence et votre contribution estimée. Évitez de compter une même économie dans plusieurs composantes.'
+              : 'Avoided costs are probabilistic estimates based on reference values and your estimated contribution. Do not count the same saving in multiple components.'}
+          </p>
         </div>
       </div>
     </div>
