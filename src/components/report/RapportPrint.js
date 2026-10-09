@@ -41,6 +41,16 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
 
       {/* Corps du rapport */}
       <div id="rapport-print" className="bg-white rounded-2xl shadow-ceq-md overflow-hidden print:shadow-none print:rounded-none">
+        <Image
+          className="report-page-frame"
+          src="/ceq-report-frame.png"
+          alt=""
+          aria-hidden="true"
+          width={2625}
+          height={3375}
+          loading="eager"
+          unoptimized
+        />
         {/* En-tête */}
         <div className="ceq-header-bg p-8 text-white print:bg-slate-900 print:text-black">
           <div className="flex items-start justify-between gap-4">
