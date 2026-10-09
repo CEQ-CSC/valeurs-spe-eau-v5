@@ -41,8 +41,8 @@ export async function POST(req) {
       to:   [recipientEmail],
       subject: `[CEQ] Nouvelle soumission V5 : ${nomProjet}`,
       html: `
-        <div style="font-family:sans-serif;color:#222F30;max-width:600px;margin:0 auto;border:1px solid #e2e8f0;padding:24px;border-radius:12px;">
-          <h2 style="color:#222F30;border-bottom:2px solid #63E3E5;padding-bottom:8px;">
+        <div style="font-family:Arial,sans-serif;color:#222f3d;max-width:600px;margin:0 auto;border:1px solid #e1e8ed;padding:28px;border-radius:12px;">
+          <h2 style="color:#222f3d;border-bottom:2px solid #c7d8e5;padding-bottom:10px;">
             Nouvelle soumission — Réseau Provincial SPE-Eau V5
           </h2>
           <p><strong>Projet :</strong> ${nomProjet}</p>
@@ -50,7 +50,7 @@ export async function POST(req) {
           <p><strong>Contact :</strong> ${personneRef} (${courrielContact})</p>
           <hr style="border:none;border-top:1px solid #e2e8f0;margin:16px 0;"/>
           <p><strong>Score global V5 :</strong> <strong>${data.scoreGlobal || 0}/100</strong></p>
-          <p><strong>Valeur économique :</strong> <span style="font-size:16px;font-weight:bold;color:#0d9488;">${Number(data.valeurEconomique||0).toLocaleString('fr-CA')} $</span></p>
+          <p><strong>Valeur économique :</strong> <span style="font-size:16px;font-weight:bold;color:#394f66;">${Number(data.valeurEconomique||0).toLocaleString('fr-CA')} $</span></p>
           <ul style="background:#f8fafc;padding:12px 24px;border-radius:8px;font-size:14px;">
             <li>Scientifique : ${data.scoresParDimension?.Scientifique||0}/100</li>
             <li>Sociale : ${data.scoresParDimension?.Sociale||0}/100</li>

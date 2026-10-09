@@ -86,32 +86,34 @@ const TR = {
 function Header({ lang, onToggle }) {
   const tr = TR[lang]
   return (
-    <header className="ceq-header-bg text-white no-print">
-      <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <a href="https://www.g3e-ewag.ca/collectif-eau-quebec/" target="_blank" rel="noopener noreferrer"
-             className="hover:opacity-85 transition-opacity shrink-0">
-            <Image src="/logo-ceq.png" alt="Logo Collectif Eau Québec"
-              width={160} height={44} priority
-              className="h-11 w-auto object-contain bg-white/95 p-1.5 rounded-xl"/>
-          </a>
-          <div>
-            <div className="font-display font-bold text-base leading-tight">{tr.collectif}</div>
-            <div className="text-white/60 text-xs">{tr.science}</div>
-          </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <button onClick={onToggle}
-            className="flex items-center gap-1.5 bg-white/15 hover:bg-white/25 text-white px-3 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer">
-            <Globe size={14}/>
-            {lang==='fr'?'EN':'FR'}
-          </button>
-        </div>
+    <header className="app-header no-print">
+      <div className="brandbar">
+        <a href="https://www.g3e-ewag.ca/collectif-eau-quebec/" target="_blank" rel="noopener noreferrer"
+          className="brand-lockup hover:opacity-85 transition-opacity">
+          <Image
+            src="/ceq-water-mark.png"
+            alt="Symbole graphique du Collectif Eau Québec"
+            width={48}
+            height={48}
+            priority
+            className="brand-logo"
+          />
+          <span className="brand-name">
+            <span className="block text-sm font-semibold leading-tight text-ceq-dark">{tr.collectif}</span>
+            <span className="mt-0.5 block text-xs text-ceq-slate">{tr.science}</span>
+          </span>
+        </a>
+        <button onClick={onToggle} className="language-switch cursor-pointer" aria-label={lang === 'fr' ? 'Switch language to English' : 'Changer la langue pour le français'}>
+          <Globe size={15} aria-hidden="true" />
+          {lang==='fr'?'EN':'FR'}
+        </button>
       </div>
-      {/* Hero */}
-      <div className="max-w-5xl mx-auto px-4 pb-5 pt-1">
-        <h1 className="font-display text-xl md:text-2xl font-bold">{tr.titre}</h1>
-        <p className="text-white/65 text-sm mt-1 max-w-2xl leading-relaxed">{tr.sousTitre}</p>
+      <div className="hero-band">
+        <div className="hero-inner">
+          <div className="hero-kicker">{lang === 'fr' ? 'Science participative de l’eau' : 'Participatory water science'}</div>
+          <h1 className="hero-title">{tr.titre}</h1>
+          <p className="hero-subtitle">{tr.sousTitre}</p>
+        </div>
       </div>
     </header>
   )
@@ -120,35 +122,39 @@ function Header({ lang, onToggle }) {
 // ── Stepper ────────────────────────────────────────────────────────
 function Stepper({ etapeId, onGo, completion, lang }) {
   return (
-    <div className="flex gap-1 overflow-x-auto pb-1 no-print">
-      {ETAPES.map((e)=>{
-        const pct = completion[e.id]??0
-        const isActive = e.id===etapeId
-        const isDone   = pct>=80
-        const IconComponent = e.icon
-        return (
-          <button key={e.id} onClick={()=>onGo(e.id)}
-            className={`flex flex-col items-center flex-1 min-w-[52px] p-1.5 rounded-xl transition-all duration-200 cursor-pointer
-              ${isActive?'bg-ceq-dark text-white shadow-ceq-md':isDone?'bg-green-100 text-green-800 hover:bg-green-200':'bg-white text-ceq-slate hover:bg-ceq-iceDark'}`}>
-            <IconComponent size={18} className="mb-0.5" />
-            <span className="text-[9px] font-semibold text-center leading-tight hidden sm:block">
-              {lang==='fr'?e.fr:e.en}
-            </span>
-            <div className="w-full mt-1 h-0.5 rounded-full bg-current opacity-20">
-              <div className="h-full rounded-full opacity-100 transition-all duration-500"
-                style={{width:`${pct}%`,background:isActive?'#63E3E5':isDone?'#2E8B57':'currentColor'}}/>
-            </div>
-          </button>
-        )
-      })}
-    </div>
+    <nav className="stepper-shell no-print" aria-label={lang === 'fr' ? 'Étapes de l’évaluation' : 'Assessment steps'}>
+      <ol className="stepper-list">
+        {ETAPES.map((e, index) => {
+          const pct = completion[e.id] ?? 0
+          const isActive = e.id === etapeId
+          const isDone = pct >= 80
+          const IconComponent = e.icon
+          return (
+            <li key={e.id} className="stepper-item">
+              <button
+                type="button"
+                onClick={() => onGo(e.id)}
+                aria-current={isActive ? 'step' : undefined}
+                aria-label={`${lang === 'fr' ? 'Étape' : 'Step'} ${index + 1}: ${lang === 'fr' ? e.fr : e.en}`}
+                title={lang === 'fr' ? e.fr : e.en}
+                className={`stepper-step ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}`}
+              >
+                <IconComponent className="stepper-icon" aria-hidden="true" />
+                <span className="stepper-label">{lang === 'fr' ? e.fr : e.en}</span>
+                <span className="stepper-progress" aria-hidden="true">
+                  <span style={{ width: `${pct}%` }} />
+                </span>
+              </button>
+            </li>
+          )
+        })}
+      </ol>
+    </nav>
   )
 }
 
 // ── Page principale ─────────────────────────────────────────────────
 export default function Home() {
-  const inp = "ceq-input w-full text-sm"
-  const fi = (name) => (e) => setFormData(prev=>({...prev,[name]:e.target.value}))
   const [lang,    setLang]    = useState('fr')
   const [etapeId, setEtapeId] = useState('info')
   const [formData,setFormData]= useState(ETAT_INITIAL)
@@ -224,29 +230,35 @@ export default function Home() {
     <div className="min-h-screen bg-ceq-ice">
       <Header lang={lang} onToggle={()=>setLang(l=>l==='fr'?'en':'fr')}/>
 
-      <main className="max-w-5xl mx-auto px-4 py-6">
-        {/* Stepper */}
-        <div className="mb-5">
-          <Stepper etapeId={etapeId} onGo={setEtapeId} completion={completion} lang={lang}/>
+      <main id="contenu" className="mx-auto max-w-6xl px-4 py-7 sm:px-6 md:py-9">
+        <Stepper etapeId={etapeId} onGo={setEtapeId} completion={completion} lang={lang}/>
+
+        <div className="step-context">
+          <div className="step-context-title">
+            <span className="step-context-icon">
+              {CurrentIcon && <CurrentIcon size={19} aria-hidden="true" />}
+            </span>
+            <span>
+              <span className="step-context-meta block">
+                {lang === 'fr' ? 'ÉTAPE' : 'STEP'} {String(idxActif + 1).padStart(2, '0')} / {String(ETAPES.length).padStart(2, '0')}
+              </span>
+              <span className="step-context-name block">{lang==='fr'?titreEtape?.fr:titreEtape?.en}</span>
+            </span>
+          </div>
+          <div className="w-20 text-right sm:w-28">
+            <span className="step-context-meta block">{Math.round(((idxActif + 1) / ETAPES.length) * 100)}%</span>
+            <div className="progress-bar mt-1.5" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(((idxActif + 1) / ETAPES.length) * 100)}>
+              <div className="progress-fill" style={{ width: `${((idxActif + 1) / ETAPES.length) * 100}%` }} />
+            </div>
+          </div>
         </div>
 
-        {/* Barre de progression */}
-        <div className="flex items-center justify-between text-xs font-semibold text-ceq-slate bg-white px-4 py-2 rounded-xl border border-ceq-iceDark mb-5 shadow-ceq-sm">
-          <span className="flex items-center gap-2">
-            {CurrentIcon && <CurrentIcon size={18} className="text-ceq-cyanDark" />}
-            {lang==='fr'?titreEtape?.fr:titreEtape?.en}
-            <span className="text-ceq-slate/50">({tr.etape} {idxActif+1}/{ETAPES.length})</span>
-          </span>
-          <span>{Math.round(((idxActif+1)/ETAPES.length)*100)}%</span>
-        </div>
-
-        {/* Carte de l'étape */}
-        <div className="card p-6 md:p-8 mb-5 animate-fade-in">
+        <section className="card step-card mb-5 animate-fade-in" aria-label={lang === 'fr' ? titreEtape?.fr : titreEtape?.en}>
           {renderStep()}
-        </div>
+        </section>
 
         {/* Navigation */}
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex gap-3">
             {idxActif > 0 && (
               <button onClick={goPrev}
@@ -289,18 +301,17 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="no-print mt-8 border-t border-ceq-iceDark py-5 text-center text-xs text-ceq-slate">
-  <div>
-    © {new Date().getFullYear()} Collectif Eau Québec / Québec Water Collective
-    {lang === 'fr' ? ' Tous droits réservés' : ' All rights reserved'}
-  </div>
-  <div className="mt-1">
-    <a href="https://www.g3e-ewag.ca/collectif-eau-quebec/" target="_blank" rel="noopener noreferrer"
-      className="text-ceq-cyan hover:underline">
-      {lang === 'fr' ? 'Visiter g3e-ewag.ca/collectif-eau-quebec' : 'Visit g3e-ewag.ca/collectif-eau-quebec'}
-    </a>
-  </div>
-</footer>
+      <footer className="app-footer no-print">
+        <p>© {new Date().getFullYear()} Collectif Eau Québec / Québec Water Collective</p>
+        <a
+          href="https://www.g3e-ewag.ca/collectif-eau-quebec/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-1 inline-block text-ceq-slate underline-offset-4 hover:underline"
+        >
+          {lang === 'fr' ? 'Visiter le site du Collectif Eau Québec' : 'Visit the Québec Water Collective website'}
+        </a>
+      </footer>
     </div>
   )
 }

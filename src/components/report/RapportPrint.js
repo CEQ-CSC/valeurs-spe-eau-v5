@@ -93,7 +93,7 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
 
           {/* 1. Résumé */}
           <section className="print-section">
-            <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-cyan pb-2 mb-4">
+            <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-slate pb-2 mb-4">
               {t ? '1. Résumé exécutif' : '1. Executive Summary'}
             </h2>
             <div className="grid grid-cols-3 gap-4">
@@ -103,7 +103,7 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
                 { l:t?'Investissement':'Investment', v:formatMontant(investissement,lang), Icon:Briefcase },
               ].map(x=>(
                 <div key={x.l} className="bg-ceq-ice rounded-xl p-4 text-center print:bg-gray-100 print:border print:border-gray-200">
-                  <x.Icon className="w-6 h-6 mx-auto mb-1 text-ceq-cyan" aria-hidden="true" />
+                  <x.Icon className="w-6 h-6 mx-auto mb-1 text-ceq-slate" aria-hidden="true" />
                   <div className="font-display text-xl font-bold text-ceq-dark">{x.v}</div>
                   <div className="text-xs text-ceq-slate mt-1">{x.l}</div>
                 </div>
@@ -116,48 +116,50 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
 
           {/* 2. Scores par dimension */}
           <section className="print-section">
-            <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-cyan pb-2 mb-4">
+            <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-slate pb-2 mb-4">
               {t ? '2. Évaluation par dimension (MCDA 25/25/25/25)' : '2. Evaluation by Dimension (MCDA 25/25/25/25)'}
             </h2>
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-ceq-ice print:bg-gray-200">
-                  <th className="text-left py-3 px-4 rounded-l-xl font-semibold text-ceq-dark">{t?'Dimension':'Dimension'}</th>
-                  <th className="text-center py-3 px-4 font-semibold text-ceq-dark">{t?'Pondération':'Weight'}</th>
-                  <th className="text-center py-3 px-4 font-semibold text-ceq-dark">{t?'Score':'Score'}</th>
-                  <th className="text-center py-3 px-4 rounded-r-xl font-semibold text-ceq-dark">{t?'Profil':'Profile'}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.entries(scores).map(([k,v],i)=>(
-                  <tr key={k} className={i%2===0?'bg-white':'bg-ceq-ice/50 print:bg-gray-50'}>
-                    <td className="py-3 px-4 font-medium text-ceq-dark">{dimLabels[k]}</td>
-                    <td className="py-3 px-4 text-center text-ceq-slate">25 %</td>
-                    <td className="py-3 px-4 text-center">
-                      <span className="font-bold text-ceq-dark">{v}</span>
-                      <span className="text-ceq-slate">/100</span>
-                    </td>
-                    <td className="py-3 px-4">
-                      <div className="h-2 bg-ceq-ice rounded-full overflow-hidden w-full print:bg-gray-200">
-                        <div className="h-full rounded-full bg-ceq-cyan" style={{width:`${v}%`}}/>
-                      </div>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[480px] text-sm">
+                <thead>
+                  <tr className="bg-ceq-ice print:bg-gray-200">
+                    <th className="text-left py-3 px-4 rounded-l-xl font-semibold text-ceq-dark">{t?'Dimension':'Dimension'}</th>
+                    <th className="text-center py-3 px-4 font-semibold text-ceq-dark">{t?'Pondération':'Weight'}</th>
+                    <th className="text-center py-3 px-4 font-semibold text-ceq-dark">{t?'Score':'Score'}</th>
+                    <th className="text-center py-3 px-4 rounded-r-xl font-semibold text-ceq-dark">{t?'Profil':'Profile'}</th>
                   </tr>
-                ))}
-                <tr className="bg-ceq-dark text-white font-bold print:bg-black">
-                  <td className="py-3 px-4 rounded-bl-xl">{t?'Score global':'Global Score'}</td>
-                  <td className="py-3 px-4 text-center">100 %</td>
-                  <td className="py-3 px-4 text-center">{scoreGlobal}/100</td>
-                  <td className="py-3 px-4 rounded-br-xl"/>
-                </tr>
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {Object.entries(scores).map(([k,v],i)=>(
+                    <tr key={k} className={i%2===0?'bg-white':'bg-ceq-ice/50 print:bg-gray-50'}>
+                      <td className="py-3 px-4 font-medium text-ceq-dark">{dimLabels[k]}</td>
+                      <td className="py-3 px-4 text-center text-ceq-slate">25 %</td>
+                      <td className="py-3 px-4 text-center">
+                        <span className="font-bold text-ceq-dark">{v}</span>
+                        <span className="text-ceq-slate">/100</span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="h-2 bg-ceq-ice rounded-full overflow-hidden w-full print:bg-gray-200">
+                          <div className="h-full rounded-full bg-ceq-slate" style={{width:`${v}%`}}/>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  <tr className="bg-ceq-dark text-white font-bold print:bg-black">
+                    <td className="py-3 px-4 rounded-bl-xl">{t?'Score global':'Global Score'}</td>
+                    <td className="py-3 px-4 text-center">100 %</td>
+                    <td className="py-3 px-4 text-center">{scoreGlobal}/100</td>
+                    <td className="py-3 px-4 rounded-br-xl"/>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </section>
 
           {/* 3. Valeur économique */}
           {valeurTotale > 0 && (
             <section className="print-section">
-              <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-cyan pb-2 mb-4">
+              <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-slate pb-2 mb-4">
                 {t ? '3. Valeur économique estimée' : '3. Estimated Economic Value'}
               </h2>
               <table className="w-full text-sm mb-3">
@@ -192,7 +194,7 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
           {/* 4. Recommandations */}
           {recommandations?.length > 0 && (
             <section className="print-section">
-              <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-cyan pb-2 mb-4">
+              <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-slate pb-2 mb-4">
                 {t ? '4. Recommandations prioritaires' : '4. Priority Recommendations'}
               </h2>
               <div className="space-y-3">

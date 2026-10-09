@@ -1,6 +1,7 @@
 import './globals.css'
 
 export const metadata = {
+  metadataBase: new URL('https://valeur-spe-eau.vercel.app'),
   title: 'Calculateur de valeur SPE-Eau V5 | Collectif Eau Québec',
   description: "Outil bilingue d'évaluation multidimensionnelle de la valeur des projets de science participative de l'eau — économique, scientifique, sociale, environnementale, politique. V5 — Collectif Eau Québec / G3E-EWAG.",
   keywords: 'science participative, eau, Québec, SROI, MCDA, OBV, Collectif Eau Québec, G3E-EWAG',

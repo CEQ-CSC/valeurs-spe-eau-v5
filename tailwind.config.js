@@ -6,18 +6,18 @@ module.exports = {
       colors: {
         // ── Palette officielle Collectif Eau Québec (charte graphique) ──
         ceq: {
-          dark:     '#222F30',  // Bleu sombre / texte principal / en-têtes
-          slate:    '#434F66',  // Bleu-gris / sous-titres
-          cyan:     '#63E3E5',  // Cyan-turquoise / éléments d'accent signature
-          cyanDark: '#3ABFC1',  // Cyan foncé (survol)
-          ice:      '#F3FAFF',  // Fond clair / cartes
-          iceDark:  '#E2F2FA',  // Fond cartes légèrement plus sombre
+          dark:     '#222F3D',
+          slate:    '#394F66',
+          cyan:     '#C7D8E5',
+          cyanDark: '#71899D',
+          ice:      '#F4F7F9',
+          iceDark:  '#E4EBF0',
           white:    '#FFFFFF',
           // Dimensions
-          sci:      '#1A5F7A',  // Bleu scientifique
-          soc:      '#2E8B57',  // Vert social
-          env:      '#0D7377',  // Vert-bleu environnemental
-          pol:      '#5B4B8A',  // Violet politique
+          sci:      '#244C66',
+          soc:      '#536D81',
+          env:      '#607C91',
+          pol:      '#899DAD',
           // Niveaux de confiance
           confHigh:   '#2E8B57',
           confMed:    '#D97706',
@@ -30,16 +30,15 @@ module.exports = {
         },
       },
       fontFamily: {
-        // On configure Montserrat pour tous les rôles typographiques
-        display: ['"Montserrat"', 'sans-serif'],
-        body:    ['"Montserrat"', 'sans-serif'],
+        display: ['"Owners Narrow"', '"Arial Narrow"', 'sans-serif'],
+        body:    ['Owners', 'Arial', 'sans-serif'],
         mono:    ['"JetBrains Mono"', 'Consolas', 'monospace'],
       },
       boxShadow: {
-        'ceq-sm': '0 2px 8px rgba(34,47,48,0.08)',
-        'ceq-md': '0 4px 20px rgba(34,47,48,0.12)',
-        'ceq-lg': '0 8px 40px rgba(34,47,48,0.16)',
-        'ceq-glow':'0 0 24px rgba(99,227,229,0.35)',
+        'ceq-sm': '0 2px 8px rgba(34,47,61,0.05)',
+        'ceq-md': '0 8px 24px rgba(34,47,61,0.08)',
+        'ceq-lg': '0 12px 34px rgba(34,47,61,0.12)',
+        'ceq-glow':'0 0 24px rgba(113,137,157,0.2)',
       },
       animation: {
         'fade-up':  'fadeUp 0.5s ease-out both',

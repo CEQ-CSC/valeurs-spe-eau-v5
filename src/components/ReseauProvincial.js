@@ -112,39 +112,39 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
   }
 
   return (
-    <div className="space-y-10 text-left p-2 max-w-5xl mx-auto">
+    <div className="network-page space-y-8 text-left max-w-5xl mx-auto">
       
       {/* --- SECTION 1: LE TABLEAU DE BORD DU RÉSEAU --- */}
       <div className="space-y-4">
-        <div className="border-b pb-3">
-          <div className="flex items-center gap-2 text-[#1DB7AE] font-bold text-xs uppercase tracking-wider mb-1">
+        <div className="border-b border-ceq-iceDark pb-4">
+          <div className="flex items-center gap-2 text-ceq-slate font-semibold text-xs uppercase tracking-wider mb-2">
             <Globe className="w-4 h-4" />
             <span>Impact Collectif Provincial</span>
           </div>
-          <h2 className="text-xl md:text-2xl font-bold font-montserrat text-[#0E3A5D]">
+          <h2 className="text-xl md:text-2xl font-bold font-display text-ceq-dark">
             Valeur globale de la science participative de l&apos;eau au Québec — {currentYear}
           </h2>
-          <p className="text-xs text-gray-500 mt-1 max-w-2xl leading-relaxed">
+          <p className="text-sm text-ceq-slate mt-2 max-w-2xl leading-relaxed">
             Ces indicateurs consolidés illustrent la force et la valeur multidimensionnelle générées par l&apos;ensemble des acteurs du réseau à l&apos;échelle de la province.
           </p>
         </div>
 
         {/* Blocs KPI Provinciaux mis à jour en temps réel */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-gradient-to-br from-[#0E3A5D] to-[#124975] text-white p-4 rounded-xl shadow-sm">
-            <div className="text-[11px] font-semibold text-teal-300 uppercase tracking-wider">Projets Actifs</div>
+          <div className="bg-gradient-to-br from-ceq-dark to-ceq-slate text-white p-5 rounded-xl shadow-ceq-sm">
+            <div className="text-[11px] font-semibold text-ceq-cyan uppercase tracking-wider">Projets Actifs</div>
             <div className="text-3xl font-black mt-1 flex items-baseline gap-1">
               {statsDynamiques.projetsEnregistres}
               <span className="text-xs font-normal text-gray-300">organisations</span>
             </div>
-            <div className="text-[10px] text-teal-200 mt-2 italic">Mise à jour en temps réel</div>
+            <div className="text-[10px] text-white/65 mt-2">Mise à jour en temps réel</div>
           </div>
 
-          <div className="bg-white border border-gray-100 p-4 rounded-xl shadow-sm">
+          <div className="card p-5">
             <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
-              <Landmark className="w-3.5 h-3.5 text-[#1DB7AE]" /> Valeur Éco. Réseau
+              <Landmark className="w-3.5 h-3.5 text-ceq-slate" /> Valeur Éco. Réseau
             </div>
-            <div className="text-2xl font-bold text-[#0E3A5D] mt-1">
+            <div className="text-2xl font-bold text-ceq-dark mt-1">
               {Number(statsDynamiques.valeurEconomiqueCumulee).toLocaleString('fr-CA')} $
             </div>
             <div className="text-[10px] text-emerald-600 font-semibold mt-1 flex items-center gap-0.5">
@@ -152,9 +152,9 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
             </div>
           </div>
 
-          <div className="bg-white border border-gray-100 p-4 rounded-xl shadow-sm">
+          <div className="card p-5">
             <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#1DB7AE]" /> Coûts Crises Évités
+              <ShieldCheck className="w-3.5 h-3.5 text-ceq-slate" /> Coûts Crises Évités
             </div>
             <div className="text-2xl font-bold text-emerald-600 mt-1">
               {Number(statsDynamiques.coutsEvitesEstimes).toLocaleString('fr-CA')} $
@@ -162,11 +162,11 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
             <div className="text-[10px] text-gray-400 mt-1 italic">Grâce à la détection précoce des anomalies</div>
           </div>
 
-          <div className="bg-white border border-gray-100 p-4 rounded-xl shadow-sm">
+          <div className="card p-5">
             <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
-              <Database className="w-3.5 h-3.5 text-[#1DB7AE]" /> Force Citoyenne
+              <Database className="w-3.5 h-3.5 text-ceq-slate" /> Force Citoyenne
             </div>
-            <div className="text-2xl font-bold text-[#0E3A5D] mt-1">
+            <div className="text-2xl font-bold text-ceq-dark mt-1">
               {statsDynamiques.benevolesActifs}
             </div>
             <div className="text-[10px] text-gray-400 mt-1 font-medium">
@@ -176,18 +176,18 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
         </div>
 
         {/* Graphique d'Impact Global par dimensions */}
-        <div className="bg-white border border-gray-100 p-5 rounded-xl shadow-sm">
-          <span className="text-[11px] font-bold text-[#0E3A5D] uppercase tracking-wider block mb-4">
+        <div className="card p-5">
+          <span className="text-xs font-semibold text-ceq-dark uppercase tracking-wider block mb-4">
             Santé du réseau par dimension de la SPE-Eau
           </span>
           <div className="w-full h-[220px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={statsDynamiques.repartitionParDimension} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
-                <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#4B5563', fontWeight: 600 }} />
-                <YAxis domain={[0, 100]} tick={{ fontSize: 11 }} />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E4EBF0" />
+                <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#394F66', fontWeight: 600 }} />
+                <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: '#718092' }} />
                 <Tooltip />
-                <Bar dataKey="Impact Cumulé (/)" fill="#1DB7AE" radius={[4, 4, 0, 0]} barSize={40} />
+                <Bar dataKey="Impact Cumulé (/)" fill="#394F66" radius={[4, 4, 0, 0]} barSize={40} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -195,16 +195,16 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
       </div>
 
       {/* --- SECTION 2: ENREGISTREMENT ET CONTRIBUTION AU RÉSEAU --- */}
-      <div className="bg-gradient-to-b from-slate-50 to-white border border-gray-200/80 rounded-2xl p-6 shadow-sm">
+      <div className="card p-6 md:p-8">
         <div className="flex items-start gap-3 mb-6">
-          <div className="p-2.5 bg-[#0E3A5D]/5 text-[#0E3A5D] rounded-xl shrink-0">
+          <div className="p-2.5 bg-ceq-iceDark text-ceq-slate rounded-lg shrink-0">
             <HeartHandshake className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-lg font-bold font-montserrat text-[#0E3A5D]">
+            <h3 className="text-lg font-bold font-display text-ceq-dark">
               Enregistrez votre projet et contribuez à l&apos;impact collectif
             </h3>
-            <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">
+            <p className="text-sm text-ceq-slate mt-1 leading-relaxed">
               En soumettant les indices de valeur calculés aujourd&apos;hui, vous permettez au Collectif Eau Québec de légitimer la science participative auprès des instances gouvernementales et des bailleurs de fonds.
             </p>
           </div>
@@ -220,7 +220,7 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
           /* Message de succès après enregistrement */
           <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 text-center space-y-3 max-w-md mx-auto">
             <CheckCircle className="w-12 h-12 text-emerald-500 mx-auto" />
-            <h4 className="font-bold text-emerald-900 font-montserrat text-base">Projet enregistré avec succès !</h4>
+            <h4 className="font-bold text-emerald-900 font-display text-base">Projet enregistré avec succès !</h4>
             <p className="text-xs text-emerald-800 leading-relaxed">
               Merci, <strong>{formData.nomCompletRef}</strong>. Les indicateurs du projet <strong>{resultatsCalculateur.meta?.nomProjet || 'votre projet'}</strong> ont été enregistrés et les statistiques du réseau ont été mises à jour.
             </p>
@@ -237,37 +237,37 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
             )}
 
             {/* Rappel des données qui vont être transmises */}
-            <div className="bg-[#0E3A5D]/5 p-3 rounded-xl border border-[#0E3A5D]/10 flex items-center justify-between text-xs">
+            <div className="bg-ceq-ice p-3 rounded-lg border border-ceq-iceDark flex items-center justify-between text-xs">
               <div>
                 <span className="text-gray-400">Données prêtes à l&apos;envoi :</span>
-                <span className="font-bold text-[#0E3A5D] ml-1.5">
+                <span className="font-bold text-ceq-dark ml-1.5">
                   {resultatsCalculateur.meta?.nomProjet || 'Projet anonyme'} ({resultatsCalculateur.meta?.organisation || 'Sans organisation'})
                 </span>
               </div>
-              <div className="bg-white px-2.5 py-1 rounded-md font-bold text-[#0E3A5D] border shadow-xs">
+              <div className="bg-white px-2.5 py-1 rounded-md font-bold text-ceq-dark border border-ceq-iceDark">
                 Score : {resultatsCalculateur.scoreGlobal ?? 0}/100
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-gray-700 block">Nom de la personne ressource</label>
+                <label className="label-ceq">Nom de la personne ressource</label>
                 <input 
                   type="text" 
                   required
                   placeholder="Ex: Rodrigue Lemay" 
-                  className="w-full text-xs p-3 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1DB7AE]"
+                  className="input-ceq"
                   value={formData.nomCompletRef}
                   onChange={(e) => setFormData({...formData, nomCompletRef: e.target.value})}
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-gray-700 block">Courriel professionnel de contact</label>
+                <label className="label-ceq">Courriel professionnel de contact</label>
                 <input 
                   type="email" 
                   required
                   placeholder="Ex: r.lemay@g3e-ewag.ca" 
-                  className="w-full text-xs p-3 border rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#1DB7AE]"
+                  className="input-ceq"
                   value={formData.courrielRef}
                   onChange={(e) => setFormData({...formData, courrielRef: e.target.value})}
                 />
@@ -278,7 +278,7 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
               <input 
                 type="checkbox" 
                 required
-                className="mt-0.5 rounded text-[#1DB7AE] focus:ring-[#1DB7AE]"
+                className="mt-0.5 rounded text-ceq-slate focus:ring-ceq-slate"
                 checked={formData.autorisationPartage}
                 onChange={(e) => setFormData({...formData, autorisationPartage: e.target.checked})}
               />
@@ -290,7 +290,7 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
             <button
               type="submit"
               disabled={chargement}
-              className="inline-flex items-center gap-2 bg-[#1DB7AE] hover:bg-[#19a199] text-white font-bold text-xs px-5 py-3 rounded-xl shadow-md transition-colors disabled:opacity-50"
+              className="btn-primary disabled:cursor-not-allowed disabled:opacity-50"
             >
               {chargement ? (
                 <>Enregistrement en cours...</>

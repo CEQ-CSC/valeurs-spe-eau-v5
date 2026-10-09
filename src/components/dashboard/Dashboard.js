@@ -3,7 +3,7 @@ import { RadarChart, PolarGrid, PolarAngleAxis, Radar, BarChart, Bar, XAxis, YAx
 import { TrendingUp, Coins, Award, Info, ShieldCheck, Users, Building2, Leaf, Microscope, Handshake, Landmark } from 'lucide-react'
 import { formatMontant } from '@/lib/calculations/index'
 
-const DIM_COLORS = { scientifique:'#1A5F7A', sociale:'#2E8B57', environnementale:'#0D7377', politique:'#5B4B8A' };
+const DIM_COLORS = { scientifique:'#222F3D', sociale:'#394F66', environnementale:'#71899D', politique:'#A4B8C7' };
 const DIM_ICONS = { scientifique:Microscope, sociale:Handshake, environnementale:Leaf, politique:Landmark };
 
 function Jauge({ score, couleur, size=88 }) {
@@ -11,7 +11,7 @@ function Jauge({ score, couleur, size=88 }) {
   return (
     <div className="relative" style={{width:size,height:size}}>
       <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#E2F2FA" strokeWidth={7}/>
+        <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#E4EBF0" strokeWidth={7}/>
         <circle cx={size/2} cy={size/2} r={r} fill="none" stroke={couleur} strokeWidth={7}
           strokeDasharray={c} strokeDashoffset={offset} strokeLinecap="round"
           style={{transition:'stroke-dashoffset 1s ease-out'}}/>
@@ -28,7 +28,7 @@ function KpiCard({ label, value, icon: Icon }) {
   return (
     <div className="card p-4">
       <div className="flex items-center gap-1.5 text-ceq-slate text-[10px] font-semibold uppercase tracking-wide mb-2">
-        {Icon&&<Icon className="w-3.5 h-3.5" style={{color:'#3ABFC1'}}/>}<span>{label}</span>
+        {Icon&&<Icon className="w-3.5 h-3.5" style={{color:'#71899D'}}/>}<span>{label}</span>
       </div>
       <div className="text-lg font-bold text-ceq-dark">{value}</div>
     </div>
@@ -71,7 +71,7 @@ export default function Dashboard({ resultats, lang='fr' }) {
 
       {/* Valeur économique */}
       <div>
-        <h3 className="section-title flex items-center gap-2 mb-3"><Coins className="w-5 h-5 text-ceq-cyan"/>{t?'Valeur économique estimée':'Estimated Economic Value'}</h3>
+        <h3 className="section-title flex items-center gap-2 mb-3"><Coins className="w-5 h-5 text-ceq-slate"/>{t?'Valeur économique estimée':'Estimated Economic Value'}</h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
           <KpiCard label={t?'Travail bénévole':'Volunteer labour'} value={formatMontant(composantes?.travail_benevole,lang)} icon={Users}/>
           <KpiCard label={t?'Données':'Data value'} value={formatMontant(composantes?.donnees_scientifiques,lang)} icon={ShieldCheck}/>
@@ -97,9 +97,9 @@ export default function Dashboard({ resultats, lang='fr' }) {
           <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">{t?'Profil multidimensionnel':'Multidimensional profile'}</p>
           <ResponsiveContainer width="100%" height={230}>
             <RadarChart data={radarData}>
-              <PolarGrid stroke="#E2F2FA"/>
-              <PolarAngleAxis dataKey="dimension" tick={{fontSize:11,fill:'#222F30',fontWeight:600}}/>
-              <Radar dataKey="score" stroke="#63E3E5" fill="#63E3E5" fillOpacity={0.18} strokeWidth={2}/>
+              <PolarGrid stroke="#E4EBF0"/>
+              <PolarAngleAxis dataKey="dimension" tick={{fontSize:11,fill:'#394F66',fontWeight:600}}/>
+              <Radar dataKey="score" stroke="#394F66" fill="#71899D" fillOpacity={0.18} strokeWidth={2}/>
             </RadarChart>
           </ResponsiveContainer>
         </div>
@@ -107,10 +107,10 @@ export default function Dashboard({ resultats, lang='fr' }) {
           <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">{t?'Score par dimension':'Score by dimension'}</p>
           <ResponsiveContainer width="100%" height={230}>
             <BarChart data={barData} layout="vertical" margin={{left:8,right:20,top:4,bottom:4}}>
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E2F2FA"/>
-              <XAxis type="number" domain={[0,100]} tick={{fontSize:10}}/>
-              <YAxis type="category" dataKey="name" tick={{fontSize:10,fill:'#222F30',fontWeight:500}} width={80}/>
-              <Tooltip formatter={v=>[`${v}/100`]} contentStyle={{borderRadius:'10px',border:'1px solid #E2F2FA'}}/>
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#E4EBF0"/>
+              <XAxis type="number" domain={[0,100]} tick={{fontSize:10,fill:'#718092'}}/>
+              <YAxis type="category" dataKey="name" tick={{fontSize:10,fill:'#394F66',fontWeight:500}} width={80}/>
+              <Tooltip formatter={v=>[`${v}/100`]} contentStyle={{borderRadius:'8px',border:'1px solid #E1E8ED',fontFamily:'Owners, Arial, sans-serif'}}/>
               <Bar dataKey="score" radius={[0,6,6,0]} barSize={18}>
                 {barData.map((d,i)=><Cell key={i} fill={d.fill}/>)}
               </Bar>
@@ -121,14 +121,14 @@ export default function Dashboard({ resultats, lang='fr' }) {
 
       {/* Jauges par dimension */}
       <div>
-        <h3 className="section-title flex items-center gap-2 mb-3"><TrendingUp className="w-5 h-5 text-ceq-cyan"/>{t?'Détail par dimension':'Score by dimension'}</h3>
+        <h3 className="section-title flex items-center gap-2 mb-3"><TrendingUp className="w-5 h-5 text-ceq-slate"/>{t?'Détail par dimension':'Score by dimension'}</h3>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {Object.entries(scores).map(([k,v])=>{
             const cn=confiances?.[k]?.niveau||'inconnu';
             const Icon=DIM_ICONS[k];
             return (
               <div key={k} className="card p-4 flex flex-col items-center gap-2">
-                <Icon className="w-6 h-6 text-ceq-cyan" aria-hidden="true" />
+                <Icon className="w-6 h-6 text-ceq-slate" aria-hidden="true" />
                 <Jauge score={v} couleur={DIM_COLORS[k]}/>
                 <span className="text-xs font-bold text-ceq-dark">{t?labFr[k]:labEn[k]}</span>
                 <span className={`text-[10px] px-2 py-0.5 rounded-full border ${confStyle[cn]||confStyle.inconnu}`}>{confLabel[lang][cn]||'—'}</span>
