@@ -41,58 +41,50 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
 
       {/* Corps du rapport */}
       <div id="rapport-print" className="bg-white rounded-2xl shadow-ceq-md overflow-hidden print:shadow-none print:rounded-none">
-        <Image
-          className="report-page-frame"
-          src="/ceq-report-frame.png"
-          alt=""
-          aria-hidden="true"
-          width={2625}
-          height={3375}
-          loading="eager"
-          unoptimized
-        />
         {/* En-tête */}
-        <div className="ceq-header-bg p-8 text-white print:bg-slate-900 print:text-black">
+        <div className="ceq-header-bg report-header p-8 text-white">
           <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-ceq-cyan text-xs font-semibold uppercase tracking-widest mb-2 print:text-blue-600">
-                {t ? "Rapport d'évaluation de la valeur · Science participative de l'eau" : "Value Assessment Report · Participatory Water Science"}
-              </p>
-              <h1 className="font-display text-2xl font-bold">
-                {info?.nomProjet || (t ? 'Projet SPE-Eau' : 'SPE-Water Project')}
-              </h1>
-              {info?.organisation && <p className="text-white/70 text-sm mt-1 print:text-gray-600">{info.organisation}</p>}
-            </div>
-            <div className="flex flex-col items-end text-right text-xs text-white/60 shrink-0 print:text-gray-500">
+            <div className="flex items-center gap-4">
               <Image
                 src="/logo-ceq.png"
                 alt="Collectif Eau Québec / Québec Water Collective"
                 width={200}
                 height={120}
-                className="w-36 h-auto rounded-lg bg-white p-1 mb-2"
+                className="report-logo w-36 h-auto rounded-lg bg-white p-1"
               />
-              <div className="mt-1">{dateStr}</div>
+              <div>
+                <p className="report-eyebrow text-ceq-cyan text-xs font-semibold uppercase tracking-widest mb-2">
+                  {t ? "Rapport d'évaluation de la valeur · Science participative de l'eau" : "Value Assessment Report · Participatory Water Science"}
+                </p>
+                <h1 className="font-display text-2xl font-bold">
+                  {info?.nomProjet || (t ? 'Projet SPE-Eau' : 'SPE-Water Project')}
+                </h1>
+                {info?.organisation && <p className="text-white/70 text-sm mt-1">{info.organisation}</p>}
+              </div>
+            </div>
+            <div className="report-meta flex flex-col items-end text-right text-xs text-white/60 shrink-0">
+              <div>{dateStr}</div>
               {version && <div className="mt-1">V{version}</div>}
             </div>
           </div>
 
           {/* Score + confiance */}
-          <div className="flex flex-wrap items-center gap-4 bg-white/10 rounded-xl p-4 mt-5 border border-white/20 print:bg-gray-100 print:border-gray-300 print:text-black">
+          <div className="report-score-summary flex flex-wrap items-center gap-4 bg-white/10 rounded-xl p-4 mt-5 border border-white/20">
             <div className="text-center">
-              <div className="font-display text-4xl font-black text-ceq-cyan print:text-blue-600">{scoreGlobal}</div>
-              <div className="text-xs text-white/60 print:text-gray-500">/100</div>
+              <div className="report-score font-display text-4xl font-black text-ceq-cyan">{scoreGlobal}</div>
+              <div className="report-meta text-xs text-white/60">/100</div>
             </div>
             <div>
               <p className="font-semibold text-sm">{t ? 'Indice global SPE-Eau (MCDA)' : 'SPE-Water Global Index (MCDA)'}</p>
-              <p className="text-sm text-white/80 mt-0.5 print:text-gray-700">{t ? interp.fr : interp.en}</p>
+              <p className="report-summary-text text-sm text-white/80 mt-0.5">{t ? interp.fr : interp.en}</p>
             </div>
             {sroi && (
               <div className="ml-auto text-center">
-                <div className="font-display text-3xl font-black text-ceq-cyan print:text-blue-600">{sroi}:1</div>
-                <div className="text-xs text-white/60 print:text-gray-500">SROI</div>
+                <div className="report-score font-display text-3xl font-black text-ceq-cyan">{sroi}:1</div>
+                <div className="report-meta text-xs text-white/60">SROI</div>
               </div>
             )}
-            <div className="text-xs bg-white/20 px-3 py-1.5 rounded-full print:bg-gray-200">
+            <div className="report-confidence text-xs bg-white/20 px-3 py-1.5 rounded-full">
               {t ? 'Confiance :' : 'Confidence:'} {confLabel[lang][confianceGlobal?.niveau] || '—'}
             </div>
           </div>
