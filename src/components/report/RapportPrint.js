@@ -64,7 +64,7 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
             </div>
             <div className="report-meta flex flex-col items-end text-right text-xs text-white/60 shrink-0">
               <div>{dateStr}</div>
-              {version && <div className="mt-1">V{version}</div>}
+              <div className="mt-1">V1.0</div>
             </div>
           </div>
 
