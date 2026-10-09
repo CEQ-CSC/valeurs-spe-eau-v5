@@ -238,25 +238,6 @@ textarea {
   padding: 2.25rem 1.5rem 2.5rem;
 }
 
-.hero-kicker {
-  align-items: center;
-  color: #c7d8e5;
-  display: flex;
-  font-size: 0.7rem;
-  font-weight: 600;
-  gap: 0.55rem;
-  letter-spacing: 0.13em;
-  margin-bottom: 0.65rem;
-  text-transform: uppercase;
-}
-
-.hero-kicker::before {
-  background: #c7d8e5;
-  content: '';
-  height: 1px;
-  width: 1.5rem;
-}
-
 .hero-title {
   font-family: 'Owners Narrow', 'Arial Narrow', sans-serif;
   font-size: clamp(2rem, 4vw, 3.15rem);

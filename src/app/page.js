@@ -110,7 +110,6 @@ function Header({ lang, onToggle }) {
       </div>
       <div className="hero-band">
         <div className="hero-inner">
-          <div className="hero-kicker">{lang === 'fr' ? 'Science participative de l’eau' : 'Participatory water science'}</div>
           <h1 className="hero-title">{tr.titre}</h1>
           <p className="hero-subtitle">{tr.sousTitre}</p>
         </div>

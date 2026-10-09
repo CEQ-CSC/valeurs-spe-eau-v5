@@ -36,7 +36,7 @@ export default function StepInvestissement({ data, onChange, lang }) {
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ceq-slate font-medium">$ CAD</span>
         </div>
       </div>
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800">
+      <div className="bg-ceq-ice border border-ceq-iceDark rounded-xl p-4 text-xs text-ceq-slate">
         <strong>SROI :</strong> {t?'Un SROI de 3:1 signifie que chaque $ investi génère 3 $ de valeur sociale estimée. La moyenne pour la SPE se situe entre 2,5 et 8.':'A SROI of 3:1 means every $1 invested generates $3 of estimated social value. The average for citizen science is 2.5–8.'}
       </div>
     </div>
