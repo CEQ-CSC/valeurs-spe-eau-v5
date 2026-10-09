@@ -22,13 +22,13 @@ const fr = {
   },
   // ─── Étapes du formulaire ────────────────────────────────────────
   etapes: {
-    info:           { titre: 'Identification du projet',          icone: '💧' },
-    investissement: { titre: 'Investissements et ressources',     icone: '💰' },
-    scientifique:   { titre: 'Qualité scientifique',              icone: '🔬' },
-    sociale:        { titre: 'Valeur sociale et éducative',       icone: '🤝' },
-    environnementale:{ titre: 'Valeur environnementale',          icone: '🌿' },
-    politique:      { titre: 'Valeur politique et institutionnelle',icone: '🏛️' },
-    preuves:        { titre: 'Niveau de preuve',                  icone: '📋' },
+    info:           { titre: 'Identification du projet',          icone: 'Droplets' },
+    investissement: { titre: 'Investissements et ressources',     icone: 'Coins' },
+    scientifique:   { titre: 'Qualité scientifique',              icone: 'Microscope' },
+    sociale:        { titre: 'Valeur sociale et éducative',       icone: 'Handshake' },
+    environnementale:{ titre: 'Valeur environnementale',          icone: 'Leaf' },
+    politique:      { titre: 'Valeur politique et institutionnelle',icone: 'Landmark' },
+    preuves:        { titre: 'Niveau de preuve',                  icone: 'ClipboardList' },
   },
   // ─── Champs formulaire ───────────────────────────────────────────
   champs: {

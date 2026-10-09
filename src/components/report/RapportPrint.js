@@ -1,5 +1,6 @@
 'use client'
 import Image from 'next/image'
+import { AlertTriangle, Briefcase, Coins, Printer, TrendingUp } from 'lucide-react'
 import { formatMontant } from '@/lib/calculations/index'
 
 export default function RapportPrint({ resultats, lang = 'fr' }) {
@@ -33,7 +34,8 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
       <div className="no-print flex justify-end mb-4">
         <button onClick={() => window.print()}
           className="btn-primary flex items-center gap-2 cursor-pointer">
-          🖨️ {t ? 'Imprimer / Exporter PDF' : 'Print / Export PDF'}
+          <Printer size={16} aria-hidden="true" />
+          {t ? 'Imprimer / Exporter PDF' : 'Print / Export PDF'}
         </button>
       </div>
 
@@ -96,12 +98,12 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
             </h2>
             <div className="grid grid-cols-3 gap-4">
               {[
-                { l:t?'Valeur totale':'Total Value', v:formatMontant(valeurTotale,lang), i:'💰' },
-                { l:'SROI', v:sroi?`${sroi}:1`:'—', i:'📈' },
-                { l:t?'Investissement':'Investment', v:formatMontant(investissement,lang), i:'💼' },
+                { l:t?'Valeur totale':'Total Value', v:formatMontant(valeurTotale,lang), Icon:Coins },
+                { l:'SROI', v:sroi?`${sroi}:1`:'—', Icon:TrendingUp },
+                { l:t?'Investissement':'Investment', v:formatMontant(investissement,lang), Icon:Briefcase },
               ].map(x=>(
                 <div key={x.l} className="bg-ceq-ice rounded-xl p-4 text-center print:bg-gray-100 print:border print:border-gray-200">
-                  <div className="text-2xl mb-1">{x.i}</div>
+                  <x.Icon className="w-6 h-6 mx-auto mb-1 text-ceq-cyan" aria-hidden="true" />
                   <div className="font-display text-xl font-bold text-ceq-dark">{x.v}</div>
                   <div className="text-xs text-ceq-slate mt-1">{x.l}</div>
                 </div>
@@ -178,10 +180,11 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
                   </tr>
                 </tbody>
               </table>
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800">
-                ⚠️ {t
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800 flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
+                <span>{t
                   ? 'Ces valeurs sont des estimations à des fins de plaidoyer et de communication. Elles ne constituent pas une valeur comptable ou financière vérifiée.'
-                  : 'These values are estimates for advocacy and communication purposes. They do not constitute verified accounting or financial values.'}
+                  : 'These values are estimates for advocacy and communication purposes. They do not constitute verified accounting or financial values.'}</span>
               </div>
             </section>
           )}

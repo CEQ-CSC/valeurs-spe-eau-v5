@@ -6,7 +6,7 @@ import {
 } from 'recharts'
 import { 
   Globe, ShieldCheck, Database, Landmark, HeartHandshake, 
-  Send, CheckCircle, ArrowUpRight 
+  Send, CheckCircle, ArrowUpRight, AlertTriangle
 } from 'lucide-react'
 
 // Valeurs de secours (fallback) le temps du chargement des données de l'API
@@ -205,8 +205,9 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
 
         {!resultatsCalculateur ? (
           /* Garde-fou si l'utilisateur n'a pas encore fait de simulation */
-          <div className="bg-amber-50 border border-amber-200 text-amber-900 rounded-xl p-4 text-xs font-medium">
-            ⚠️ <strong>Données introuvables :</strong> Vous devez d'abord remplir les sections précédentes du calculateur (Valeur économique, scientifique, etc.) pour pouvoir soumettre l'indice de valeur de votre projet au réseau provincial.
+          <div className="bg-amber-50 border border-amber-200 text-amber-900 rounded-xl p-4 text-xs font-medium flex items-start gap-2">
+            <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
+            <p><strong>Données introuvables :</strong> Vous devez d'abord remplir les sections précédentes du calculateur (Valeur économique, scientifique, etc.) pour pouvoir soumettre l'indice de valeur de votre projet au réseau provincial.</p>
           </div>
         ) : formSoumis ? (
           /* Message de succès après enregistrement */
@@ -222,8 +223,9 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
           <form onSubmit={handleSoumission} className="space-y-5 max-w-2xl">
             {/* Message d'erreur le cas échéant */}
             {erreur && (
-              <div className="bg-red-50 border border-red-200 text-red-700 text-xs p-3 rounded-xl">
-                ⚠️ {erreur}
+              <div className="bg-red-50 border border-red-200 text-red-700 text-xs p-3 rounded-xl flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
+                <p>{erreur}</p>
               </div>
             )}
 

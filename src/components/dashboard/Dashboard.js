@@ -1,9 +1,10 @@
 'use client'
 import { RadarChart, PolarGrid, PolarAngleAxis, Radar, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts'
-import { TrendingUp, Coins, Award, Info, ShieldCheck, Users, Building2, Leaf } from 'lucide-react'
+import { TrendingUp, Coins, Award, Info, ShieldCheck, Users, Building2, Leaf, Microscope, Handshake, Landmark } from 'lucide-react'
 import { formatMontant } from '@/lib/calculations/index'
 
 const DIM_COLORS = { scientifique:'#1A5F7A', sociale:'#2E8B57', environnementale:'#0D7377', politique:'#5B4B8A' };
+const DIM_ICONS = { scientifique:Microscope, sociale:Handshake, environnementale:Leaf, politique:Landmark };
 
 function Jauge({ score, couleur, size=88 }) {
   const r=size/2-6, c=2*Math.PI*r, offset=c-(score/100)*c;
@@ -124,9 +125,10 @@ export default function Dashboard({ resultats, lang='fr' }) {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {Object.entries(scores).map(([k,v])=>{
             const cn=confiances?.[k]?.niveau||'inconnu';
+            const Icon=DIM_ICONS[k];
             return (
               <div key={k} className="card p-4 flex flex-col items-center gap-2">
-                <span className="text-2xl">{{scientifique:'🔬',sociale:'🤝',environnementale:'🌿',politique:'🏛️'}[k]}</span>
+                <Icon className="w-6 h-6 text-ceq-cyan" aria-hidden="true" />
                 <Jauge score={v} couleur={DIM_COLORS[k]}/>
                 <span className="text-xs font-bold text-ceq-dark">{t?labFr[k]:labEn[k]}</span>
                 <span className={`text-[10px] px-2 py-0.5 rounded-full border ${confStyle[cn]||confStyle.inconnu}`}>{confLabel[lang][cn]||'—'}</span>
