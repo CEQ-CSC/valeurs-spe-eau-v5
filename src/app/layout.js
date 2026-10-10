@@ -1,4 +1,5 @@
 import './globals.css'
+import { Analytics } from '@vercel/analytics/next'
 
 export const metadata = {
   metadataBase: new URL('https://valeur-spe-eau.vercel.app'),
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
     <html lang="fr">
       <body className="min-h-screen bg-ceq-ice font-body antialiased">
         {children}
+        <Analytics />
       </body>
     </html>
   )
