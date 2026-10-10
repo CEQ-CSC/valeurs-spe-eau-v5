@@ -60,32 +60,69 @@ export default function StepScientifique({ data, onChange, lang }) {
       <LikertScale name="integrationBases" value={data.integrationBases} onChange={onChange} options={opts}
         label={t?'Intégration dans des bases de données publiques (Données Québec, DataStream, Water Rangers, etc.)':'Integration in public databases (Données Québec, DataStream, Water Rangers, etc.)'} lang={lang} />
       <div className="border-t border-ceq-iceDark pt-4 mt-2">
-        <section className="mb-5 rounded-xl border border-ceq-iceDark bg-ceq-ice p-4">
-          <h3 className="text-sm font-bold text-ceq-dark">
-            {t ? 'Participation citoyenne au cycle scientifique' : 'Citizen participation in the research cycle'}
-          </h3>
-          <p className="mb-3 mt-1 text-xs leading-relaxed text-ceq-slate">
-            {t
-              ? 'Cochez toutes les étapes auxquelles les citoyennes et citoyens contribuent. Cette description complète le score, sans le modifier.'
-              : 'Select every stage where citizens contribute. This describes the project without changing its score.'}
-          </p>
-          <fieldset className="mb-4">
-            <legend className="mb-2 text-xs font-semibold text-ceq-dark">
-              {t ? 'Rôles joués par les citoyennes et citoyens' : 'Roles played by citizens'}
-            </legend>
-            <div className="grid gap-2">
-              {TYPES_IMPLICATION[lang].map(([value, label]) => {
-                const selected = Array.isArray(data.typesImplication) && data.typesImplication.includes(value);
+        <div className="mb-5 space-y-4">
+          <section className="rounded-xl border border-ceq-iceDark bg-ceq-ice p-4">
+            <h3 className="text-sm font-bold text-ceq-dark">
+              {t ? '1. Type / niveau d’implication' : '1. Type / level of involvement'}
+            </h3>
+            <p className="mb-3 mt-1 text-xs leading-relaxed text-ceq-slate">
+              {t
+                ? 'Sélectionnez le ou les niveaux qui décrivent la participation citoyenne au projet.'
+                : 'Select the level or levels that describe citizen involvement in the project.'}
+            </p>
+            <fieldset>
+              <legend className="sr-only">
+                {t ? 'Type ou niveau d’implication' : 'Type or level of involvement'}
+              </legend>
+              <div className="grid gap-2">
+                {TYPES_IMPLICATION[lang].map(([value, label]) => {
+                  const selected = Array.isArray(data.typesImplication) && data.typesImplication.includes(value);
+                  return (
+                    <label key={value} className="flex items-start gap-2 rounded-lg border border-ceq-iceDark bg-white p-2.5 text-xs text-ceq-dark">
+                      <input
+                        type="checkbox"
+                        checked={selected}
+                        onChange={event => {
+                          const current = Array.isArray(data.typesImplication) ? data.typesImplication : [];
+                          onChange('typesImplication', event.target.checked
+                            ? [...current, value]
+                            : current.filter(role => role !== value));
+                        }}
+                        className="mt-0.5 accent-ceq-slate"
+                      />
+                      <span>{label}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </fieldset>
+          </section>
+          <section className="rounded-xl border border-ceq-iceDark bg-ceq-ice p-4">
+            <h3 className="text-sm font-bold text-ceq-dark">
+              {t ? '2. Rôles dans le cycle scientifique' : '2. Roles in the research cycle'}
+            </h3>
+            <p className="mb-3 mt-1 text-xs leading-relaxed text-ceq-slate">
+              {t
+                ? 'Cochez les rôles ou activités auxquels les citoyennes et citoyens prennent part. Cette description complète le score, sans le modifier.'
+                : 'Select the roles or activities in which citizens take part. This describes the project without changing its score.'}
+            </p>
+            <fieldset>
+              <legend className="sr-only">
+                {t ? 'Rôles et activités du cycle scientifique' : 'Research-cycle roles and activities'}
+              </legend>
+              <div className="grid gap-2 sm:grid-cols-2">
+              {ETAPES_PARTICIPATION[lang].map(([value, label]) => {
+                const selected = Array.isArray(data.etapesParticipation) && data.etapesParticipation.includes(value);
                 return (
                   <label key={value} className="flex items-start gap-2 rounded-lg border border-ceq-iceDark bg-white p-2.5 text-xs text-ceq-dark">
                     <input
                       type="checkbox"
                       checked={selected}
                       onChange={event => {
-                        const current = Array.isArray(data.typesImplication) ? data.typesImplication : [];
-                        onChange('typesImplication', event.target.checked
+                        const current = Array.isArray(data.etapesParticipation) ? data.etapesParticipation : [];
+                        onChange('etapesParticipation', event.target.checked
                           ? [...current, value]
-                          : current.filter(role => role !== value));
+                          : current.filter(stage => stage !== value));
                       }}
                       className="mt-0.5 accent-ceq-slate"
                     />
@@ -94,29 +131,9 @@ export default function StepScientifique({ data, onChange, lang }) {
                 );
               })}
             </div>
-          </fieldset>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {ETAPES_PARTICIPATION[lang].map(([value, label]) => {
-              const selected = Array.isArray(data.etapesParticipation) && data.etapesParticipation.includes(value);
-              return (
-                <label key={value} className="flex items-start gap-2 rounded-lg border border-ceq-iceDark bg-white p-2.5 text-xs text-ceq-dark">
-                  <input
-                    type="checkbox"
-                    checked={selected}
-                    onChange={event => {
-                      const current = Array.isArray(data.etapesParticipation) ? data.etapesParticipation : [];
-                      onChange('etapesParticipation', event.target.checked
-                        ? [...current, value]
-                        : current.filter(stage => stage !== value));
-                    }}
-                    className="mt-0.5 accent-ceq-slate"
-                  />
-                  <span>{label}</span>
-                </label>
-              );
-            })}
-          </div>
-        </section>
+            </fieldset>
+          </section>
+        </div>
         <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">{t?'Données quantitatives':'Quantitative Data'}</p>
         <div className="grid grid-cols-2 gap-4">
           <div>

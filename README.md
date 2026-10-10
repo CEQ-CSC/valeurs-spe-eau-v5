@@ -78,7 +78,7 @@ Le ratio affiché est `valeur économique estimée / investissement déclaré`; 
 
 ## 5. Participation, impact et niveau de preuve
 
-Le formulaire décrit les rôles des personnes participantes (contributeur, collaborateur ou responsable) et leur implication dans les étapes du cycle scientifique. Il permet aussi de consigner un parcours d’effets — sensibilisation, apprentissage, mobilisation, décision ou action, changement à long terme — avec un statut et une justification facultative.
+Le formulaire distingue deux renseignements : **le type/niveau d’implication** (contributeur, collaborateur ou responsable) et les **rôles ou activités dans le cycle scientifique** (définition des questions, développement des méthodes, collecte, traitement, analyse, interprétation, diffusion, partage et reconnaissance). Il permet aussi de consigner un parcours d’effets — sensibilisation, apprentissage, mobilisation, décision ou action, changement à long terme — avec un statut et une justification facultative.
 
 Ce parcours distingue les observations et les contributions jugées plausibles; il ne constitue pas une mesure d’impact causal. Le nombre de personnes évaluées avant/après et la méthode d’évaluation des apprentissages peuvent être rapportés, mais l’interface ne réalise pas elle-même cette évaluation.
 

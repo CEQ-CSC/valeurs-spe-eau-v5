@@ -143,7 +143,7 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
               {t ? '2. Participation citoyenne et parcours des effets' : '2. Citizen Participation and Impact Pathway'}
             </h2>
             <h3 className="mb-2 text-sm font-semibold text-ceq-dark">
-              {t ? 'Type d’implication' : 'Type of involvement'}
+              {t ? '1. Type / niveau d’implication' : '1. Type / level of involvement'}
             </h3>
             {transparence?.typesImplication?.length ? (
               <ul className="mb-4 grid gap-2 sm:grid-cols-2">
@@ -154,10 +154,10 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
                 ))}
               </ul>
             ) : (
-              <p className="mb-4 text-xs text-ceq-slate">{t ? 'Aucun rôle n’a été précisé.' : 'No roles were specified.'}</p>
+              <p className="mb-4 text-xs text-ceq-slate">{t ? 'Aucun type ou niveau d’implication n’a été précisé.' : 'No involvement type or level was specified.'}</p>
             )}
             <h3 className="mb-2 text-sm font-semibold text-ceq-dark">
-              {t ? 'Étapes du cycle scientifique auxquelles les citoyennes et citoyens contribuent' : 'Research-cycle stages involving citizens'}
+              {t ? '2. Rôles dans le cycle scientifique' : '2. Roles in the research cycle'}
             </h3>
             {transparence?.etapesParticipation?.length ? (
               <ul className="mb-5 grid gap-2 sm:grid-cols-2">
@@ -168,7 +168,7 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
                 ))}
               </ul>
             ) : (
-              <p className="mb-5 text-xs text-ceq-slate">{t ? 'Aucune étape n’a été précisée.' : 'No stages were specified.'}</p>
+              <p className="mb-5 text-xs text-ceq-slate">{t ? 'Aucun rôle ou activité du cycle scientifique n’a été précisé.' : 'No research-cycle roles or activities were specified.'}</p>
             )}
             <h3 className="mb-2 text-sm font-semibold text-ceq-dark">
               {t ? 'Effets suivis dans le temps' : 'Effects tracked over time'}
