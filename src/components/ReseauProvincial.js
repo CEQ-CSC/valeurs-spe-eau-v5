@@ -111,12 +111,14 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
             <Globe className="w-4 h-4" />
             <span>Impact Collectif Provincial</span>
           </div>
-          <h2 className="text-xl md:text-2xl font-bold font-display text-ceq-dark">
-            Valeur globale de la science participative de l&apos;eau au Québec
-          </h2>
-          <p className="mt-2 text-sm font-semibold text-ceq-slate">
-            Année de référence : {currentYear}
-          </p>
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <h2 className="text-xl md:text-2xl font-bold font-display text-ceq-dark">
+              Valeur globale de la science participative de l&apos;eau au Québec
+            </h2>
+            <span className="shrink-0 text-sm font-semibold text-ceq-slate">
+              Année de référence : {currentYear}
+            </span>
+          </div>
           <p className="text-sm text-ceq-slate mt-2 max-w-2xl leading-relaxed">
             Ces indicateurs consolidés illustrent la force et la valeur multidimensionnelle générées par l&apos;ensemble des acteurs du réseau à l&apos;échelle de la province. Les données regroupent les contributions approuvées enregistrées et ne sont pas filtrées par année.
           </p>
