@@ -540,6 +540,13 @@ input[type='range']::-moz-range-thumb {
   }
 }
 
+.report-typography,
+.report-typography * {
+  font-family: Arial, Helvetica, sans-serif !important;
+  font-synthesis: none;
+  font-variant-ligatures: none;
+}
+
 @media print {
   body * {
     visibility: hidden;

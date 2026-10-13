@@ -61,7 +61,7 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
       </div>
 
       {/* Corps du rapport */}
-      <div id="rapport-print" className="bg-white rounded-2xl shadow-ceq-md overflow-hidden print:shadow-none print:rounded-none">
+      <div id="rapport-print" className="report-typography bg-white rounded-2xl shadow-ceq-md overflow-hidden print:shadow-none print:rounded-none">
         {/* En-tête */}
         <div className="ceq-header-bg report-header p-8 text-white">
           <div className="flex items-start justify-between gap-4">
