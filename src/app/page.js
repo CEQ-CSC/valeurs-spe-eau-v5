@@ -94,9 +94,9 @@ function Header({ lang, onToggle }) {
             src="/logo-ceq.png"
             alt="Logo Collectif Eau Québec"
             width={160}
-            height={44}
+            height={96}
             priority
-            className="h-12 w-auto rounded-lg bg-white p-1.5 object-contain"
+            className="h-20 w-auto rounded-lg bg-white p-1.5 object-contain sm:h-24"
           />
           <span className="brand-name">
             <span className="block text-sm font-semibold leading-tight text-ceq-dark">{tr.collectif}</span>
