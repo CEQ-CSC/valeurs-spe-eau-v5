@@ -76,7 +76,7 @@ const TR = {
     precedent:'Previous', suivant:'Next',
     calculer:'Calculate Value', reset:'Reset',
     imprimer:'Print / PDF', etape:'Step',
-    collectif:'Collectif Eau Québec',
+    collectif:'Québec water Collective',
     science:'Participatory water science',
     confirm:'Do you really want to erase all entered data?',
   }
@@ -96,7 +96,7 @@ function Header({ lang, onToggle }) {
             width={160}
             height={44}
             priority
-            className="h-11 w-auto rounded-lg bg-white p-1.5 object-contain"
+            className="h-12 w-auto rounded-lg bg-white p-1.5 object-contain"
           />
           <span className="brand-name">
             <span className="block text-sm font-semibold leading-tight text-ceq-dark">{tr.collectif}</span>
