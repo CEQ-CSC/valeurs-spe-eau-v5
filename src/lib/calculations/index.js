@@ -11,7 +11,7 @@
  * ═══════════════════════════════════════════════════════════
  */
 
-import { BENEVOLE, OBSERVATION } from '@/data/referenceCosts';
+import { BENEVOLE, COUTS_EVITES, OBSERVATION } from '@/data/referenceCosts';
 
 export const METHODOLOGIE_VERSION = '1.0';
 export const ANNEE_REFERENCE = 2024;
@@ -31,14 +31,6 @@ export const REF = {
   valeurKmCoursDeau:       1800,   // Univ. Sherbrooke 2020
   valeurConsultation:      3500,   // Secrétariat CE QC 2022
   // Coûts évités — modèle probabiliste
-  coutContaminationBase:   85000,  // INSPQ 2019, par 1000 hab.
-  probDetectionSPE_conta:  0.35,
-  coutAlguesBase:          45000,  // MDDELCC 2020
-  probDetectionSPE_algues: 0.55,
-  coutDeversement:         120000, // MDDELCC 2022
-  probDetectionSPE_dever:  0.25,
-  coutFermeturePlage:      28000,  // MESI 2021
-  probDetectionSPE_plage:  0.50,
 };
 
 // ── Normalisation ───────────────────────────────────────────────────
@@ -155,12 +147,28 @@ function calcEnvironnementale(d) {
   let coutEvite = 0;
   const risques = d.risquesActifs||[];
   const detailRisques = risques.map(r => {
-    let base=0, prob=0;
-    if (r.type==='contamination_eau_potable') { base=REF.coutContaminationBase*(Number(r.population||1000)/1000); prob=REF.probDetectionSPE_conta; }
-    else if (r.type==='proliferation_algues') { base=REF.coutAlguesBase; prob=REF.probDetectionSPE_algues; }
-    else if (r.type==='deversement_accidentel'){ base=REF.coutDeversement; prob=REF.probDetectionSPE_dever; }
-    else if (r.type==='fermeture_plage')       { base=REF.coutFermeturePlage; prob=REF.probDetectionSPE_plage; }
-    const contrib = Math.max(0,Math.min(1,Number(r.contribution||0.5)));
+    const reference = COUTS_EVITES[r.type];
+    const coutReference = reference?.cout_evenement_base;
+    const valeurReference = coutReference?.par_1000_habitants ?? coutReference?.forfait ?? 0;
+    const coutPersonnalise = r.coutReferencePersonnalise;
+    const baseIncident = coutPersonnalise !== '' && coutPersonnalise !== null && coutPersonnalise !== undefined &&
+      Number.isFinite(Number(coutPersonnalise))
+      ? Math.max(0, Number(coutPersonnalise))
+      : valeurReference;
+    const base = r.type === 'contamination_eau_potable'
+      ? baseIncident * (Math.max(0, Number(r.population || 1000)) / 1000)
+      : baseIncident;
+    const probabilitePersonnalisee = r.probabiliteDetectionPersonnalisee;
+    const prob = reference
+      ? reference.probabilite_detection_spe
+      : probabilitePersonnalisee !== '' && probabilitePersonnalisee !== null &&
+        probabilitePersonnalisee !== undefined && Number.isFinite(Number(probabilitePersonnalisee))
+        ? Math.max(0, Math.min(1, Number(probabilitePersonnalisee)))
+        : 0;
+    const contribution = r.contribution === '' || r.contribution === null || r.contribution === undefined
+      ? 0.5
+      : Number(r.contribution);
+    const contrib = Number.isFinite(contribution) ? Math.max(0,Math.min(1,contribution)) : 0;
     const valeur  = Math.round(base*prob*contrib);
     coutEvite += valeur;
     return { ...r, base:Math.round(base), prob, contrib, valeur };

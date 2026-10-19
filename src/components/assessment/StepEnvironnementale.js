@@ -1,6 +1,6 @@
 'use client'
 import LikertScale from '@/components/ui/LikertScale'
-import { useState } from 'react'
+import { COUTS_EVITES } from '@/data/referenceCosts'
 
 const TYPES_RISQUES = {
   fr: [
@@ -34,6 +34,16 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
   const addRisque = () => onChange('risquesActifs', [...risques, { type:'contamination_eau_potable', population:1000, contribution:0.5 }]);
   const removeRisque = (i) => onChange('risquesActifs', risques.filter((_,j)=>j!==i));
   const updateRisque = (i,k,v) => { const r=[...risques]; r[i]={...r[i],[k]:v}; onChange('risquesActifs',r); };
+  const updateTypeRisque = (i, type) => {
+    const r=[...risques];
+    r[i]={...r[i], type};
+    delete r[i].coutReferencePersonnalise;
+    delete r[i].probabiliteDetectionPersonnalisee;
+    onChange('risquesActifs',r);
+  };
+  const formatMontant = (montant) => new Intl.NumberFormat(t?'fr-CA':'en-CA', {
+    style:'currency', currency:'CAD', maximumFractionDigits:0
+  }).format(montant);
 
   return (
     <div className="space-y-1">
@@ -82,7 +92,7 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
           {risques.map((r,i)=>(
             <div key={i} className="bg-white rounded-xl border border-ceq-iceDark p-3 mb-2">
               <div className="flex justify-between items-start mb-2">
-                <select value={r.type} onChange={e=>updateRisque(i,'type',e.target.value)} className="text-xs border rounded-lg px-2 py-1.5 text-ceq-dark flex-1 mr-2">
+                <select value={r.type} onChange={e=>updateTypeRisque(i,e.target.value)} className="text-xs border rounded-lg px-2 py-1.5 text-ceq-dark flex-1 mr-2">
                   {TYPES_RISQUES[lang].map(opt=><option key={opt.v} value={opt.v}>{opt.l}</option>)}
                 </select>
                 <button type="button" onClick={()=>removeRisque(i)} className="text-ceq-confLow text-xs px-2 py-1 hover:bg-red-50 rounded">✕</button>
@@ -93,6 +103,53 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
                   <input type="number" min="0" value={r.population??1000} onChange={e=>updateRisque(i,'population',e.target.value)} className="w-full text-xs border rounded-lg px-2 py-1.5 mt-1" />
                 </div>
               )}
+              <div className="mb-2">
+                <label className="text-xs text-ceq-slate">
+                  {t?'Coût de référence de l’incident (facultatif)':'Incident reference cost (optional)'}
+                  {r.type==='contamination_eau_potable'
+                    ? (t?' — par 1 000 habitants':' — per 1,000 inhabitants')
+                    : (t?' — par incident':' — per incident')}
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={r.coutReferencePersonnalise??''}
+                  placeholder={COUTS_EVITES[r.type]
+                    ? formatMontant(COUTS_EVITES[r.type].cout_evenement_base.par_1000_habitants ?? COUTS_EVITES[r.type].cout_evenement_base.forfait)
+                    : (t?'Aucune valeur par défaut':'No default value')}
+                  onChange={e=>updateRisque(i,'coutReferencePersonnalise',e.target.value)}
+                  className="w-full text-xs border rounded-lg px-2 py-1.5 mt-1"
+                />
+                {COUTS_EVITES[r.type] ? (
+                  <p className="text-[11px] text-ceq-slate/70 mt-1">
+                    {t
+                      ? `Valeur par défaut : ${formatMontant(COUTS_EVITES[r.type].cout_evenement_base.par_1000_habitants ?? COUTS_EVITES[r.type].cout_evenement_base.forfait)}. Saisissez un montant pour la remplacer.`
+                      : `Default value: ${formatMontant(COUTS_EVITES[r.type].cout_evenement_base.par_1000_habitants ?? COUTS_EVITES[r.type].cout_evenement_base.forfait)}. Enter an amount to override it.`}
+                  </p>
+                ) : (
+                  <>
+                    <p className="text-[11px] text-amber-700 mt-1">
+                      {t
+                        ? 'Aucun coût de référence intégré pour cet incident. Saisissez un coût et une probabilité de détection pour le calculer.'
+                        : 'No built-in reference cost for this incident. Enter a cost and detection probability to include it in the calculation.'}
+                    </p>
+                    <label className="text-xs text-ceq-slate mt-2 block">
+                      {t?'Probabilité de détection par le projet (0 à 1)':'Project detection probability (0 to 1)'}
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      value={r.probabiliteDetectionPersonnalisee??''}
+                      placeholder="0.35"
+                      onChange={e=>updateRisque(i,'probabiliteDetectionPersonnalisee',e.target.value)}
+                      className="w-full text-xs border rounded-lg px-2 py-1.5 mt-1"
+                    />
+                  </>
+                )}
+              </div>
               <div>
                 <label className="text-xs text-ceq-slate">{t?'Contribution estimée de votre SPE (0 à 1)':'Estimated SPE contribution (0 to 1)'}</label>
                 <div className="flex items-center gap-2 mt-1">
