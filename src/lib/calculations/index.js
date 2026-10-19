@@ -11,6 +11,8 @@
  * ═══════════════════════════════════════════════════════════
  */
 
+import { BENEVOLE, OBSERVATION } from '@/data/referenceCosts';
+
 export const METHODOLOGIE_VERSION = '1.0';
 export const ANNEE_REFERENCE = 2024;
 
@@ -19,10 +21,10 @@ export const POIDS = { scientifique:0.25, sociale:0.25, environnementale:0.25, p
 
 // ── Valeurs monétaires de référence (avec sources) ──────────────────
 export const REF = {
-  tauxHoraireBenevole:     22.60,  // Stats Canada, ESG 2022, QC
-  coutObs_simple:          35,     // MELCCFP 2022, physico-chimie base
-  coutObs_intermediaire:   75,     // MELCCFP 2023, multiparamétrique
-  coutObs_avancee:         185,    // Env. Canada 2023, labo complet
+  tauxHoraireBenevole:     BENEVOLE.tauxHoraire.valeur,
+  coutObs_simple:          OBSERVATION.simple.valeur,
+  coutObs_intermediaire:   OBSERVATION.intermediaire.valeur,
+  coutObs_avancee:         OBSERVATION.avancee.valeur,
   valeurFormation:         420,    // Commission formation QC 2023
   valeurSensibilisation:   38,     // INSPQ 2020, par personne
   valeurHaMilieuxHumides:  9200,   // TEEB Canada 2021
@@ -92,7 +94,12 @@ function calcScientifique(d) {
   ];
   const score = borne(moyPonderee(s));
   const nb = Math.max(0, Number(d.nombreEchantillons)||0);
-  const tarif = REF[`coutObs_${d.complexiteEchantillons||'simple'}`]??REF.coutObs_simple;
+  const tarifReference = REF[`coutObs_${d.complexiteEchantillons||'simple'}`]??REF.coutObs_simple;
+  const tarifPersonnalise = d.coutObsPersonnalise;
+  const tarif = tarifPersonnalise !== '' && tarifPersonnalise !== null && tarifPersonnalise !== undefined &&
+    Number.isFinite(Number(tarifPersonnalise))
+    ? Math.max(0, Number(tarifPersonnalise))
+    : tarifReference;
   const valeurDonnees  = Math.round(nb * tarif);
   const niveauForm     = (likert(d.protocoleRigueur)||0)/100;
   const valeurFormation= Math.round((Number(d.nbBenevoles)||0)*REF.valeurFormation*niveauForm);
@@ -118,7 +125,13 @@ function calcSociale(d) {
   const hTerr  = Math.max(0, Number(d.heuresTerrain)||0);
   const hCoord = Math.max(0, Number(d.heuresCoordination)||0);
   const hAutre = Math.max(0, hTotal - hForm - hTerr - hCoord);
-  const taux = REF.tauxHoraireBenevole;
+  const tauxPersonnalise = d.tauxHoraireBenevolePersonnalise;
+  const taux = d.tauxHoraireBenevole === 'custom'
+    ? (tauxPersonnalise !== '' && tauxPersonnalise !== null && tauxPersonnalise !== undefined &&
+      Number.isFinite(Number(tauxPersonnalise))
+      ? Math.max(0, Number(tauxPersonnalise))
+      : 0)
+    : Math.max(0, Number(d.tauxHoraireBenevole)||REF.tauxHoraireBenevole);
   const valeurBenevole = Math.round(hForm*taux*1.2 + hTerr*taux + hCoord*taux*1.3 + hAutre*taux);
   const valeurSensib   = Math.round((Number(d.nbParticipants)||0)*REF.valeurSensibilisation);
   return { score, scores_detail:s, valeur_eco:{ valeurBenevole, valeurSensib, total:valeurBenevole+valeurSensib, taux }};

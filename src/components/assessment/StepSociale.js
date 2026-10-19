@@ -1,5 +1,6 @@
 'use client'
 import LikertScale from '@/components/ui/LikertScale'
+import { BENEVOLE } from '@/data/referenceCosts'
 
 const PARCOURS_IMPACT = {
   fr: [
@@ -96,6 +97,45 @@ export default function StepSociale({ data, onChange, lang }) {
         <div>
           <label className="label-ceq">{t?'Heures de bénévolat par année (total)':'Annual volunteer hours (total)'}</label>
           <input type="number" min="0" value={data.heuresTotal??''} placeholder="0" onChange={e=>onChange('heuresTotal',e.target.value)} className={inp} />
+        </div>
+
+        <div>
+          <label className="label-ceq">{t?'Taux horaire des bénévoles':'Volunteer hourly rate'}</label>
+          <select
+            value={data.tauxHoraireBenevole??String(BENEVOLE.tauxHoraire.valeur)}
+            onChange={e=>onChange('tauxHoraireBenevole',e.target.value)}
+            className={inp+" cursor-pointer"}
+          >
+            <option value={BENEVOLE.tauxHoraire.intervalle[0]}>
+              {t?'Taux minimal de référence':'Lower reference rate'} ({BENEVOLE.tauxHoraire.intervalle[0].toFixed(2)} $/h)
+            </option>
+            <option value={BENEVOLE.tauxHoraire.valeur}>
+              {t?'Taux moyen de référence':'Average reference rate'} ({BENEVOLE.tauxHoraire.valeur.toFixed(2)} $/h)
+            </option>
+            <option value={BENEVOLE.tauxHoraire.intervalle[1]}>
+              {t?'Taux maximal de référence':'Upper reference rate'} ({BENEVOLE.tauxHoraire.intervalle[1].toFixed(2)} $/h)
+            </option>
+            <option value="custom">{t?'Autre taux — saisir un montant':'Other rate — enter an amount'}</option>
+          </select>
+          {data.tauxHoraireBenevole==='custom' && (
+            <div className="mt-2">
+              <label className="label-ceq text-xs">{t?'Taux personnalisé ($/h)':'Custom rate ($/h)'}</label>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value={data.tauxHoraireBenevolePersonnalise??''}
+                placeholder="0.00"
+                onChange={e=>onChange('tauxHoraireBenevolePersonnalise',e.target.value)}
+                className={inp}
+              />
+              {(data.tauxHoraireBenevolePersonnalise === '' || data.tauxHoraireBenevolePersonnalise === null || data.tauxHoraireBenevolePersonnalise === undefined) && (
+                <p className="text-[11px] text-amber-700 mt-1">
+                  {t?'Saisissez le taux souhaité; un champ vide est calculé à 0 $/h.':'Enter the desired rate; an empty field is calculated as $0/hour.'}
+                </p>
+              )}
+            </div>
+          )}
         </div>
         
         <p className="text-xs text-ceq-slate mb-2 italic mt-4">{t?'Sous-totaux optionnels (si connus) :':'Optional sub-totals (if known):'}</p>

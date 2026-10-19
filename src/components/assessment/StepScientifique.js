@@ -178,6 +178,24 @@ export default function StepScientifique({ data, onChange, lang }) {
             <option value="intermediaire">{t?'Intermédiaire (multiparamétrique ≈75 $/obs.)':'Intermediate (multi-parameter ≈$75/obs.)'}</option>
             <option value="avancee">{t?'Avancée (analyses laboratoire complètes ≈185 $/obs.)':'Advanced (complete lab analysis ≈$185/obs.)'}</option>
           </select>
+          <label className="label-ceq mt-3">{t?'Coût de remplacement personnalisé par observation (facultatif)':'Custom replacement cost per observation (optional)'}</label>
+          <div className="relative">
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              value={data.coutObsPersonnalise??''}
+              placeholder={t?'Utiliser le coût de référence':'Use reference cost'}
+              onChange={e=>onChange('coutObsPersonnalise',e.target.value)}
+              className={inp+" pr-12"}
+            />
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ceq-slate font-medium">$ / obs.</span>
+          </div>
+          <p className="text-[11px] text-ceq-slate/70 mt-1">
+            {t
+              ? 'Si renseigné, ce montant remplace le coût de référence de la complexité choisie.'
+              : 'When entered, this amount replaces the reference cost for the selected complexity.'}
+          </p>
         </div>
       </div>
     </div>
