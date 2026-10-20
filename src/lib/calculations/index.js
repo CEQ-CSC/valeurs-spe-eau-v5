@@ -12,6 +12,7 @@
  */
 
 import { BENEVOLE, COUTS_EVITES, OBSERVATION } from '@/data/referenceCosts';
+import { ECOSYSTEM_SERVICES } from '@/data/ecosystemServices';
 
 export const METHODOLOGIE_VERSION = '1.0';
 export const ANNEE_REFERENCE = 2024;
@@ -141,8 +142,49 @@ function calcEnvironnementale(d) {
   const score = borne(moyPonderee(s));
   // Facteur de preuve
   const fp = {mesure:1.0,documente:0.8,verifie:0.6,declare:0.4,inconnu:0.2}[d.preuveEcosystemique]??0.4;
-  const valeurMH = Math.round((Number(d.nbMilieuxHumides)||0)*REF.valeurHaMilieuxHumides*fp);
-  const valeurKm = Math.round((Number(d.nbKmCoursDeau)||0)*REF.valeurKmCoursDeau*fp);
+  const servicesActifs = Array.isArray(d.servicesEcoActifs) ? d.servicesEcoActifs : [];
+  const detailServices = servicesActifs.flatMap(selection => {
+    const service = ECOSYSTEM_SERVICES.find(item => item.id === selection.serviceId);
+    if (!service || !['inlandWetlands', 'freshwater'].includes(selection.habitat)) return [];
+    const surfaceHa = Math.max(0, Number(
+      selection.habitat === 'inlandWetlands' ? d.nbMilieuxHumides : d.superficieEauDouceHa
+    ) || 0);
+    const referenceInt2007ParHa = service[selection.habitat];
+    const localRateProvided = selection.tauxCadParHaPersonnalise !== '' &&
+      selection.tauxCadParHaPersonnalise !== null &&
+      selection.tauxCadParHaPersonnalise !== undefined &&
+      Number.isFinite(Number(selection.tauxCadParHaPersonnalise));
+    const tauxCadParHa = localRateProvided
+      ? Math.max(0, Number(selection.tauxCadParHaPersonnalise))
+      : null;
+    return [{
+      serviceId: service.id,
+      nomFr: service.fr,
+      nomEn: service.en,
+      habitat: selection.habitat,
+      surfaceHa,
+      referenceInt2007ParHa,
+      valeurReferenceInt2007: referenceInt2007ParHa === null ? null : Math.round(surfaceHa * referenceInt2007ParHa),
+      tauxCadParHa,
+      valeurLocaleCad: tauxCadParHa === null ? 0 : Math.round(surfaceHa * tauxCadParHa * fp),
+    }];
+  });
+  const servicesParType = (habitat) => detailServices
+    .filter(service => service.habitat === habitat)
+    .reduce((total, service) => total + service.valeurLocaleCad, 0);
+  const methodeServices = detailServices.length ? 'article-par-service' : 'estimation-simplifiee';
+  const valeurMH = detailServices.length
+    ? servicesParType('inlandWetlands')
+    : Math.round((Number(d.nbMilieuxHumides)||0)*REF.valeurHaMilieuxHumides*fp);
+  const valeurEauDouce = detailServices.length ? servicesParType('freshwater') : 0;
+  const valeurKm = detailServices.length
+    ? 0
+    : Math.round((Number(d.nbKmCoursDeau)||0)*REF.valeurKmCoursDeau*fp);
+  const valeurEcosystemique = valeurMH + valeurEauDouce + valeurKm;
+  const benchmarkArticleInt2007 = detailServices.reduce(
+    (total, service) => total + (service.valeurReferenceInt2007 ?? 0),
+    0
+  );
   // Coûts évités probabilistes
   let coutEvite = 0;
   const risques = d.risquesActifs||[];
@@ -173,7 +215,23 @@ function calcEnvironnementale(d) {
     coutEvite += valeur;
     return { ...r, base:Math.round(base), prob, contrib, valeur };
   });
-  return { score, scores_detail:s, valeur_eco:{ valeurMH, valeurKm, coutEvite, detailRisques, total:valeurMH+valeurKm+coutEvite, facteurPreuve:fp }};
+  return {
+    score,
+    scores_detail:s,
+    valeur_eco:{
+      valeurMH,
+      valeurKm,
+      valeurEauDouce,
+      valeurEcosystemique,
+      benchmarkArticleInt2007,
+      methodeServices,
+      detailServices,
+      coutEvite,
+      detailRisques,
+      total:valeurEcosystemique+coutEvite,
+      facteurPreuve:fp
+    }
+  };
 }
 
 // ── Dimension Politique ─────────────────────────────────────────────
@@ -274,7 +332,7 @@ export function calculerAssessment(formData) {
     sensibilisation:     soc.valeur_eco.valeurSensib||0,
     donnees_scientifiques: sci.valeur_eco.valeurDonnees||0,
     formation:           sci.valeur_eco.valeurFormation||0,
-    ecosystemique:       (env.valeur_eco.valeurMH||0)+(env.valeur_eco.valeurKm||0),
+    ecosystemique:       env.valeur_eco.valeurEcosystemique||0,
     couts_evites:        env.valeur_eco.coutEvite||0,
     influence_politique: pol.valeur_eco.valeurInfluence||0,
   };
@@ -331,6 +389,9 @@ export function calculerAssessment(formData) {
       scenarioSansProjet: envD.scenarioSansProjet || '',
       sourceCoutsEvites: envD.sourceCoutsEvites || '',
       risquesEvites: env.valeur_eco.detailRisques || [],
+      servicesEcosystemiques: env.valeur_eco.detailServices || [],
+      referenceServicesEcosystemiquesInt2007: env.valeur_eco.benchmarkArticleInt2007 || 0,
+      methodeServicesEcosystemiques: env.valeur_eco.methodeServices || 'estimation-simplifiee',
     },
     chartRadar, chartRadarEN,
     // Format compatible V4 pour ReseauProvincial

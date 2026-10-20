@@ -1,6 +1,7 @@
 'use client'
 import LikertScale from '@/components/ui/LikertScale'
 import { COUTS_EVITES } from '@/data/referenceCosts'
+import { ECOSYSTEM_SERVICES, ECOSYSTEM_SERVICES_SOURCE } from '@/data/ecosystemServices'
 
 const TYPES_RISQUES = {
   fr: [
@@ -30,6 +31,7 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
     : [{v:1,l:'Very low'},{v:2,l:'Low'},{v:3,l:'Moderate'},{v:4,l:'High'},{v:5,l:'Very high'}];
   const inp = "input-ceq";
   const risques = data.risquesActifs||[];
+  const servicesEcoActifs = data.servicesEcoActifs || [];
 
   const addRisque = () => onChange('risquesActifs', [...risques, { type:'contamination_eau_potable', population:1000, contribution:0.5 }]);
   const removeRisque = (i) => onChange('risquesActifs', risques.filter((_,j)=>j!==i));
@@ -44,6 +46,67 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
   const formatMontant = (montant) => new Intl.NumberFormat(t?'fr-CA':'en-CA', {
     style:'currency', currency:'CAD', maximumFractionDigits:0
   }).format(montant);
+  const serviceActif = (habitat, serviceId) =>
+    servicesEcoActifs.find(service => service.habitat === habitat && service.serviceId === serviceId);
+  const toggleServiceEco = (habitat, serviceId, checked) => {
+    const updated = servicesEcoActifs.filter(service =>
+      service.habitat !== habitat || service.serviceId !== serviceId
+    );
+    if (checked) updated.push({ habitat, serviceId, tauxCadParHaPersonnalise: '' });
+    onChange('servicesEcoActifs', updated);
+  };
+  const updateTauxServiceEco = (habitat, serviceId, value) => {
+    onChange('servicesEcoActifs', servicesEcoActifs.map(service =>
+      service.habitat === habitat && service.serviceId === serviceId
+        ? { ...service, tauxCadParHaPersonnalise: value }
+        : service
+    ));
+  };
+  const afficherServicesEco = (habitat, titre) => (
+    <details className="rounded-xl border border-ceq-iceDark bg-white">
+      <summary className="cursor-pointer px-3 py-2 text-xs font-semibold text-ceq-dark">
+        {titre}
+      </summary>
+      <div className="space-y-2 border-t border-ceq-iceDark p-3">
+        {ECOSYSTEM_SERVICES.map(service => {
+          const actif = serviceActif(habitat, service.id);
+          const valeurReference = service[habitat];
+          return (
+            <div key={`${habitat}-${service.id}`} className="rounded-lg bg-ceq-ice/50 p-2">
+              <label className="flex items-start gap-2 text-xs text-ceq-dark">
+                <input
+                  type="checkbox"
+                  checked={Boolean(actif)}
+                  onChange={event => toggleServiceEco(habitat, service.id, event.target.checked)}
+                  className="mt-0.5 accent-ceq-dark"
+                />
+                <span className="flex-1">{t ? service.fr : service.en}</span>
+                <span className="text-right text-ceq-slate">
+                  {valeurReference === null
+                    ? (t ? 'Non estimé dans l’article' : 'Not estimated in the article')
+                    : `${new Intl.NumberFormat(t ? 'fr-CA' : 'en-CA').format(valeurReference)} ${ECOSYSTEM_SERVICES_SOURCE.currency}/ha/an`}
+                </span>
+              </label>
+              {actif && (
+                <label className="mt-2 block pl-6 text-[11px] text-ceq-slate">
+                  {t ? 'Valeur locale à utiliser dans le total (CAD/ha/an)' : 'Local value to include in total (CAD/ha/year)'}
+                  <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={actif.tauxCadParHaPersonnalise ?? ''}
+                    onChange={event => updateTauxServiceEco(habitat, service.id, event.target.value)}
+                    placeholder={t ? 'Laisser vide pour ne pas inclure en CAD' : 'Leave blank to exclude from CAD total'}
+                    className="mt-1 w-full rounded-lg border border-ceq-iceDark px-2 py-1.5 text-xs text-ceq-dark"
+                  />
+                </label>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </details>
+  );
 
   return (
     <div className="space-y-1">
@@ -70,6 +133,51 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
             <label className="label-ceq">{t?'Cours d\'eau surveillés (km linéaires)':'Monitored waterways (linear km)'}</label>
             <input type="number" min="0" value={data.nbKmCoursDeau??''} placeholder="0" onChange={e=>onChange('nbKmCoursDeau',e.target.value)} className={inp} />
           </div>
+        </div>
+        <div className="mb-4">
+          <label className="label-ceq" htmlFor="superficie-eau-douce">
+            {t ? 'Superficie d’eau douce surveillée (ha)' : 'Monitored freshwater area (ha)'}
+          </label>
+          <input
+            id="superficie-eau-douce"
+            type="number"
+            min="0"
+            step="0.01"
+            value={data.superficieEauDouceHa ?? ''}
+            placeholder="0"
+            onChange={event => onChange('superficieEauDouceHa', event.target.value)}
+            className={inp}
+          />
+          <p className="mt-1 text-[11px] text-ceq-slate">
+            {t
+              ? 'L’article exprime ses valeurs par hectare : la longueur en km ne suffit pas. Utilisez la surface réellement pertinente pour le service évalué.'
+              : 'The article reports values per hectare: length in km is not enough. Use the area relevant to the service being assessed.'}
+          </p>
+        </div>
+        <div className="mb-4 rounded-xl border border-ceq-iceDark bg-ceq-ice p-3">
+          <p className="text-xs font-semibold text-ceq-dark">
+            {t ? 'Évaluation détaillée des services écosystémiques' : 'Detailed ecosystem-service valuation'}
+          </p>
+          <p className="my-2 text-[11px] leading-relaxed text-ceq-slate">
+            {t
+              ? 'Sélectionnez uniquement les services réellement fournis par votre milieu. Les références sont des moyennes mondiales en Int$ 2007/ha/an; elles ne sont pas converties en CAD ni ajoutées au total monétaire. Saisissez une valeur locale en CAD/ha/an pour l’inclure. Les services sans estimation publiée sont indiqués comme tels, jamais comme zéro.'
+              : 'Select only services actually provided by your site. References are global averages in Int$ 2007/ha/year; they are not converted to CAD or added to the monetary total. Enter a local value in CAD/ha/year to include it. Services without a published estimate are marked as such, never as zero.'}
+          </p>
+          <div className="space-y-2">
+            {afficherServicesEco(
+              'inlandWetlands',
+              t ? `Milieux humides intérieurs (${ECOSYSTEM_SERVICES.length} services)` : `Inland wetlands (${ECOSYSTEM_SERVICES.length} services)`
+            )}
+            {afficherServicesEco(
+              'freshwater',
+              t ? `Eaux douces — rivières et lacs (${ECOSYSTEM_SERVICES.length} services)` : `Freshwater — rivers and lakes (${ECOSYSTEM_SERVICES.length} services)`
+            )}
+          </div>
+          <p className="mt-2 text-[10px] leading-relaxed text-ceq-slate">
+            {t
+              ? `Référence : ${ECOSYSTEM_SERVICES_SOURCE.citation}. Les valeurs varient selon les études et ne sont pas transférables automatiquement au Québec. La sélection d’au moins un service remplace l’estimation simplifiée; sans sélection, celle-ci est conservée. Évitez de compter deux fois un même bénéfice.`
+              : `Source: ${ECOSYSTEM_SERVICES_SOURCE.citation}. Values vary across studies and are not automatically transferable to Quebec. Selecting at least one service replaces the simplified estimate; otherwise it is retained. Avoid double-counting the same benefit.`}
+          </p>
         </div>
         <div className="mb-4">
           <label className="label-ceq">{t?'Valeur écosystémique':'Ecosystem value'}</label>

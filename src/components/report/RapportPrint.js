@@ -281,7 +281,7 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
           </section>
 
           {/* 5. Valeur économique */}
-          {valeurTotale > 0 && (
+          {(valeurTotale > 0 || transparence?.servicesEcosystemiques?.length > 0) && (
             <section className="print-section">
               <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-slate pb-2 mb-4">
                 {t ? '5. Valeur économique estimée' : '5. Estimated Economic Value'}
@@ -306,6 +306,13 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
                   </tr>
                 </tbody>
               </table>
+              {transparence?.methodeServicesEcosystemiques === 'estimation-simplifiee' && (
+                <p className="mb-3 text-xs text-ceq-slate">
+                  {t
+                    ? 'Aucun service détaillé n’a été sélectionné : la composante écosystémique utilise l’estimation simplifiée par hectares de milieux humides et kilomètres de cours d’eau.'
+                    : 'No detailed services were selected: the ecosystem component uses the simplified estimate based on wetland hectares and waterway kilometres.'}
+                </p>
+              )}
               {transparence?.risquesEvites?.length > 0 && (
                 <div className="mb-4">
                   <h3 className="mb-2 text-sm font-semibold text-ceq-dark">
@@ -356,6 +363,56 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
                       ))}
                     </ul>
                   )}
+                </div>
+              )}
+              {transparence?.servicesEcosystemiques?.length > 0 && (
+                <div className="mb-4">
+                  <h3 className="mb-2 text-sm font-semibold text-ceq-dark">
+                    {t ? 'Détail des services écosystémiques sélectionnés' : 'Selected ecosystem services'}
+                  </h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-[650px] text-xs">
+                      <thead>
+                        <tr className="bg-ceq-ice print:bg-gray-200">
+                          <th className="px-3 py-2 text-left">{t ? 'Service' : 'Service'}</th>
+                          <th className="px-3 py-2 text-left">{t ? 'Milieu' : 'Habitat'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Surface (ha)' : 'Area (ha)'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Référence Int$ 2007/ha/an' : 'Int$ 2007/ha/year reference'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Repère article (Int$ 2007)' : 'Article benchmark (Int$ 2007)'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Estimation locale CAD' : 'Local estimate CAD'}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {transparence.servicesEcosystemiques.map(service => (
+                          <tr key={`${service.habitat}-${service.serviceId}`} className="border-b border-ceq-iceDark">
+                            <td className="px-3 py-2">{t ? service.nomFr : service.nomEn}</td>
+                            <td className="px-3 py-2">
+                              {service.habitat === 'inlandWetlands'
+                                ? (t ? 'Milieu humide intérieur' : 'Inland wetland')
+                                : (t ? 'Eau douce' : 'Freshwater')}
+                            </td>
+                            <td className="px-3 py-2 text-right">{service.surfaceHa}</td>
+                            <td className="px-3 py-2 text-right">
+                              {service.referenceInt2007ParHa === null
+                                ? (t ? 'Non estimé' : 'Not estimated')
+                                : `${service.referenceInt2007ParHa.toLocaleString(t ? 'fr-CA' : 'en-CA')} Int$/ha/an`}
+                            </td>
+                            <td className="px-3 py-2 text-right">
+                              {service.valeurReferenceInt2007 === null
+                                ? '—'
+                                : `${service.valeurReferenceInt2007.toLocaleString(t ? 'fr-CA' : 'en-CA')} Int$`}
+                            </td>
+                            <td className="px-3 py-2 text-right">{formatMontant(service.valeurLocaleCad, lang)}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <p className="mt-2 text-xs text-ceq-slate">
+                    {t
+                      ? `Les valeurs de référence proviennent de de Groot et al. (2012), tableau 2, et demeurent en dollars internationaux de 2007. Référence appliquée aux surfaces sélectionnées : ${transparence.referenceServicesEcosystemiquesInt2007.toLocaleString('fr-CA')} Int$ 2007. Seules les valeurs locales saisies en CAD sont incluses au total économique.`
+                      : `Reference values come from de Groot et al. (2012), Table 2, and remain in 2007 international dollars. Reference applied to selected areas: ${transparence.referenceServicesEcosystemiquesInt2007.toLocaleString('en-CA')} Int$ 2007. Only locally entered CAD values are included in the economic total.`}
+                  </p>
                 </div>
               )}
               <div className="flex items-start gap-2 rounded-xl border border-ceq-iceDark bg-ceq-ice p-3 text-xs text-ceq-slate">

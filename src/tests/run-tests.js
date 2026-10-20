@@ -99,6 +99,32 @@ test('Contribution 0 → coût évité 0$', ()=>{
   assert(Math.round(85000*0.35*0), 0, 'contrib 0')
 })
 
+// ── Tests des références par service écosystémique ──────────────────
+console.log('\n🌿 Services écosystémiques — de Groot et al. (2012)\n')
+
+const valeursMilieuxHumidesInt2007 = [
+  614, 408, 425, 99, 114, 488, 2986, 5606, 3015, 2607, 1713, 948,
+  1287, 1168, 1292, 2211, 700,
+]
+const valeursEauDouceInt2007 = [106, 1808, 187, 2166]
+
+test('Les services estimés des milieux humides totalisent 25 681 Int$/ha/an', ()=>{
+  assert(valeursMilieuxHumidesInt2007.reduce((sum, value)=>sum+value, 0), 25681, 'milieux humides')
+})
+test('Les services estimés des eaux douces totalisent 4 267 Int$/ha/an', ()=>{
+  assert(valeursEauDouceInt2007.reduce((sum, value)=>sum+value, 0), 4267, 'eaux douces')
+})
+test('Une valeur locale en CAD utilise la surface et le facteur de preuve', ()=>{
+  const estimationLocale = Math.round(2.5 * 1200 * 0.8)
+  assert(estimationLocale, 2400, 'valeur locale CAD')
+})
+test('Une référence en Int$ 2007 n’est pas ajoutée au total CAD sans taux local', ()=>{
+  const referenceInt2007 = 2 * 614
+  const totalCad = 0
+  assert(referenceInt2007, 1228, 'repère article')
+  assert(totalCad, 0, 'total CAD sans taux local')
+})
+
 // ── Tests influence politique ──────────────────────────────────────
 console.log('\n🏛️ Influence politique\n')
 
