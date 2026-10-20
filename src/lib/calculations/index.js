@@ -12,7 +12,7 @@
  */
 
 import { BENEVOLE, COUTS_EVITES, OBSERVATION } from '@/data/referenceCosts';
-import { ECOSYSTEM_SERVICES, convertirInt2007EnCAD2026 } from '@/data/ecosystemServices';
+import { ECOSYSTEM_SERVICES, ECOSYSTEM_TYPES } from '@/data/ecosystemServices';
 
 export const METHODOLOGIE_VERSION = '1.0';
 export const ANNEE_REFERENCE = 2024;
@@ -25,11 +25,9 @@ export const REF = {
   tauxHoraireBenevole:     BENEVOLE.tauxHoraire.valeur,
   coutObs_simple:          OBSERVATION.simple.valeur,
   coutObs_intermediaire:   OBSERVATION.intermediaire.valeur,
-  coutObs_avancee:         OBSERVATION.avancee.valeur,
+  coutObs_avancee:        OBSERVATION.avancee.valeur,
   valeurFormation:         420,    // Commission formation QC 2023
   valeurSensibilisation:   38,     // INSPQ 2020, par personne
-  valeurHaMilieuxHumides:  9200,   // TEEB Canada 2021
-  valeurKmCoursDeau:       1800,   // Univ. Sherbrooke 2020
   valeurConsultation:      3500,   // Secrétariat CE QC 2022
   // Coûts évités — modèle probabiliste
 };
@@ -142,57 +140,44 @@ function calcEnvironnementale(d) {
   const score = borne(moyPonderee(s));
   // Facteur de preuve
   const fp = {mesure:1.0,documente:0.8,verifie:0.6,declare:0.4,inconnu:0.2}[d.preuveEcosystemique]??0.4;
-  const servicesActifs = Array.isArray(d.servicesEcoActifs) ? d.servicesEcoActifs : [];
-  const detailServices = servicesActifs.flatMap(selection => {
-    const service = ECOSYSTEM_SERVICES.find(item => item.id === selection.serviceId);
-    if (!service || !['inlandWetlands', 'freshwater'].includes(selection.habitat)) return [];
-    const surfaceHa = Math.max(0, Number(
-      selection.habitat === 'inlandWetlands' ? d.nbMilieuxHumides : d.superficieEauDouceHa
-    ) || 0);
-    const referenceInt2007ParHa = service[selection.habitat];
-    const referenceCad2026ParHa = referenceInt2007ParHa === null
-      ? null
-      : convertirInt2007EnCAD2026(referenceInt2007ParHa);
-    const localRateProvided = selection.tauxCadParHaPersonnalise !== '' &&
-      selection.tauxCadParHaPersonnalise !== null &&
-      selection.tauxCadParHaPersonnalise !== undefined &&
-      Number.isFinite(Number(selection.tauxCadParHaPersonnalise));
-    const tauxCadParHa = localRateProvided
-      ? Math.max(0, Number(selection.tauxCadParHaPersonnalise))
-      : referenceCad2026ParHa;
-    return [{
-      serviceId: service.id,
-      nomFr: service.fr,
-      nomEn: service.en,
-      habitat: selection.habitat,
-      surfaceHa,
-      referenceInt2007ParHa,
-      valeurReferenceInt2007: referenceInt2007ParHa === null ? null : Math.round(surfaceHa * referenceInt2007ParHa),
-      referenceCad2026ParHa,
-      valeurReferenceCad2026: referenceCad2026ParHa === null ? null : Math.round(surfaceHa * referenceCad2026ParHa),
-      tauxCadParHa,
-      tauxPersonnalise: localRateProvided,
-      valeurLocaleCad: tauxCadParHa === null ? 0 : Math.round(surfaceHa * tauxCadParHa * fp),
-    }];
+  const evaluationsServicesEco = Array.isArray(d.servicesEcoEvaluations)
+    ? d.servicesEcoEvaluations
+    : [];
+  const detailServices = evaluationsServicesEco.map(evaluation => {
+    const service = ECOSYSTEM_SERVICES.find(item => item.id === evaluation.serviceId);
+    const ecosystemType = ECOSYSTEM_TYPES.find(item => item.id === evaluation.ecosystemType);
+    const dimension = evaluation.dimension === 'ha' ? 'ha' : 'km';
+    const quantityValue = Number(evaluation.quantity);
+    const costValue = Number(evaluation.replacementCost);
+    const quantity = Number.isFinite(quantityValue) ? Math.max(0, quantityValue) : 0;
+    const replacementCost = evaluation.replacementCost !== '' &&
+      evaluation.replacementCost !== null &&
+      evaluation.replacementCost !== undefined &&
+      Number.isFinite(costValue)
+      ? Math.max(0, costValue)
+      : 0;
+    const serviceName = evaluation.serviceId === 'other'
+      ? (evaluation.serviceName || (service?.fr ?? 'Autre service écosystémique'))
+      : (service?.fr ?? 'Service écosystémique');
+    const serviceNameEn = evaluation.serviceId === 'other'
+      ? (evaluation.serviceName || (service?.en ?? 'Other ecosystem service'))
+      : (service?.en ?? 'Ecosystem service');
+    const value = Math.round(quantity * replacementCost * fp);
+    return {
+      ecosystemType: evaluation.ecosystemType,
+      ecosystemTypeFr: ecosystemType?.fr ?? 'Autres écosystèmes',
+      ecosystemTypeEn: ecosystemType?.en ?? 'Other ecosystems',
+      dimension,
+      quantity,
+      serviceId: evaluation.serviceId,
+      nomFr: serviceName,
+      nomEn: serviceNameEn,
+      replacementCost,
+      valeurLocaleCad: value,
+    };
   });
-  const servicesParType = (habitat) => detailServices
-    .filter(service => service.habitat === habitat)
-    .reduce((total, service) => total + service.valeurLocaleCad, 0);
-  const methodeServices = detailServices.length ? 'article-par-service' : 'estimation-simplifiee';
-  const valeurMH = detailServices.length
-    ? servicesParType('inlandWetlands')
-    : Math.round((Number(d.nbMilieuxHumides)||0)*REF.valeurHaMilieuxHumides*fp);
-  const valeurEauDouce = detailServices.length ? servicesParType('freshwater') : 0;
-  const valeurKm = detailServices.length
-    ? 0
-    : Math.round((Number(d.nbKmCoursDeau)||0)*REF.valeurKmCoursDeau*fp);
-  const valeurEcosystemique = valeurMH + valeurEauDouce + valeurKm;
-  const benchmarkArticleInt2007 = detailServices.reduce(
-    (total, service) => total + (service.valeurReferenceInt2007 ?? 0),
-    0
-  );
-  const benchmarkArticleCad2026 = detailServices.reduce(
-    (total, service) => total + (service.valeurReferenceCad2026 ?? 0),
+  const valeurEcosystemique = detailServices.reduce(
+    (total, service) => total + service.valeurLocaleCad,
     0
   );
   // Coûts évités probabilistes
@@ -229,13 +214,7 @@ function calcEnvironnementale(d) {
     score,
     scores_detail:s,
     valeur_eco:{
-      valeurMH,
-      valeurKm,
-      valeurEauDouce,
       valeurEcosystemique,
-      benchmarkArticleInt2007,
-      benchmarkArticleCad2026,
-      methodeServices,
       detailServices,
       coutEvite,
       detailRisques,
@@ -401,9 +380,6 @@ export function calculerAssessment(formData) {
       sourceCoutsEvites: envD.sourceCoutsEvites || '',
       risquesEvites: env.valeur_eco.detailRisques || [],
       servicesEcosystemiques: env.valeur_eco.detailServices || [],
-      referenceServicesEcosystemiquesInt2007: env.valeur_eco.benchmarkArticleInt2007 || 0,
-      referenceServicesEcosystemiquesCad2026: env.valeur_eco.benchmarkArticleCad2026 || 0,
-      methodeServicesEcosystemiques: env.valeur_eco.methodeServices || 'estimation-simplifiee',
     },
     chartRadar, chartRadarEN,
     // Format compatible V4 pour ReseauProvincial

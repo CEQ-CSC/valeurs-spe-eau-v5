@@ -306,13 +306,6 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
                   </tr>
                 </tbody>
               </table>
-              {transparence?.methodeServicesEcosystemiques === 'estimation-simplifiee' && (
-                <p className="mb-3 text-xs text-ceq-slate">
-                  {t
-                    ? 'Aucun service détaillé n’a été sélectionné : la composante écosystémique utilise l’estimation simplifiée par hectares de milieux humides et kilomètres de cours d’eau.'
-                    : 'No detailed services were selected: the ecosystem component uses the simplified estimate based on wetland hectares and waterway kilometres.'}
-                </p>
-              )}
               {transparence?.risquesEvites?.length > 0 && (
                 <div className="mb-4">
                   <h3 className="mb-2 text-sm font-semibold text-ceq-dark">
@@ -375,32 +368,24 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
                       <thead>
                         <tr className="bg-ceq-ice print:bg-gray-200">
                           <th className="px-3 py-2 text-left">{t ? 'Service' : 'Service'}</th>
-                          <th className="px-3 py-2 text-left">{t ? 'Milieu' : 'Habitat'}</th>
-                          <th className="px-3 py-2 text-right">{t ? 'Surface (ha)' : 'Area (ha)'}</th>
-                          <th className="px-3 py-2 text-right">{t ? 'Taux appliqué (CAD 2026/ha/an)' : 'Applied rate (CAD 2026/ha/year)'}</th>
-                          <th className="px-3 py-2 text-right">{t ? 'Équivalent original (Int$ 2007)' : 'Original equivalent (Int$ 2007)'}</th>
-                          <th className="px-3 py-2 text-right">{t ? 'Valeur estimée (CAD 2026)' : 'Estimated value (CAD 2026)'}</th>
+                          <th className="px-3 py-2 text-left">{t ? 'Type d’écosystème' : 'Ecosystem type'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Dimension' : 'Unit'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Quantité' : 'Quantity'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Coût de remplacement' : 'Replacement cost'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Valeur estimée' : 'Estimated value'}</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {transparence.servicesEcosystemiques.map(service => (
-                          <tr key={`${service.habitat}-${service.serviceId}`} className="border-b border-ceq-iceDark">
+                        {transparence.servicesEcosystemiques.map((service, index) => (
+                          <tr key={`${service.ecosystemType}-${service.serviceId}-${index}`} className="border-b border-ceq-iceDark">
                             <td className="px-3 py-2">{t ? service.nomFr : service.nomEn}</td>
-                            <td className="px-3 py-2">
-                              {service.habitat === 'inlandWetlands'
-                                ? (t ? 'Milieu humide intérieur' : 'Inland wetland')
-                                : (t ? 'Eau douce' : 'Freshwater')}
-                            </td>
-                            <td className="px-3 py-2 text-right">{service.surfaceHa}</td>
                             <td className="px-3 py-2 text-right">
-                              {service.tauxCadParHa === null
-                                ? (t ? 'Non estimé' : 'Not estimated')
-                                : `${formatMontant(service.tauxCadParHa, lang)}${service.tauxPersonnalise ? (t ? ' (local)' : ' (local)') : ''}`}
+                              {t ? service.ecosystemTypeFr : service.ecosystemTypeEn}
                             </td>
+                            <td className="px-3 py-2 text-right">{service.dimension}</td>
+                            <td className="px-3 py-2 text-right">{service.quantity}</td>
                             <td className="px-3 py-2 text-right">
-                              {service.referenceInt2007ParHa === null
-                                ? '—'
-                                : `${service.valeurReferenceInt2007.toLocaleString(t ? 'fr-CA' : 'en-CA')} Int$`}
+                              {formatMontant(service.replacementCost, lang)} / {service.dimension}
                             </td>
                             <td className="px-3 py-2 text-right">{formatMontant(service.valeurLocaleCad, lang)}</td>
                           </tr>
@@ -410,8 +395,8 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
                   </div>
                   <p className="mt-2 text-xs text-ceq-slate">
                     {t
-                      ? `Référence : de Groot et al. (2012), tableau 2. Conversion appliquée : parité de pouvoir d’achat du Canada en 2007, puis IPC canadien de janvier 2007 à septembre 2026. Référence sur les surfaces sélectionnées : ${transparence.referenceServicesEcosystemiquesCad2026.toLocaleString('fr-CA')} CAD 2026 (${transparence.referenceServicesEcosystemiquesInt2007.toLocaleString('fr-CA')} Int$ 2007). Les taux locaux saisis remplacent les taux de référence pour les services correspondants.`
-                      : `Source: de Groot et al. (2012), Table 2. Conversion applied: Canada's 2007 purchasing power parity, then Canadian CPI from January 2007 to September 2026. Benchmark for selected areas: ${transparence.referenceServicesEcosystemiquesCad2026.toLocaleString('en-CA')} CAD 2026 (${transparence.referenceServicesEcosystemiquesInt2007.toLocaleString('en-CA')} Int$ 2007). Entered local rates replace reference rates for the corresponding services.`}
+                      ? 'La valeur estimée correspond à la quantité multipliée par le coût de remplacement unitaire saisi, puis par le facteur de preuve déclaré. Ces montants sont des estimations et non des valeurs financières vérifiées.'
+                      : 'The estimated value is the quantity multiplied by the entered unit replacement cost and the declared evidence factor. These amounts are estimates, not verified financial values.'}
                   </p>
                 </div>
               )}

@@ -99,36 +99,25 @@ test('Contribution 0 → coût évité 0$', ()=>{
   assert(Math.round(85000*0.35*0), 0, 'contrib 0')
 })
 
-// ── Tests des références par service écosystémique ──────────────────
-console.log('\n🌿 Services écosystémiques — de Groot et al. (2012)\n')
+// ── Tests coût de remplacement des services écosystémiques ──────────
+console.log('\n🌿 Services écosystémiques — coût de remplacement\n')
 
-const valeursMilieuxHumidesInt2007 = [
-  614, 408, 425, 99, 114, 488, 2986, 5606, 3015, 2607, 1713, 948,
-  1287, 1168, 1292, 2211, 700,
-]
-const valeursEauDouceInt2007 = [106, 1808, 187, 2166]
-
-test('Les services estimés des milieux humides totalisent 25 681 Int$/ha/an', ()=>{
-  assert(valeursMilieuxHumidesInt2007.reduce((sum, value)=>sum+value, 0), 25681, 'milieux humides')
+test('1,5 ha × 2 000 CAD/ha × preuve 80 % = 2 400 CAD', ()=>{
+  const valeur = Math.round(1.5 * 2000 * 0.8)
+  assert(valeur, 2400, 'coût de remplacement en ha')
 })
-test('Les services estimés des eaux douces totalisent 4 267 Int$/ha/an', ()=>{
-  assert(valeursEauDouceInt2007.reduce((sum, value)=>sum+value, 0), 4267, 'eaux douces')
+test('3 km × 450 CAD/km × preuve 100 % = 1 350 CAD', ()=>{
+  const valeur = Math.round(3 * 450 * 1)
+  assert(valeur, 1350, 'coût de remplacement en km')
 })
-test('Une valeur locale en CAD utilise la surface et le facteur de preuve', ()=>{
-  const estimationLocale = Math.round(2.5 * 1200 * 0.8)
-  assert(estimationLocale, 2400, 'valeur locale CAD')
+test('Plusieurs services additionnent leurs coûts de remplacement', ()=>{
+  const valeur = Math.round(1.5 * 2000 * 0.8) + Math.round(3 * 450 * 1)
+  assert(valeur, 3750, 'total des services')
 })
-const FACTEUR_CAD2026_PAR_INT2007 = 1.212177 * (170 / 111.45)
-test('Conversion parité PPP 2007 et inflation jusqu’à septembre 2026', ()=>{
-  assert(FACTEUR_CAD2026_PAR_INT2007, 1.849, 'facteur CAD 2026')
-})
-test('Nourriture milieu humide : 614 Int$ → 1 135 CAD 2026/ha/an', ()=>{
-  assert(Math.round(614 * FACTEUR_CAD2026_PAR_INT2007), 1135, 'conversion par service')
-})
-test('Une référence convertie est utilisée automatiquement dans le calcul', ()=>{
-  const taux = Math.round(614 * FACTEUR_CAD2026_PAR_INT2007)
-  const total = Math.round(2 * taux * 0.8)
-  assert(total, 1816, 'valeur pour 2 ha avec facteur de preuve')
+test('Coût de remplacement non saisi ne produit aucune valeur', ()=>{
+  const cout = ''
+  const valeur = Math.round(2 * (cout === '' ? 0 : Number(cout)) * 0.8)
+  assert(valeur, 0, 'coût manquant')
 })
 
 // ── Tests influence politique ──────────────────────────────────────
