@@ -1,7 +1,11 @@
 'use client'
 import LikertScale from '@/components/ui/LikertScale'
 import { COUTS_EVITES } from '@/data/referenceCosts'
-import { ECOSYSTEM_SERVICES, ECOSYSTEM_SERVICES_SOURCE } from '@/data/ecosystemServices'
+import {
+  convertirInt2007EnCAD2026,
+  ECOSYSTEM_SERVICES,
+  ECOSYSTEM_SERVICES_SOURCE,
+} from '@/data/ecosystemServices'
 
 const TYPES_RISQUES = {
   fr: [
