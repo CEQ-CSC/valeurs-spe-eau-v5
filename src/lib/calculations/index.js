@@ -12,7 +12,7 @@
  */
 
 import { BENEVOLE, COUTS_EVITES, OBSERVATION } from '@/data/referenceCosts';
-import { ECOSYSTEM_SERVICES } from '@/data/ecosystemServices';
+import { ECOSYSTEM_SERVICES, convertirInt2007EnCAD2026 } from '@/data/ecosystemServices';
 
 export const METHODOLOGIE_VERSION = '1.0';
 export const ANNEE_REFERENCE = 2024;
@@ -150,13 +150,16 @@ function calcEnvironnementale(d) {
       selection.habitat === 'inlandWetlands' ? d.nbMilieuxHumides : d.superficieEauDouceHa
     ) || 0);
     const referenceInt2007ParHa = service[selection.habitat];
+    const referenceCad2026ParHa = referenceInt2007ParHa === null
+      ? null
+      : convertirInt2007EnCAD2026(referenceInt2007ParHa);
     const localRateProvided = selection.tauxCadParHaPersonnalise !== '' &&
       selection.tauxCadParHaPersonnalise !== null &&
       selection.tauxCadParHaPersonnalise !== undefined &&
       Number.isFinite(Number(selection.tauxCadParHaPersonnalise));
     const tauxCadParHa = localRateProvided
       ? Math.max(0, Number(selection.tauxCadParHaPersonnalise))
-      : null;
+      : referenceCad2026ParHa;
     return [{
       serviceId: service.id,
       nomFr: service.fr,
@@ -165,7 +168,10 @@ function calcEnvironnementale(d) {
       surfaceHa,
       referenceInt2007ParHa,
       valeurReferenceInt2007: referenceInt2007ParHa === null ? null : Math.round(surfaceHa * referenceInt2007ParHa),
+      referenceCad2026ParHa,
+      valeurReferenceCad2026: referenceCad2026ParHa === null ? null : Math.round(surfaceHa * referenceCad2026ParHa),
       tauxCadParHa,
+      tauxPersonnalise: localRateProvided,
       valeurLocaleCad: tauxCadParHa === null ? 0 : Math.round(surfaceHa * tauxCadParHa * fp),
     }];
   });
@@ -183,6 +189,10 @@ function calcEnvironnementale(d) {
   const valeurEcosystemique = valeurMH + valeurEauDouce + valeurKm;
   const benchmarkArticleInt2007 = detailServices.reduce(
     (total, service) => total + (service.valeurReferenceInt2007 ?? 0),
+    0
+  );
+  const benchmarkArticleCad2026 = detailServices.reduce(
+    (total, service) => total + (service.valeurReferenceCad2026 ?? 0),
     0
   );
   // Coûts évités probabilistes
@@ -224,6 +234,7 @@ function calcEnvironnementale(d) {
       valeurEauDouce,
       valeurEcosystemique,
       benchmarkArticleInt2007,
+      benchmarkArticleCad2026,
       methodeServices,
       detailServices,
       coutEvite,
@@ -391,6 +402,7 @@ export function calculerAssessment(formData) {
       risquesEvites: env.valeur_eco.detailRisques || [],
       servicesEcosystemiques: env.valeur_eco.detailServices || [],
       referenceServicesEcosystemiquesInt2007: env.valeur_eco.benchmarkArticleInt2007 || 0,
+      referenceServicesEcosystemiquesCad2026: env.valeur_eco.benchmarkArticleCad2026 || 0,
       methodeServicesEcosystemiques: env.valeur_eco.methodeServices || 'estimation-simplifiee',
     },
     chartRadar, chartRadarEN,

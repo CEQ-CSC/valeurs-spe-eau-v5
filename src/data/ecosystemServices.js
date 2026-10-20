@@ -1,8 +1,26 @@
 export const ECOSYSTEM_SERVICES_SOURCE = {
   citation: 'de Groot et al. (2012), Ecosystem Services 1, 50–61, Table 2',
   url: 'https://www.sciencedirect.com/science/article/pii/S2212041612000101',
-  currency: 'Int$ 2007',
-  unit: 'Int$/ha/year',
+  originalCurrency: 'Int$ 2007',
+  originalUnit: 'Int$/ha/an',
+  currency: 'CAD 2026',
+  unit: 'CAD/ha/an',
+  purchasingPowerParityCadPerIntDollar2007: 1.212177,
+  cpiCanada2007AnnualAverage: 111.45,
+  cpiCanadaLatest: 170,
+  cpiLatestDate: '2026-09',
+  inflationFactor: 170 / 111.45,
+  cad2026PerIntDollar2007: 1.212177 * (170 / 111.45),
+  conversionSources: [
+    {
+      name: 'World Bank, PPP conversion factor, GDP (LCU per international $), Canada, 2007',
+      url: 'https://api.worldbank.org/v2/country/CAN/indicator/PA.NUS.PPP?date=2007&format=json',
+    },
+    {
+      name: 'Bank of Canada, total CPI, monthly observations (January 2007 to September 2026)',
+      url: 'https://www.bankofcanada.ca/valet/observations/STATIC_INFLATIONCALC/json?start_date=2007-01-01&end_date=2026-09-01',
+    },
+  ],
 };
 
 export const ECOSYSTEM_SERVICES = [
@@ -29,3 +47,7 @@ export const ECOSYSTEM_SERVICES = [
   { id: 'spiritual_experience', category: 'cultural', fr: 'Expérience spirituelle', en: 'Spiritual experience', inlandWetlands: null, freshwater: null },
   { id: 'cognitive_development', category: 'cultural', fr: 'Développement cognitif', en: 'Cognitive development', inlandWetlands: null, freshwater: null },
 ];
+
+export function convertirInt2007EnCAD2026(valeurInt2007) {
+  return Math.round(valeurInt2007 * ECOSYSTEM_SERVICES_SOURCE.cad2026PerIntDollar2007);
+}

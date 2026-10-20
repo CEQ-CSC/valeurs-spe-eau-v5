@@ -118,11 +118,17 @@ test('Une valeur locale en CAD utilise la surface et le facteur de preuve', ()=>
   const estimationLocale = Math.round(2.5 * 1200 * 0.8)
   assert(estimationLocale, 2400, 'valeur locale CAD')
 })
-test('Une référence en Int$ 2007 n’est pas ajoutée au total CAD sans taux local', ()=>{
-  const referenceInt2007 = 2 * 614
-  const totalCad = 0
-  assert(referenceInt2007, 1228, 'repère article')
-  assert(totalCad, 0, 'total CAD sans taux local')
+const FACTEUR_CAD2026_PAR_INT2007 = 1.212177 * (170 / 111.45)
+test('Conversion parité PPP 2007 et inflation jusqu’à septembre 2026', ()=>{
+  assert(FACTEUR_CAD2026_PAR_INT2007, 1.849, 'facteur CAD 2026')
+})
+test('Nourriture milieu humide : 614 Int$ → 1 135 CAD 2026/ha/an', ()=>{
+  assert(Math.round(614 * FACTEUR_CAD2026_PAR_INT2007), 1135, 'conversion par service')
+})
+test('Une référence convertie est utilisée automatiquement dans le calcul', ()=>{
+  const taux = Math.round(614 * FACTEUR_CAD2026_PAR_INT2007)
+  const total = Math.round(2 * taux * 0.8)
+  assert(total, 1816, 'valeur pour 2 ha avec facteur de preuve')
 })
 
 // ── Tests influence politique ──────────────────────────────────────

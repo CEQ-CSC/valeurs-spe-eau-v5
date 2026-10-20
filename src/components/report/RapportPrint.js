@@ -371,15 +371,15 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
                     {t ? 'Détail des services écosystémiques sélectionnés' : 'Selected ecosystem services'}
                   </h3>
                   <div className="overflow-x-auto">
-                    <table className="w-full min-w-[650px] text-xs">
+                    <table className="w-full min-w-[600px] text-xs">
                       <thead>
                         <tr className="bg-ceq-ice print:bg-gray-200">
                           <th className="px-3 py-2 text-left">{t ? 'Service' : 'Service'}</th>
                           <th className="px-3 py-2 text-left">{t ? 'Milieu' : 'Habitat'}</th>
                           <th className="px-3 py-2 text-right">{t ? 'Surface (ha)' : 'Area (ha)'}</th>
-                          <th className="px-3 py-2 text-right">{t ? 'Référence Int$ 2007/ha/an' : 'Int$ 2007/ha/year reference'}</th>
-                          <th className="px-3 py-2 text-right">{t ? 'Repère article (Int$ 2007)' : 'Article benchmark (Int$ 2007)'}</th>
-                          <th className="px-3 py-2 text-right">{t ? 'Estimation locale CAD' : 'Local estimate CAD'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Taux appliqué (CAD 2026/ha/an)' : 'Applied rate (CAD 2026/ha/year)'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Équivalent original (Int$ 2007)' : 'Original equivalent (Int$ 2007)'}</th>
+                          <th className="px-3 py-2 text-right">{t ? 'Valeur estimée (CAD 2026)' : 'Estimated value (CAD 2026)'}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -393,12 +393,12 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
                             </td>
                             <td className="px-3 py-2 text-right">{service.surfaceHa}</td>
                             <td className="px-3 py-2 text-right">
-                              {service.referenceInt2007ParHa === null
+                              {service.tauxCadParHa === null
                                 ? (t ? 'Non estimé' : 'Not estimated')
-                                : `${service.referenceInt2007ParHa.toLocaleString(t ? 'fr-CA' : 'en-CA')} Int$/ha/an`}
+                                : `${formatMontant(service.tauxCadParHa, lang)}${service.tauxPersonnalise ? (t ? ' (local)' : ' (local)') : ''}`}
                             </td>
                             <td className="px-3 py-2 text-right">
-                              {service.valeurReferenceInt2007 === null
+                              {service.referenceInt2007ParHa === null
                                 ? '—'
                                 : `${service.valeurReferenceInt2007.toLocaleString(t ? 'fr-CA' : 'en-CA')} Int$`}
                             </td>
@@ -410,8 +410,8 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
                   </div>
                   <p className="mt-2 text-xs text-ceq-slate">
                     {t
-                      ? `Les valeurs de référence proviennent de de Groot et al. (2012), tableau 2, et demeurent en dollars internationaux de 2007. Référence appliquée aux surfaces sélectionnées : ${transparence.referenceServicesEcosystemiquesInt2007.toLocaleString('fr-CA')} Int$ 2007. Seules les valeurs locales saisies en CAD sont incluses au total économique.`
-                      : `Reference values come from de Groot et al. (2012), Table 2, and remain in 2007 international dollars. Reference applied to selected areas: ${transparence.referenceServicesEcosystemiquesInt2007.toLocaleString('en-CA')} Int$ 2007. Only locally entered CAD values are included in the economic total.`}
+                      ? `Référence : de Groot et al. (2012), tableau 2. Conversion appliquée : parité de pouvoir d’achat du Canada en 2007, puis IPC canadien de janvier 2007 à septembre 2026. Référence sur les surfaces sélectionnées : ${transparence.referenceServicesEcosystemiquesCad2026.toLocaleString('fr-CA')} CAD 2026 (${transparence.referenceServicesEcosystemiquesInt2007.toLocaleString('fr-CA')} Int$ 2007). Les taux locaux saisis remplacent les taux de référence pour les services correspondants.`
+                      : `Source: de Groot et al. (2012), Table 2. Conversion applied: Canada's 2007 purchasing power parity, then Canadian CPI from January 2007 to September 2026. Benchmark for selected areas: ${transparence.referenceServicesEcosystemiquesCad2026.toLocaleString('en-CA')} CAD 2026 (${transparence.referenceServicesEcosystemiquesInt2007.toLocaleString('en-CA')} Int$ 2007). Entered local rates replace reference rates for the corresponding services.`}
                   </p>
                 </div>
               )}
