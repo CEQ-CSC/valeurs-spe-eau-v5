@@ -66,7 +66,7 @@ Le moteur actif additionne des estimations de remplacement ou de coûts potentie
 |---|---|
 | Travail bénévole | Heures par type × 22,60 $/h; multiplicateurs de 1,2 pour la formation et 1,3 pour la coordination. |
 | Sensibilisation | Nombre de participants × 38 $ par personne. |
-| Données scientifiques | Nombre d’échantillons × 35 $, 75 $ ou 185 $, selon la complexité déclarée. |
+| Données scientifiques | Nombre d’observations complémentaires × coût de remplacement déclaré ou tarif de référence (35 $, 75 $ ou 185 $). |
 | Formation | Nombre de bénévoles × 420 $ × score de rigueur du protocole exprimé entre 0 et 1. |
 | Services écosystémiques | Pour chaque entrée : quantité en ha ou km × coût de remplacement saisi par unité × facteur de preuve. |
 | Coûts évités | Pour chaque risque pris en charge : coût de référence × probabilité fixe de détection × contribution estimée du projet. |
@@ -79,6 +79,14 @@ Pour les coûts évités, les probabilités inscrites dans le moteur actif sont 
 Le formulaire permet d’ajouter une ou plusieurs évaluations. Pour chaque entrée, l’utilisateur choisit le type d’écosystème (milieux lotiques, milieux lentiques, marais d’eau douce, tourbières ou autres), la dimension (ha ou km), la quantité, puis un service dans la liste retenue de l’article de de Groot et al. (2012), tableau 1 : eau, matières premières, ressources génétiques, régulation du climat, modération des perturbations, régulation des flux d’eau, traitement des déchets, prévention de l’érosion, maintien de la fertilité des sols, pollinisation, contrôle biologique, service de nurserie et protection du patrimoine génétique. L’utilisateur saisit le coût de remplacement par unité en CAD; la valeur calculée est `quantité × coût de remplacement unitaire × facteur de preuve`. Le formulaire permet aussi de nommer un autre service et d’indiquer son coût de remplacement. Les valeurs économiques intégrées par service dans le tableau 2 ne sont pas utilisées, car l’évaluation demandée repose sur le coût de remplacement choisi par l’utilisateur.
 
 Sources conceptuelles : [de Groot et al. (2012), *Global estimates of the value of ecosystems and their services in monetary units*](https://www.sciencedirect.com/science/article/pii/S2212041612000101), notamment le tableau 1 et les catégories de méthodes de coût de remplacement et de restauration. Les coûts saisis doivent être documentés par l’utilisateur et ne constituent pas des tarifs universels.
+
+### Valeur des données citoyennes
+
+Le formulaire permet de déclarer le nombre d’observations qui comblent des lacunes spatiales ou temporelles par rapport aux données existantes, ainsi que les coûts cumulés de conception, préparation, collecte et traitement. La valeur économique intégrée est estimée par `observations complémentaires × coût de remplacement par observation`; elle ne crédite donc pas automatiquement les observations redondantes. Le nombre complémentaire est plafonné au nombre total d’observations.
+
+Le coût par enregistrement est calculé séparément par `coûts cumulés de production / nombre total d’observations`. Comme dans l’approche de Alfonso, Gharesifard et Wehn (2022), il s’agit d’un indicateur de coût/efficience qui peut être suivi dans le temps, et non d’un bénéfice monétaire à ajouter au total. L’article mesure également les complémentarités spatiale et temporelle selon les lacunes des réseaux existants; l’application demande à l’utilisateur de déclarer le nombre d’observations complémentaires sur la base de cette comparaison, puisqu’elle ne dispose pas des jeux de données géoréférencés et datés nécessaires pour les calculer automatiquement. Les montants de remplacement demeurent des estimations distinctes de la méthode de l’article.
+
+Source : Alfonso, Gharesifard et Wehn (2022), « Analysing the value of environmental citizen-generated data: Complementarity and cost per observation », *Journal of Environmental Management*, 303, 114157. [https://doi.org/10.1016/j.jenvman.2021.114157](https://doi.org/10.1016/j.jenvman.2021.114157).
 
 Le ratio affiché est `valeur économique estimée / investissement déclaré`; il n’est pas calculé si l’investissement est nul ou absent. Il s’agit d’un ratio descriptif de type SROI, sans analyse complète des coûts, des effets attribuables, de leur durée, de leur actualisation ou des scénarios contrefactuels. Les valeurs des composantes sont exprimées en dollars canadiens sans indexation automatique. Les composantes peuvent se chevaucher : une même retombée ne doit pas être comptée à la fois comme sensibilisation, service écosystémique, coût évité ou influence politique sans justification.
 

@@ -65,8 +65,23 @@ test('Heures sous-totaux cohérents', ()=>{
 // ── Tests coût de remplacement données ────────────────────────────
 console.log('\n🔬 Valeur des données\n')
 
-test('100 obs. simples × 35$ = 3 500$',       ()=>assert(100*35, 3500))
-test('50 obs. avancées × 185$ = 9 250$',       ()=>assert(50*185, 9250))
+test('100 observations complémentaires × 35$ = 3 500$', ()=>assert(100*35, 3500))
+test('40 observations complémentaires × 75$ = 3 000$',  ()=>assert(40*75, 3000))
+test('Observations non complémentaires exclues de la valeur intégrée', ()=>{
+  const nombreObservations = 100, complementaires = 40, tarif = 75
+  assert(complementaires * tarif, 3000, 'valeur des données')
+})
+test('Le coût par enregistrement est un indicateur distinct', ()=>{
+  const coutCumule = 5000, nombreObservations = 100
+  assert(coutCumule / nombreObservations, 50, 'coût par enregistrement')
+  assert(40 * 75, 3000, 'valeur intégrée, sans additionner le coût')
+})
+test('Observations complémentaires plafonnées au total', ()=>{
+  const nombreObservations = 50
+  const complementaires = Math.min(nombreObservations, 80)
+  assert(complementaires * 35, 1750, 'valeur plafonnée')
+})
+test('50 obs. avancées × 185$ = 9 250$', ()=>assert(50*185, 9250))
 test('0 obs. → 0$',                            ()=>assert(0*35, 0))
 
 // ── Tests score global MCDA ────────────────────────────────────────

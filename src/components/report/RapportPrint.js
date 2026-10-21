@@ -281,7 +281,11 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
           </section>
 
           {/* 5. Valeur économique */}
-          {(valeurTotale > 0 || transparence?.servicesEcosystemiques?.length > 0) && (
+          {(valeurTotale > 0 ||
+            transparence?.servicesEcosystemiques?.length > 0 ||
+            transparence?.donneesScientifiques?.nombreObservations > 0 ||
+            (transparence?.donneesScientifiques &&
+              transparence.donneesScientifiques.coutProductionDonnees !== null)) && (
             <section className="print-section">
               <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-slate pb-2 mb-4">
                 {t ? '5. Valeur économique estimée' : '5. Estimated Economic Value'}
@@ -306,6 +310,54 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
                   </tr>
                 </tbody>
               </table>
+              {transparence?.donneesScientifiques &&
+                (transparence.donneesScientifiques.nombreObservations > 0 ||
+                  transparence.donneesScientifiques.coutProductionDonnees !== null) && (
+                <div className="mb-4 rounded-lg bg-ceq-ice p-3 text-xs text-ceq-slate print:bg-gray-50">
+                  <h3 className="mb-2 text-sm font-semibold text-ceq-dark">
+                    {t ? 'Complémentarité et coût des données' : 'Data complementarity and cost'}
+                  </h3>
+                  <dl className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                    <div>
+                      <dt className="inline">{t ? 'Observations totales : ' : 'Total observations: '}</dt>
+                      <dd className="inline">{transparence.donneesScientifiques.nombreObservations}</dd>
+                    </div>
+                    <div>
+                      <dt className="inline">{t ? 'Observations complémentaires : ' : 'Complementary observations: '}</dt>
+                      <dd className="inline">{transparence.donneesScientifiques.observationsComplementaires}</dd>
+                    </div>
+                    <div>
+                      <dt className="inline">{t ? 'Coût de remplacement par observation : ' : 'Replacement cost per observation: '}</dt>
+                      <dd className="inline">{formatMontant(transparence.donneesScientifiques.tarifRemplacement, lang)}</dd>
+                    </div>
+                    <div>
+                      <dt className="inline">{t ? 'Valeur estimée des données complémentaires : ' : 'Estimated value of complementary data: '}</dt>
+                      <dd className="inline font-semibold">{formatMontant(transparence.donneesScientifiques.valeurDonnees, lang)}</dd>
+                    </div>
+                    {transparence.donneesScientifiques.coutProductionDonnees !== null && (
+                      <>
+                        <div>
+                          <dt className="inline">{t ? 'Coût cumulé de production : ' : 'Cumulative data-generation cost: '}</dt>
+                          <dd className="inline">{formatMontant(transparence.donneesScientifiques.coutProductionDonnees, lang)}</dd>
+                        </div>
+                        <div>
+                          <dt className="inline">{t ? 'Coût par enregistrement (indicateur d’efficience) : ' : 'Cost per record (efficiency indicator): '}</dt>
+                          <dd className="inline">
+                            {transparence.donneesScientifiques.coutParEnregistrement === null
+                              ? (t ? 'Non calculable' : 'Not calculable')
+                              : formatMontant(transparence.donneesScientifiques.coutParEnregistrement, lang)}
+                          </dd>
+                        </div>
+                      </>
+                    )}
+                  </dl>
+                  <p className="mt-2">
+                    {t
+                      ? 'Le coût par enregistrement est un indicateur de coût, non un bénéfice; il n’est pas additionné à la valeur économique.'
+                      : 'Cost per record is a cost indicator, not a benefit; it is not added to the economic value.'}
+                  </p>
+                </div>
+              )}
               {transparence?.risquesEvites?.length > 0 && (
                 <div className="mb-4">
                   <h3 className="mb-2 text-sm font-semibold text-ceq-dark">

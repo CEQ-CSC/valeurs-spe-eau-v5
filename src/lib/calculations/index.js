@@ -91,10 +91,40 @@ function calcScientifique(d) {
     Number.isFinite(Number(tarifPersonnalise))
     ? Math.max(0, Number(tarifPersonnalise))
     : tarifReference;
-  const valeurDonnees  = Math.round(nb * tarif);
+  const observationsComplementaires = d.nbObservationsComplementaires === undefined
+    ? nb
+    : Math.min(nb, Math.max(0, Number(d.nbObservationsComplementaires)||0));
+  const valeurDonnees = Math.round(observationsComplementaires * tarif);
+  const coutProductionRenseigne = d.coutProductionDonnees !== '' &&
+    d.coutProductionDonnees !== null &&
+    d.coutProductionDonnees !== undefined &&
+    Number.isFinite(Number(d.coutProductionDonnees));
+  const coutProductionDonnees = coutProductionRenseigne
+    ? Math.max(0, Number(d.coutProductionDonnees))
+    : null;
+  const coutParEnregistrement = nb > 0 && coutProductionDonnees !== null
+    ? coutProductionDonnees / nb
+    : null;
   const niveauForm     = (likert(d.protocoleRigueur)||0)/100;
   const valeurFormation= Math.round((Number(d.nbBenevoles)||0)*REF.valeurFormation*niveauForm);
-  return { score, scores_detail:s, valeur_eco:{ valeurDonnees, valeurFormation, total:valeurDonnees+valeurFormation, tarif }};
+  return {
+    score,
+    scores_detail:s,
+    valeur_eco:{
+      valeurDonnees,
+      valeurFormation,
+      total:valeurDonnees+valeurFormation,
+      tarif,
+      detailDonnees:{
+        nombreObservations:nb,
+        observationsComplementaires,
+        tarifRemplacement:tarif,
+        valeurDonnees,
+        coutProductionDonnees,
+        coutParEnregistrement,
+      },
+    },
+  };
 }
 
 // ── Dimension Sociale ───────────────────────────────────────────────
@@ -380,6 +410,7 @@ export function calculerAssessment(formData) {
       sourceCoutsEvites: envD.sourceCoutsEvites || '',
       risquesEvites: env.valeur_eco.detailRisques || [],
       servicesEcosystemiques: env.valeur_eco.detailServices || [],
+      donneesScientifiques: sci.valeur_eco.detailDonnees,
     },
     chartRadar, chartRadarEN,
     // Format compatible V4 pour ReseauProvincial

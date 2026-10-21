@@ -149,6 +149,20 @@ export default function StepScientifique({ data, onChange, lang }) {
             <input type="number" min="0" value={data.nombreEchantillons??''} placeholder="0" onChange={e=>onChange('nombreEchantillons',e.target.value)} className={inp} />
           </div>
           <div>
+            <label className="label-ceq">
+              {t?'Observations complémentaires (lacunes spatiales ou temporelles comblées)':'Complementary observations (spatial or temporal gaps filled)'}
+            </label>
+            <input
+              type="number"
+              min="0"
+              max={data.nombreEchantillons || undefined}
+              value={data.nbObservationsComplementaires??''}
+              placeholder="0"
+              onChange={e=>onChange('nbObservationsComplementaires',e.target.value)}
+              className={inp}
+            />
+          </div>
+          <div>
             <label className="label-ceq">{t?'Publications / rapports scientifiques':'Scientific publications / reports'}</label>
             <input type="number" min="0" value={data.nbPublications??''} placeholder="0" onChange={e=>onChange('nbPublications',e.target.value)} className={inp} />
           </div>
@@ -195,6 +209,31 @@ export default function StepScientifique({ data, onChange, lang }) {
             {t
               ? 'Si renseigné, ce montant remplace le coût de référence de la complexité choisie.'
               : 'When entered, this amount replaces the reference cost for the selected complexity.'}
+          </p>
+          <label className="label-ceq mt-3">
+            {t?'Coûts cumulés de production des données (facultatif)':'Cumulative data-generation costs (optional)'}
+          </label>
+          <div className="relative">
+            <input
+              type="number"
+              min="0"
+              step="0.01"
+              value={data.coutProductionDonnees??''}
+              placeholder={t?'Coûts liés à cette collecte':'Costs linked to this data collection'}
+              onChange={e=>onChange('coutProductionDonnees',e.target.value)}
+              className={inp+" pr-12"}
+            />
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ceq-slate font-medium">CAD</span>
+          </div>
+          <p className="text-[11px] text-ceq-slate/70 mt-1">
+            {t
+              ? 'Inclure les coûts de conception, préparation, collecte et traitement, pour le même périmètre de données.'
+              : 'Include design, preparation, collection and processing costs for the same data scope.'}
+          </p>
+          <p className="text-[11px] text-ceq-slate/70 mt-2">
+            {t
+              ? 'La valeur intégrée au total utilise uniquement les observations complémentaires. Le coût par enregistrement est présenté séparément comme indicateur d’efficience.'
+              : 'Only complementary observations contribute to the total value. Cost per record is reported separately as an efficiency indicator.'}
           </p>
         </div>
       </div>
