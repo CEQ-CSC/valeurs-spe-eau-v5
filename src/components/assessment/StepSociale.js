@@ -45,8 +45,8 @@ export default function StepSociale({ data, onChange, lang }) {
           </h3>
           <p className="mb-3 mt-1 text-xs leading-relaxed text-ceq-slate">
             {t
-              ? 'Décrivez les étapes observées, de la sensibilisation aux changements à long terme. Une contribution du projet ne signifie pas à elle seule une causalité démontrée. Les champs sont facultatifs et ne modifient pas le score.'
-              : 'Describe observed stages, from awareness to long-term change. Project contribution alone does not establish causality. These optional fields do not change the score.'}
+              ? 'Veuillez décrire les étapes observées, de la phase de sensibilisation jusqu’aux changements pérennes. Il est rappelé qu’une contribution du projet ne saurait, à elle seule, établir une causalité démontrée. Le renseignement de ces champs est facultatif et n’influence pas la notation finale.'
+              : 'Please describe the observed stages, from the initial awareness-raising phase through to long-lasting changes. It should be noted that a project’s contribution alone cannot establish a proven causal link. Completing these fields is optional and will not influence the final score.'}
           </p>
           <div className="space-y-3">
             {PARCOURS_IMPACT[lang].map(([key, label]) => (

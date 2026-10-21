@@ -172,7 +172,7 @@ export default function StepScientifique({ data, onChange, lang }) {
           </div>
         </div>
         <div className="mt-4">
-          <label className="label-ceq">{t?'Complexité des observations (pour calcul de valeur)':'Observation complexity (for value calculation)'}</label>
+          <label className="label-ceq">{t?'Complexité des observations':'Observation complexity'}</label>
           <select value={data.complexiteEchantillons||'simple'} onChange={e=>onChange('complexiteEchantillons',e.target.value)} className={inp+" cursor-pointer"}>
             <option value="simple">{t?'Simple (physico-chimie de base ≈ 35 $/obs.)':'Simple (basic physico-chemistry ≈$35/obs.)'}</option>
             <option value="intermediaire">{t?'Intermédiaire (multiparamétrique ≈75 $/obs.)':'Intermediate (multi-parameter ≈$75/obs.)'}</option>
