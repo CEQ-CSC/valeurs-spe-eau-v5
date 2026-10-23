@@ -29,10 +29,10 @@ export async function GET() {
     });
     const [legacyResult, approvedResult] = await Promise.all([
       supabase.from('projets_reseau').select(
-        'valeur_economi,valeur_scientific,valeur_sociale,valeur_environn,valeur_politique,score_global',
+        'valeur_economi,valeur_scientific,valeur_sociale,valeur_environn,valeur_politique,score_global,volunteer_count,volunteer_hours',
       ),
       supabase.from('soumissions_reseau')
-        .select('economic_value,scientific_score,social_score,environmental_score,political_score,global_score')
+        .select('economic_value,scientific_score,social_score,environmental_score,political_score,global_score,volunteer_count,volunteer_hours')
         .eq('status', 'approved'),
     ]);
 
@@ -49,6 +49,8 @@ export async function GET() {
         social_score: row.valeur_sociale,
         environmental_score: row.valeur_environn,
         political_score: row.valeur_politique,
+        volunteer_count: row.volunteer_count,
+        volunteer_hours: row.volunteer_hours,
       })) : []),
       ...(approvedResult.data || []),
     ];
@@ -56,6 +58,8 @@ export async function GET() {
     const stats = {
       projetsEnregistres: projectCount,
       valeurEconomiqueCumulee: rows.reduce((total, row) => total + Number(row.economic_value || 0), 0),
+      nombreBenevolesCumule: sum(rows, 'volunteer_count'),
+      heuresBenevolatCumulees: sum(rows, 'volunteer_hours'),
       scoreGlobalMoyen: projectCount
         ? Math.round(sum(rows, 'global_score') / projectCount)
         : 0,

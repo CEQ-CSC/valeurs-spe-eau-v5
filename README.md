@@ -21,6 +21,8 @@ Les renseignements supplémentaires sur les rôles et les étapes de participati
 
 Une fonction distincte permet de proposer une contribution au Réseau provincial. Selon la configuration du service, la contribution est soumise à approbation avant d’être incluse dans les statistiques publiques. Ce partage n’est pas nécessaire pour réaliser une évaluation.
 
+Après approbation, le Réseau provincial additionne le nombre de bénévoles/participants et les heures de bénévolat déclarés dans les projets. Le nombre est repris du champ « Participants total (toutes années) »; les heures proviennent du total annuel déclaré pour le projet. La migration Supabase `20261023130000_add_network_volunteer_totals.sql` ajoute les colonnes de stockage requises aux tables de soumissions et de projets historiques.
+
 ## 3. Méthode de calcul des scores
 
 ### 3.1 Échelle et agrégation

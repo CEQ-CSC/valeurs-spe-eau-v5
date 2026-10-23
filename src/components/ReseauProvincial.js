@@ -5,12 +5,14 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts'
 import { 
-  Globe, Landmark, HeartHandshake, Send, CheckCircle, ArrowUpRight, AlertTriangle
+  Globe, Landmark, HeartHandshake, Send, CheckCircle, ArrowUpRight, AlertTriangle, Users, Clock3
 } from 'lucide-react'
 
 const DONNEES_VIDES = {
   projetsEnregistres: 0,
   valeurEconomiqueCumulee: 0,
+  nombreBenevolesCumule: 0,
+  heuresBenevolatCumulees: 0,
   scoreGlobalMoyen: 0,
   repartitionParDimension: [
     { name: 'Scientifique', 'Impact Cumulé (/)': 0 },
@@ -82,6 +84,8 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
           valeurEnvironnementale: resultatsCalculateur?.scoresParDimension?.Environnementale || 0,
           valeurPolitique: resultatsCalculateur?.scoresParDimension?.Politique || 0,
           valeurDonnees: resultatsCalculateur?.valeurDonnees || 0,
+          nombreBenevoles: resultatsCalculateur?.transparence?.nombreBenevoles || 0,
+          heuresBenevolat: resultatsCalculateur?.transparence?.heuresBenevolat || 0,
           dateSoumission: new Date().toLocaleDateString('fr-CA')
         }),
       })
@@ -132,7 +136,7 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
         )}
 
         {/* Blocs KPI Provinciaux mis à jour en temps réel */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
           <div className="bg-gradient-to-br from-ceq-dark to-ceq-slate text-white p-5 rounded-xl shadow-ceq-sm">
             <div className="text-[11px] font-semibold text-ceq-cyan uppercase tracking-wider">Projets approuvés</div>
             <div className="text-3xl font-black mt-1 flex items-baseline gap-1">
@@ -162,6 +166,27 @@ export default function ReseauProvincial({ resultatsCalculateur, lang }) {
               {statsDynamiques.scoreGlobalMoyen}/100
             </div>
             <div className="text-[10px] text-gray-400 mt-1">Moyenne des projets approuvés</div>
+          </div>
+
+          <div className="card p-5">
+            <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
+              <Users className="w-3.5 h-3.5 text-ceq-slate" /> Nombre de bénévoles
+            </div>
+            <div className="text-2xl font-bold text-ceq-dark mt-1">
+              {Number(statsDynamiques.nombreBenevolesCumule).toLocaleString('fr-CA')}
+            </div>
+            <div className="text-[10px] text-gray-400 mt-1">Participants cumulés des projets approuvés</div>
+          </div>
+
+          <div className="card p-5">
+            <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
+              <Clock3 className="w-3.5 h-3.5 text-ceq-slate" /> Heures de bénévolat
+            </div>
+            <div className="text-2xl font-bold text-ceq-dark mt-1">
+              {Number(statsDynamiques.heuresBenevolatCumulees).toLocaleString('fr-CA')}
+              <span className="ml-1 text-sm font-medium text-ceq-slate">h</span>
+            </div>
+            <div className="text-[10px] text-gray-400 mt-1">Heures cumulées des projets approuvés</div>
           </div>
         </div>
 

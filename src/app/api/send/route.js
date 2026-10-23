@@ -37,6 +37,14 @@ function amount(value, label) {
   return numericValue;
 }
 
+function count(value, label) {
+  const numericValue = Number(value);
+  if (!Number.isSafeInteger(numericValue) || numericValue < 0) {
+    throw new InputError(`La valeur « ${label} » doit être un nombre entier positif ou nul.`);
+  }
+  return numericValue;
+}
+
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, character => ({
     '&': '&amp;',
@@ -100,6 +108,8 @@ export async function POST(req) {
     const scoreGlobal = score(data.scoreGlobal, 'global');
     const valeurEconomique = amount(data.valeurEconomique ?? 0, 'économique');
     const valeurDonnees = amount(data.valeurDonnees ?? 0, 'des données');
+    const nombreBenevoles = count(data.nombreBenevoles ?? 0, 'bénévoles');
+    const heuresBenevolat = amount(data.heuresBenevolat ?? 0, 'heures de bénévolat');
     const token = randomBytes(32).toString('hex');
 
     supabase = createClient(supabaseUrl, serviceRoleKey, {
@@ -116,6 +126,8 @@ export async function POST(req) {
         global_score: scoreGlobal,
         economic_value: valeurEconomique,
         data_value: valeurDonnees,
+        volunteer_count: nombreBenevoles,
+        volunteer_hours: heuresBenevolat,
         ...scores,
         ...scoresEnglish,
         consent: true,

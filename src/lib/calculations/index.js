@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════
- *  MOTEUR DE CALCUL UNIFIÉ — SPE-Eau V5
+ *  MOTEUR DE CALCUL VALEUR SPE
  *  Collectif Eau Québec / G3E-EWAG
  *
  *  ✅ SOURCE UNIQUE DE VÉRITÉ — aucun calcul dans page.js
@@ -411,6 +411,8 @@ export function calculerAssessment(formData) {
       risquesEvites: env.valeur_eco.detailRisques || [],
       servicesEcosystemiques: env.valeur_eco.detailServices || [],
       donneesScientifiques: sci.valeur_eco.detailDonnees,
+      nombreBenevoles: Math.max(0, Number(socD.nbParticipants) || 0),
+      heuresBenevolat: Math.max(0, Number(socD.heuresTotal) || 0),
     },
     chartRadar, chartRadarEN,
     // Format compatible V4 pour ReseauProvincial
