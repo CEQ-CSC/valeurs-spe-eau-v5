@@ -1,5 +1,6 @@
 'use client'
 import LikertScale from '@/components/ui/LikertScale'
+import InfoTooltip from '@/components/ui/InfoTooltip'
 import { BENEVOLE } from '@/data/referenceCosts'
 
 const PARCOURS_IMPACT = {
@@ -30,13 +31,17 @@ export default function StepSociale({ data, onChange, lang }) {
     <div className="space-y-1">
       <LikertScale name="apprentissage" value={data.apprentissage} onChange={onChange} options={opts}
         label={t?'Apprentissage et développement des compétences des participants':'Learning and skill development of participants'}
+        info={t?'Appréciez les apprentissages ou compétences acquis grâce au projet; privilégiez les résultats observés ou évalués plutôt que le nombre de formations offertes.':'Rate learning or skills gained through the project; focus on observed or assessed outcomes rather than the number of training sessions.'}
         aide={t?'Formations reçues, nouvelles compétences acquises, changements de connaissances':'Training received, new skills acquired, knowledge changes'} lang={lang} />
       <LikertScale name="inclusion" value={data.inclusion} onChange={onChange} options={opts}
-        label={t?'Inclusion et diversité des participants (âge, origine, expertise)':'Inclusion and participant diversity (age, background, expertise)'} lang={lang} />
+        label={t?'Inclusion et diversité des participants (âge, origine, expertise)':'Inclusion and participant diversity (age, background, expertise)'}
+        info={t?'Tenez compte de la diversité des personnes rejointes et de l’accessibilité de la participation, selon les groupes pertinents pour votre territoire.':'Consider the diversity of people reached and the accessibility of participation for groups relevant to your area.'} lang={lang} />
       <LikertScale name="rayonnement" value={data.rayonnement} onChange={onChange} options={opts}
-        label={t?'Rayonnement et notoriété dans la communauté locale':'Community outreach and local recognition'} lang={lang} />
+        label={t?'Rayonnement et notoriété dans la communauté locale':'Community outreach and local recognition'}
+        info={t?'Évaluez la portée et la reconnaissance du projet dans la communauté, avec des exemples comme des activités publiques, des demandes d’information ou des mentions médiatiques.':'Rate the project’s reach and recognition in the community, using examples such as public events, information requests, or media mentions.'} lang={lang} />
       <LikertScale name="transfert" value={data.transfert} onChange={onChange} options={opts}
-        label={t?'Transfert des connaissances vers d\'autres organisations':'Knowledge transfer to other organizations'} lang={lang} />
+        label={t?'Transfert des connaissances vers d\'autres organisations':'Knowledge transfer to other organizations'}
+        info={t?'Considérez les connaissances, outils ou méthodes effectivement transmis et repris par d’autres organisations.':'Consider knowledge, tools, or methods actually shared with and adopted by other organizations.'} lang={lang} />
       
       <div className="border-t border-ceq-iceDark pt-4 mt-2">
         <section className="mb-5 rounded-xl border border-ceq-iceDark bg-ceq-ice p-4">
@@ -78,29 +83,47 @@ export default function StepSociale({ data, onChange, lang }) {
         <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">{t?'Chiffres clés':'Key Figures'}</p>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="label-ceq">{t?'Participants total (toutes années)':'Total participants (all years)'}</label>
+            <label className="label-ceq">
+              {t?'Participants total (toutes années)':'Total participants (all years)'}
+              <InfoTooltip label={t?'Information sur le nombre de participants':'Information about participant count'} text={t?'Nombre total de personnes ayant participé au projet depuis son début. Une même personne ne devrait être comptée qu’une fois si vous pouvez l’identifier.':'Total number of people who have participated since the project began. Count each person once when you can identify them.'} />
+            </label>
             <input type="number" min="0" value={data.nbParticipants??''} placeholder="0" onChange={e=>onChange('nbParticipants',e.target.value)} className={inp} />
           </div>
           <div>
-            <label className="label-ceq">{t?'Bénévoles actifs (année courante)':'Active volunteers (current year)'}</label>
+            <label className="label-ceq">
+              {t?'Bénévoles actifs (année courante)':'Active volunteers (current year)'}
+              <InfoTooltip label={t?'Information sur les bénévoles actifs':'Information about active volunteers'} text={t?'Nombre de bénévoles ayant contribué au moins une fois pendant l’année évaluée. Ce chiffre peut différer du total des participants cumulés.':'Number of volunteers who contributed at least once during the evaluation year. This may differ from the cumulative participant count.'} />
+            </label>
             <input type="number" min="0" value={data.nbBenevoles??''} placeholder="0" onChange={e=>onChange('nbBenevoles',e.target.value)} className={inp} />
           </div>
           <div>
-            <label className="label-ceq">{t?'Participants évalués avant/après':'Participants assessed before/after'}</label>
+            <label className="label-ceq">
+              {t?'Participants évalués avant/après':'Participants assessed before/after'}
+              <InfoTooltip label={t?'Information sur les évaluations avant-après':'Information about pre/post assessments'} text={t?'Nombre de personnes ayant répondu à une mesure avant et après une activité ou une période afin d’observer un changement.':'Number of people assessed both before and after an activity or period to identify change.'} />
+            </label>
             <input type="number" min="0" value={data.nbParticipantsAvantApres??''} placeholder="0" onChange={e=>onChange('nbParticipantsAvantApres',e.target.value)} className={inp} />
           </div>
         </div>
         <div className="mt-3">
-          <label className="label-ceq">{t?'Outil ou méthode d’évaluation des apprentissages (facultatif)':'Learning assessment tool or method (optional)'}</label>
+          <label className="label-ceq">
+            {t?'Outil ou méthode d’évaluation des apprentissages (facultatif)':'Learning assessment tool or method (optional)'}
+            <InfoTooltip label={t?'Information sur la méthode d’évaluation':'Information about the assessment method'} text={t?'Nommez brièvement l’outil utilisé pour vérifier les apprentissages : questionnaire, entrevue, observation de pratique ou autre méthode.':'Briefly name the tool used to assess learning: questionnaire, interview, observation of practice, or another method.'} />
+          </label>
           <input type="text" maxLength="300" value={data.outilEvaluationApprentissage||''} onChange={e=>onChange('outilEvaluationApprentissage',e.target.value)} placeholder={t?'Ex. questionnaire avant/après, entrevue, démonstration de compétence':'E.g. pre/post questionnaire, interview, skills demonstration'} className={inp} />
         </div>
         <div>
-          <label className="label-ceq">{t?'Heures de bénévolat par année (total)':'Annual volunteer hours (total)'}</label>
+          <label className="label-ceq">
+            {t?'Heures de bénévolat par année (total)':'Annual volunteer hours (total)'}
+            <InfoTooltip label={t?'Information sur les heures de bénévolat':'Information about volunteer hours'} text={t?'Total des heures bénévoles réalisées pendant l’année évaluée, toutes activités confondues. Les sous-totaux ci-dessous servent à répartir ces heures et ne doivent pas être ajoutés une seconde fois.':'Total volunteer hours during the evaluation year across all activities. The subtotals below break down these hours and must not be added again.'} />
+          </label>
           <input type="number" min="0" value={data.heuresTotal??''} placeholder="0" onChange={e=>onChange('heuresTotal',e.target.value)} className={inp} />
         </div>
 
         <div>
-          <label className="label-ceq">{t?'Taux horaire des bénévoles':'Volunteer hourly rate'}</label>
+          <label className="label-ceq">
+            {t?'Taux horaire des bénévoles':'Volunteer hourly rate'}
+            <InfoTooltip label={t?'Information sur le taux horaire':'Information about the hourly rate'} text={t?'Choisissez un taux de référence ou saisissez une estimation locale du coût de remplacement d’une heure de bénévolat.':'Choose a reference rate or enter a local estimate of the replacement cost for one volunteer hour.'} />
+          </label>
           <select
             value={data.tauxHoraireBenevole??String(BENEVOLE.tauxHoraire.valeur)}
             onChange={e=>onChange('tauxHoraireBenevole',e.target.value)}
@@ -165,7 +188,10 @@ export default function StepSociale({ data, onChange, lang }) {
         </div>
 
         <div className="mt-4">
-          <label className="label-ceq">{t?'Taux de rétention des bénévoles (%)':'Volunteer retention rate (%)'}</label>
+          <label className="label-ceq">
+            {t?'Taux de rétention des bénévoles (%)':'Volunteer retention rate (%)'}
+            <InfoTooltip label={t?'Information sur le taux de rétention':'Information about the retention rate'} text={t?'Pourcentage des bénévoles d’une période de référence qui sont revenus contribuer à la période suivante. Si vous ne pouvez pas l’estimer, laissez le champ vide.':'Percentage of volunteers from a reference period who returned in the following period. Leave blank if you cannot estimate it.'} />
+          </label>
           <div className="relative">
             <input type="number" min="0" max="100" value={data.retentionPct??''} placeholder={t?'Non renseigné':'Not specified'} onChange={e=>onChange('retentionPct',e.target.value)} className={inp+" pr-8"} />
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-ceq-slate">%</span>

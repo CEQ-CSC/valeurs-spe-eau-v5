@@ -1,4 +1,6 @@
 'use client'
+import InfoTooltip from '@/components/ui/InfoTooltip'
+
 export default function StepPreuves({ data, onChange, lang }) {
   const t = lang==='fr';
   return (
@@ -17,7 +19,15 @@ export default function StepPreuves({ data, onChange, lang }) {
           ['preuveInfluence', 'referenceInfluence', t?'L\'utilisation de vos données par des décideurs est documentée':'Data use by decision-makers is documented'],
         ].map(([name, referenceName, label])=>(
           <div key={name} className="mb-5">
-            <label className="label-ceq">{label}</label>
+            <label className="label-ceq">
+              {label}
+              <InfoTooltip
+                label={t ? `Information sur la preuve : ${label}` : `Evidence information: ${label}`}
+                text={t
+                  ? 'Choisissez le niveau qui décrit le mieux la preuve disponible, pas le niveau souhaité. Ajoutez une référence vérifiable si possible.'
+                  : 'Choose the level that best describes the evidence available, not the level you hope to reach. Add a verifiable reference when possible.'}
+              />
+            </label>
             <select value={data[name]||''} onChange={e=>onChange(name,e.target.value)} className="input-ceq cursor-pointer">
               <option value="">{t?'— Non évalué —':'— Not assessed —'}</option>
               <option value="mesure">{t?'Mesuré — données instrumentées et calibrées':'Measured — instrumented and calibrated data'}</option>

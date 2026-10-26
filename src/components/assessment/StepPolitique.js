@@ -1,5 +1,6 @@
 'use client'
 import LikertScale from '@/components/ui/LikertScale'
+import InfoTooltip from '@/components/ui/InfoTooltip'
 
 export default function StepPolitique({ data, onChange, lang }) {
   const t = lang==='fr';
@@ -29,6 +30,10 @@ export default function StepPolitique({ data, onChange, lang }) {
       <div className="mb-6">
         <label className="label-ceq">
           {t?'Niveau maximal d\'influence atteint sur les décisions':'Maximum influence level reached on decisions'}
+          <InfoTooltip
+            label={t ? 'Information sur le niveau d’influence' : 'Information about the influence level'}
+            text={t ? 'Choisissez le niveau le plus élevé appuyé par une preuve. La diffusion seule correspond à l’information; une influence sur une décision exige un lien documenté.' : 'Choose the highest level supported by evidence. Dissemination alone is information; influence on a decision requires a documented link.'}
+          />
         </label>
         <p className="text-xs text-ceq-slate mb-2 italic">{t?'Choisissez le niveau le plus élevé que vous pouvez documenter':'Choose the highest level you can document'}</p>
         <select value={data.niveauInfluence||''} onChange={e=>onChange('niveauInfluence',e.target.value)} className={inp+" cursor-pointer"}>
@@ -37,19 +42,26 @@ export default function StepPolitique({ data, onChange, lang }) {
         </select>
       </div>
       <LikertScale name="instancesGouvernance" value={data.instancesGouvernance} onChange={onChange} options={opts}
-        label={t?'Participation aux instances de gouvernance de l\'eau (comités, tables de concertation, OBV)':'Participation in water governance bodies (committees, concertation tables, OBV)'} lang={lang} />
+        label={t?'Participation aux instances de gouvernance de l\'eau (comités, tables de concertation, OBV)':'Participation in water governance bodies (committees, concertation tables, OBV)'}
+        info={t?'Évaluez la participation réelle du projet aux espaces où se discutent la gestion et les décisions liées à l’eau.':'Rate the project’s actual participation in forums where water management and related decisions are discussed.'} lang={lang} />
       <LikertScale name="partenariatsFormels" value={data.partenariatsFormels} onChange={onChange} options={opts}
-        label={t?'Partenariats formels avec des institutions (ententes, protocoles signés)':'Formal partnerships with institutions (signed agreements, protocols)'} lang={lang} />
+        label={t?'Partenariats formels avec des institutions (ententes, protocoles signés)':'Formal partnerships with institutions (signed agreements, protocols)'}
+        info={t?'Comptez les collaborations appuyées par une entente, un protocole ou un engagement formel, et non les contacts ponctuels.':'Count collaborations supported by an agreement, protocol, or formal commitment, not occasional contacts.'} lang={lang} />
       <LikertScale name="visibilitePublique" value={data.visibilitePublique} onChange={onChange} options={opts}
-        label={t?'Visibilité publique et médiatique':'Public and media visibility'} lang={lang} />
+        label={t?'Visibilité publique et médiatique':'Public and media visibility'}
+        info={t?'Tenez compte des communications publiques et médiatiques effectivement réalisées, pas seulement de la présence sur les réseaux sociaux.':'Consider public and media coverage that actually occurred, not merely a social media presence.'} lang={lang} />
       <LikertScale name="mobilisationReseau" value={data.mobilisationReseau} onChange={onChange} options={opts}
         label={t?'Connexion et contribution au réseau de science participative':'Connection and contribution to the participatory science network'}
+        info={t?'Évaluez les échanges, collaborations et ressources partagées avec d’autres projets. Ce facteur favorise la diffusion et n’augmente pas directement le score intrinsèque.':'Rate exchanges, collaborations, and resources shared with other projects. This supports dissemination and does not directly increase the intrinsic score.'}
         aide={t?'Facteur de diffusion et de mutualisation (n\'augmente pas le score intrinsèque)':'Diffusion and pooling factor (does not increase intrinsic score)'} lang={lang} />
       <div className="border-t border-ceq-iceDark pt-4 mt-2">
         <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">{t?'Données quantitatives':'Quantitative Data'}</p>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="label-ceq">{t?'Décisions institutionnelles influencées':'Institutional decisions influenced'}</label>
+            <label className="label-ceq">
+              {t?'Décisions institutionnelles influencées':'Institutional decisions influenced'}
+              <InfoTooltip label={t?'Information sur les décisions influencées':'Information about influenced decisions'} text={t?'Nombre de décisions distinctes pour lesquelles les données ou recommandations du projet ont joué un rôle documenté.':'Number of distinct decisions in which project data or recommendations played a documented role.'} />
+            </label>
             <input type="number" min="0" value={data.nbDecisionsInfluencees??''} placeholder="0" onChange={e=>onChange('nbDecisionsInfluencees',e.target.value)} className={inp} />
           </div>
           <div className="flex items-start gap-3 pt-5">

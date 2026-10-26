@@ -1,5 +1,6 @@
 'use client'
 import LikertScale from '@/components/ui/LikertScale'
+import InfoTooltip from '@/components/ui/InfoTooltip'
 import { COUTS_EVITES } from '@/data/referenceCosts'
 import {
   ECOSYSTEM_DIMENSIONS,
@@ -76,16 +77,21 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
   return (
     <div className="space-y-1">
       <LikertScale name="couvertureTerritoriale" value={data.couvertureTerritoriale} onChange={onChange} options={opts}
-        label={t?'Couverture et représentativité du territoire surveillé':'Coverage and representativeness of monitored territory'} lang={lang} />
+        label={t?'Couverture et représentativité du territoire surveillé':'Coverage and representativeness of monitored territory'}
+        info={t?'Évaluez si les sites suivis représentent les principaux secteurs et conditions du territoire, plutôt que leur seule superficie.':'Rate whether monitored sites represent the main areas and conditions in the territory, not just its total area.'} lang={lang} />
       <LikertScale name="diversiteMilieux" value={data.diversiteMilieux} onChange={onChange} options={opts}
-        label={t?'Diversité des milieux surveillés (lac, rivière, milieu humide, etc.)':'Diversity of monitored environments (lake, river, wetland, etc.)'} lang={lang} />
+        label={t?'Diversité des milieux surveillés (lac, rivière, milieu humide, etc.)':'Diversity of monitored environments (lake, river, wetland, etc.)'}
+        info={t?'Tenez compte des différents types d’écosystèmes réellement suivis par le projet.':'Consider the different ecosystem types actually monitored by the project.'} lang={lang} />
       <LikertScale name="detectionRisques" value={data.detectionRisques} onChange={onChange} options={opts}
         label={t?'Capacité de détection précoce de risques environnementaux':'Early environmental risk detection capacity'}
+        info={t?'Évaluez si le projet peut repérer rapidement une anomalie et la transmettre selon une procédure claire; cela ne signifie pas qu’un dommage a été évité.':'Rate whether the project can promptly identify an anomaly and report it through a clear process; this does not mean damage was prevented.'}
         aide={t?'Protocoles de signalement, liens avec les autorités, historique de détections':'Reporting protocols, links with authorities, detection history'} lang={lang} />
       <LikertScale name="servicesEco" value={data.servicesEco} onChange={onChange} options={opts}
-        label={t?'Documentation des services écosystémiques (épuration, régulation, biodiversité)':'Ecosystem services documentation (purification, regulation, biodiversity)'} lang={lang} />
+        label={t?'Documentation des services écosystémiques (épuration, régulation, biodiversité)':'Ecosystem services documentation (purification, regulation, biodiversity)'}
+        info={t?'Un service écosystémique est un bénéfice fourni par un écosystème, comme la filtration de l’eau ou la régulation des crues. Évaluez la documentation disponible.':'An ecosystem service is a benefit provided by an ecosystem, such as water filtration or flood regulation. Rate the documentation available.'} lang={lang} />
       <LikertScale name="contributionPDE" value={data.contributionPDE} onChange={onChange} options={opts}
-        label={t?'Contribution aux Plans directeurs de l\'eau (PDE)':'Contribution to watershed master plans (OBV)'} lang={lang} />
+        label={t?'Contribution aux Plans directeurs de l\'eau (PDE)':'Contribution to watershed master plans (OBV)'}
+        info={t?'Indiquez si les données ou résultats du projet sont repris dans un plan directeur de l’eau ou utilisés par l’organisme de bassin versant.':'Indicate whether project data or findings are included in a watershed master plan or used by the watershed organization.'} lang={lang} />
 
       <div className="border-t border-ceq-iceDark pt-4 mt-2">
         <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">{t?'Données quantitatives':'Quantitative Data'}</p>
@@ -133,9 +139,13 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
                   </button>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <label className="text-xs text-ceq-slate">
-                    {t ? 'Type de milieu ou d’écosystème' : 'Ecosystem type'}
+                  <div>
+                    <div className="mb-1 flex items-center text-xs text-ceq-slate">
+                      <label htmlFor={`ecosystem-type-${index}`}>{t ? 'Type de milieu ou d’écosystème' : 'Ecosystem type'}</label>
+                      <InfoTooltip label={t ? 'Information sur le type d’écosystème' : 'Information about ecosystem type'} text={t ? 'Choisissez le type de milieu où le service est fourni. Par exemple, un cours d’eau désigne un milieu lotique, tandis qu’un lac est lentique.' : 'Choose the environment type providing the service. For example, a river or stream is lotic, while a lake is lentic.'} />
+                    </div>
                     <select
+                      id={`ecosystem-type-${index}`}
                       value={evaluation.ecosystemType || 'lotic'}
                       onChange={event => modifierEvaluationServiceEco(index, 'ecosystemType', event.target.value)}
                       className={`${inp} mt-1`}
@@ -144,10 +154,14 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
                         <option key={type.id} value={type.id}>{t ? type.fr : type.en}</option>
                       ))}
                     </select>
-                  </label>
-                  <label className="text-xs text-ceq-slate">
-                    {t ? 'Dimension à évaluer' : 'Measurement unit'}
+                  </div>
+                  <div>
+                    <div className="mb-1 flex items-center text-xs text-ceq-slate">
+                      <label htmlFor={`ecosystem-dimension-${index}`}>{t ? 'Dimension à évaluer' : 'Measurement unit'}</label>
+                      <InfoTooltip label={t ? 'Information sur la dimension' : 'Information about the measurement unit'} text={t ? 'Choisissez l’unité correspondant au coût de remplacement que vous utiliserez : hectares pour une superficie ou kilomètres pour une longueur de cours d’eau.' : 'Choose the unit matching the replacement cost you will enter: hectares for area or kilometres for watercourse length.'} />
+                    </div>
                     <select
+                      id={`ecosystem-dimension-${index}`}
                       value={evaluation.dimension || 'km'}
                       onChange={event => modifierEvaluationServiceEco(index, 'dimension', event.target.value)}
                       className={`${inp} mt-1`}
@@ -156,10 +170,14 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
                         <option key={dimension.id} value={dimension.id}>{t ? dimension.fr : dimension.en}</option>
                       ))}
                     </select>
-                  </label>
-                  <label className="text-xs text-ceq-slate">
-                    {t ? `Quantité (${evaluation.dimension || 'km'})` : `Quantity (${evaluation.dimension || 'km'})`}
+                  </div>
+                  <div>
+                    <div className="mb-1 flex items-center text-xs text-ceq-slate">
+                      <label htmlFor={`ecosystem-quantity-${index}`}>{t ? `Quantité (${evaluation.dimension || 'km'})` : `Quantity (${evaluation.dimension || 'km'})`}</label>
+                      <InfoTooltip label={t ? 'Information sur la quantité' : 'Information about the quantity'} text={t ? 'Entrez la superficie ou la longueur réellement évaluée dans l’unité sélectionnée. Utilisez une valeur mesurable et évitez de compter deux fois une même zone.' : 'Enter the area or length being assessed in the selected unit. Use a measurable value and avoid counting the same area twice.'} />
+                    </div>
                     <input
+                      id={`ecosystem-quantity-${index}`}
                       type="number"
                       min="0"
                       step="0.01"
@@ -167,10 +185,14 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
                       onChange={event => modifierEvaluationServiceEco(index, 'quantity', event.target.value)}
                       className={`${inp} mt-1`}
                     />
-                  </label>
-                  <label className="text-xs text-ceq-slate">
-                    {t ? 'Service écosystémique fourni' : 'Ecosystem service provided'}
+                  </div>
+                  <div>
+                    <div className="mb-1 flex items-center text-xs text-ceq-slate">
+                      <label htmlFor={`ecosystem-service-${index}`}>{t ? 'Service écosystémique fourni' : 'Ecosystem service provided'}</label>
+                      <InfoTooltip label={t ? 'Information sur le service écosystémique' : 'Information about the ecosystem service'} text={t ? 'Choisissez le bénéfice fourni par le milieu et lié au projet. Sélectionnez « Autre » si le service n’apparaît pas dans la liste.' : 'Choose the benefit provided by the ecosystem and relevant to the project. Select “Other” if it is not listed.'} />
+                    </div>
                     <select
+                      id={`ecosystem-service-${index}`}
                       value={evaluation.serviceId || 'water'}
                       onChange={event => modifierEvaluationServiceEco(index, 'serviceId', event.target.value)}
                       className={`${inp} mt-1`}
@@ -179,24 +201,34 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
                         <option key={service.id} value={service.id}>{t ? service.fr : service.en}</option>
                       ))}
                     </select>
-                  </label>
+                  </div>
                   {evaluation.serviceId === 'other' && (
-                    <label className="text-xs text-ceq-slate sm:col-span-2">
-                      {t ? 'Nom de l’autre service écosystémique' : 'Name of the other ecosystem service'}
+                    <div className="sm:col-span-2">
+                      <div className="mb-1 flex items-center text-xs text-ceq-slate">
+                        <label htmlFor={`ecosystem-other-${index}`}>{t ? 'Nom de l’autre service écosystémique' : 'Name of the other ecosystem service'}</label>
+                        <InfoTooltip label={t ? 'Information sur le service personnalisé' : 'Information about the custom service'} text={t ? 'Nommez précisément le bénéfice écosystémique évalué et utilisez une source cohérente pour son coût de remplacement.' : 'Name the ecosystem benefit clearly and use a consistent source for its replacement cost.'} />
+                      </div>
                       <input
+                        id={`ecosystem-other-${index}`}
                         type="text"
                         maxLength="120"
                         value={evaluation.serviceName ?? ''}
                         onChange={event => modifierEvaluationServiceEco(index, 'serviceName', event.target.value)}
                         className={`${inp} mt-1`}
                       />
-                    </label>
+                    </div>
                   )}
-                  <label className="text-xs text-ceq-slate sm:col-span-2">
-                    {t
-                      ? `Coût de remplacement (CAD/${evaluation.dimension || 'km'})`
-                      : `Replacement cost (CAD/${evaluation.dimension || 'km'})`}
+                  <div className="sm:col-span-2">
+                    <div className="mb-1 flex items-center text-xs text-ceq-slate">
+                      <label htmlFor={`ecosystem-cost-${index}`}>
+                        {t
+                          ? `Coût de remplacement (CAD/${evaluation.dimension || 'km'})`
+                          : `Replacement cost (CAD/${evaluation.dimension || 'km'})`}
+                      </label>
+                      <InfoTooltip label={t ? 'Information sur le coût de remplacement' : 'Information about replacement cost'} text={t ? 'Coût estimé pour remplacer ou restaurer le service perdu, exprimé par hectare ou par kilomètre selon l’unité choisie. Indiquez une source et un périmètre comparables.' : 'Estimated cost to replace or restore the service lost, per hectare or kilometre according to the selected unit. Use a comparable source and scope.'} />
+                    </div>
                     <input
+                      id={`ecosystem-cost-${index}`}
                       type="number"
                       min="0"
                       step="0.01"
@@ -209,14 +241,17 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
                         ? 'Entrez le coût de remplacement par unité; la valeur estimée est quantité × coût unitaire × facteur de preuve.'
                         : 'Enter the replacement cost per unit; estimated value is quantity × unit cost × evidence factor.'}
                     </span>
-                  </label>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
         <div className="mb-4">
-          <label className="label-ceq">{t?'Valeur écosystémique':'Ecosystem value'}</label>
+          <label className="label-ceq">
+            {t?'Valeur écosystémique':'Ecosystem value'}
+            <InfoTooltip label={t?'Information sur le niveau de preuve écologique':'Information about ecosystem evidence level'} text={t?'Choisissez selon la qualité de la preuve associée aux services et aux coûts déclarés. Le niveau sélectionné réduit ou maintient la valeur estimée selon le facteur de preuve.' : 'Choose based on the evidence supporting the reported services and costs. The selected level adjusts the estimate using an evidence factor.'} />
+          </label>
           <p className="text-xs text-ceq-slate mb-2 italic">{t?'Ajuste la valeur estimée (mesurée = 100%, inconnue = 20%)':'Adjusts estimated value (measured = 100%, unknown = 20%)'}</p>
           <select value={data.preuveEcosystemique||'declare'} onChange={e=>onChange('preuveEcosystemique',e.target.value)} className={inp+" cursor-pointer"}>
             {(t?[['mesure','Mesurée (instruments calibrés)'],['documente','Documentée (rapport ou archive)'],['verifie','Estimée ou vérifiée par un tiers'],['declare','Déclarative (sans documentation)'],['inconnu','Non renseignée ou inconnue']]:
@@ -227,7 +262,10 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
         {/* Risques probabilistes */}
         <div className="rounded-xl border border-ceq-iceDark bg-ceq-ice p-4">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs font-bold text-ceq-dark">{t?'Coûts évités':'Avoided costs'}</p>
+            <p className="text-xs font-bold text-ceq-dark">
+              {t?'Coûts évités':'Avoided costs'}
+              <InfoTooltip label={t?'Information sur les coûts évités':'Information about avoided costs'} text={t?'Estimation probabiliste d’un coût qui aurait pu survenir et que la détection du projet a contribué à réduire. Ne déclarez que les risques appuyés par des éléments vérifiables; ce montant ne prouve pas à lui seul qu’un incident a été évité.' : 'Probabilistic estimate of a cost that might have occurred and that project detection helped reduce. Include only risks supported by evidence; this amount alone does not prove an incident was prevented.'} />
+            </p>
             <button type="button" onClick={addRisque} className="text-xs bg-ceq-dark text-white px-3 py-1.5 rounded-lg hover:bg-ceq-slate transition-all">
               + {t?'Ajouter un risque':'Add risk'}
             </button>
@@ -236,20 +274,29 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
           {risques.map((r,i)=>(
             <div key={i} className="bg-white rounded-xl border border-ceq-iceDark p-3 mb-2">
               <div className="flex justify-between items-start mb-2">
-                <select value={r.type} onChange={e=>updateTypeRisque(i,e.target.value)} className="text-xs border rounded-lg px-2 py-1.5 text-ceq-dark flex-1 mr-2">
+                <select
+                  aria-label={t ? `Type de risque ${i + 1}` : `Risk type ${i + 1}`}
+                  value={r.type}
+                  onChange={e=>updateTypeRisque(i,e.target.value)}
+                  className="text-xs border rounded-lg px-2 py-1.5 text-ceq-dark flex-1 mr-2"
+                >
                   {TYPES_RISQUES[lang].map(opt=><option key={opt.v} value={opt.v}>{opt.l}</option>)}
                 </select>
                 <button type="button" onClick={()=>removeRisque(i)} className="text-ceq-confLow text-xs px-2 py-1 hover:bg-red-50 rounded">✕</button>
               </div>
               {r.type==='contamination_eau_potable'&&(
                 <div className="mb-2">
-                  <label className="text-xs text-ceq-slate">{t?'Population concernée (hab.)':'Population concerned (inhabitants)'}</label>
+                  <label className="text-xs text-ceq-slate">
+                    {t?'Population concernée (hab.)':'Population concerned (inhabitants)'}
+                    <InfoTooltip label={t?'Information sur la population concernée':'Information about the population concerned'} text={t?'Nombre approximatif de personnes visées par l’incident potentiel; le coût de référence associé est exprimé par tranche de 1 000 habitants.' : 'Approximate number of people affected by the potential incident; the associated reference cost is per 1,000 inhabitants.'} />
+                  </label>
                   <input type="number" min="0" value={r.population??1000} onChange={e=>updateRisque(i,'population',e.target.value)} className="w-full text-xs border rounded-lg px-2 py-1.5 mt-1" />
                 </div>
               )}
               <div className="mb-2">
                 <label className="text-xs text-ceq-slate">
                   {t?'Coût de référence de l’incident (facultatif)':'Incident reference cost (optional)'}
+                  <InfoTooltip label={t?'Information sur le coût de référence':'Information about the reference cost'} text={t?'Saisissez le coût documenté de l’incident ou laissez le champ vide pour conserver la valeur par défaut, lorsqu’elle existe.':'Enter a documented incident cost or leave blank to use the default value when available.'} />
                   {r.type==='contamination_eau_potable'
                     ? (t?' — par 1 000 habitants':' — per 1,000 inhabitants')
                     : (t?' — par incident':' — per incident')}
@@ -280,6 +327,7 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
                     </p>
                     <label className="text-xs text-ceq-slate mt-2 block">
                       {t?'Probabilité de détection par le projet (0 à 1)':'Project detection probability (0 to 1)'}
+                      <InfoTooltip label={t?'Information sur la probabilité de détection':'Information about detection probability'} text={t?'Estimez la probabilité que le projet détecte ce type d’incident à temps, entre 0 (aucune chance) et 1 (certitude). Justifiez cette estimation si possible.' : 'Estimate the chance that the project detects this type of incident in time, from 0 (no chance) to 1 (certainty). Provide a rationale when possible.'} />
                     </label>
                     <input
                       type="number"
@@ -295,7 +343,10 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
                 )}
               </div>
               <div>
-                <label className="text-xs text-ceq-slate">{t?'Contribution estimée de votre SPE (0 à 1)':'Estimated SPE contribution (0 to 1)'}</label>
+                <label className="text-xs text-ceq-slate">
+                  {t?'Contribution estimée de votre SPE (0 à 1)':'Estimated SPE contribution (0 to 1)'}
+                  <InfoTooltip label={t?'Information sur la contribution estimée':'Information about estimated contribution'} text={t?'Part du résultat que vous attribuez prudemment au projet, entre 0 % et 100 %. Ce n’est pas une preuve de causalité.' : 'The share of the outcome cautiously attributed to the project, from 0% to 100%. This is not proof of causation.'} />
+                </label>
                 <div className="flex items-center gap-2 mt-1">
                   <input type="range" min="0" max="1" step="0.05" value={r.contribution??0.5} onChange={e=>updateRisque(i,'contribution',parseFloat(e.target.value))} className="flex-1" />
                   <span className="text-xs font-bold text-ceq-dark w-8">{Math.round((r.contribution??0.5)*100)}%</span>
@@ -321,6 +372,7 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
             <div>
               <label className="label-ceq text-xs" htmlFor="scenario-sans-projet">
                 {t ? 'Scénario sans le projet (facultatif)' : 'Counterfactual without the project (optional)'}
+                <InfoTooltip label={t ? 'Information sur le scénario sans projet' : 'Information about the counterfactual'} text={t ? 'Décrivez brièvement ce qui aurait probablement eu lieu sans le projet. Il s’agit d’un scénario plausible, pas d’un fait observé ni d’une preuve de causalité.' : 'Briefly describe what would likely have happened without the project. This is a plausible scenario, not an observed fact or proof of causation.'} />
               </label>
               <textarea
                 id="scenario-sans-projet"
@@ -335,6 +387,7 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
             <div>
               <label className="label-ceq text-xs" htmlFor="source-couts-evites">
                 {t ? 'Source utilisée ou à vérifier (facultatif)' : 'Source used or to verify (optional)'}
+                <InfoTooltip label={t ? 'Information sur la source du coût' : 'Information about the cost source'} text={t ? 'Citez la référence, l’organisme ou le lien qui appuie le coût de référence ou la probabilité déclarée.' : 'Cite the reference, organization, or link supporting the reported reference cost or probability.'} />
               </label>
               <textarea
                 id="source-couts-evites"
