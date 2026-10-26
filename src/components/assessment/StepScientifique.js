@@ -50,8 +50,7 @@ export default function StepScientifique({ data, onChange, lang }) {
     <div className="space-y-1">
       <LikertScale name="protocoleRigueur" value={data.protocoleRigueur} onChange={onChange} options={opts}
         label={t?'Rigueur et formalisation du protocole de collecte':'Rigor and formalization of collection protocol'}
-        info={t?'Évaluez la clarté des consignes, la répétabilité des méthodes et l’existence de critères pour réaliser et valider les observations.':'Consider how clear and repeatable the methods are, and whether criteria exist for collecting and validating observations.'}
-        aide={t?'Protocole écrit, procédures documentées, critères de validation définis':'Written protocol, documented procedures, defined validation criteria'} lang={lang} />
+        info={t?'Évaluez la clarté des consignes, la répétabilité des méthodes et l’existence de critères pour réaliser et valider les observations. Exemples : protocole écrit et procédures documentées.':'Consider how clear and repeatable the methods are, and whether criteria exist for collecting and validating observations. Examples include a written protocol and documented procedures.'} lang={lang} />
       <LikertScale name="couvertureSpatiale" value={data.couvertureSpatiale} onChange={onChange} options={opts}
         label={t?'Couverture de zones peu ou pas surveillées':'Coverage of under-monitored areas'}
         info={t?'Indiquez dans quelle mesure le projet collecte des données dans des secteurs peu suivis par les réseaux existants.':'Rate how much the project collects data in areas that are poorly covered by existing monitoring networks.'} lang={lang} />
@@ -60,8 +59,7 @@ export default function StepScientifique({ data, onChange, lang }) {
         info={t?'Comptez la variété des éléments mesurés ou observés (par exemple température, pH, espèces ou habitats), pas le nombre de répétitions d’une même mesure.':'Consider the variety of measured or observed factors (e.g. temperature, pH, species, or habitats), not repeated measurements of the same factor.'} lang={lang} />
       <LikertScale name="controleQualite" value={data.controleQualite} onChange={onChange} options={opts}
         label={t?'Processus de contrôle qualité et validation des données':'Quality control and data validation process'}
-        info={t?'Évaluez les vérifications qui repèrent les erreurs ou incohérences, comme une validation par une personne qualifiée ou une comparaison à des valeurs de référence.':'Consider checks used to identify errors or inconsistencies, such as qualified review or comparison with reference values.'}
-        aide={t?'Double-saisie, vérification experte, comparaison données de référence':'Double entry, expert verification, reference data comparison'} lang={lang} />
+        info={t?'Évaluez les vérifications qui repèrent les erreurs ou incohérences, comme la double saisie, une vérification experte ou une comparaison aux données de référence.':'Consider checks used to identify errors or inconsistencies, such as double entry, expert verification, or comparison with reference data.'} lang={lang} />
       <LikertScale name="integrationBases" value={data.integrationBases} onChange={onChange} options={opts}
         label={t?'Intégration dans des bases de données publiques (Données Québec, DataStream, Water Rangers, etc.)':'Integration in public databases (Données Québec, DataStream, Water Rangers, etc.)'}
         info={t?'Sélectionnez un niveau selon l’intégration réelle des données dans une base accessible; une simple intention de les partager ne compte pas comme intégration.':'Rate the actual inclusion of data in an accessible database; an intention to share does not count as integration.'} lang={lang} />
@@ -75,11 +73,6 @@ export default function StepScientifique({ data, onChange, lang }) {
                 text={t ? 'Cochez les niveaux qui s’appliquent. Les rôles peuvent varier entre les personnes ou les étapes du projet.' : 'Select all applicable levels. Roles may vary between people or project stages.'}
               />
             </h3>
-            <p className="mb-3 mt-1 text-xs leading-relaxed text-ceq-slate">
-              {t
-                ? 'Sélectionnez le ou les niveaux qui décrivent la participation citoyenne au projet.'
-                : 'Select the level or levels that describe citizen involvement in the project.'}
-            </p>
             <fieldset>
               <legend className="sr-only">
                 {t ? 'Type ou niveau d’implication' : 'Type or level of involvement'}
@@ -115,11 +108,6 @@ export default function StepScientifique({ data, onChange, lang }) {
                 text={t ? 'Cochez les activités auxquelles les citoyens participent réellement, de la conception à la diffusion. Ces réponses décrivent le projet et ne changent pas le score.' : 'Select activities citizens actually participate in, from design to communication. These answers describe the project and do not change its score.'}
               />
             </h3>
-            <p className="mb-3 mt-1 text-xs leading-relaxed text-ceq-slate">
-              {t
-                ? 'Cochez les rôles ou activités auxquels les citoyennes et citoyens prennent part. Cette description complète le score, sans le modifier.'
-                : 'Select the roles or activities in which citizens take part. This describes the project without changing its score.'}
-            </p>
             <fieldset>
               <legend className="sr-only">
                 {t ? 'Rôles et activités du cycle scientifique' : 'Research-cycle roles and activities'}
@@ -243,11 +231,6 @@ export default function StepScientifique({ data, onChange, lang }) {
             />
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ceq-slate font-medium">$ / obs.</span>
           </div>
-          <p className="text-[11px] text-ceq-slate/70 mt-1">
-            {t
-              ? 'Si renseigné, ce montant remplace le coût de référence de la complexité choisie.'
-              : 'When entered, this amount replaces the reference cost for the selected complexity.'}
-          </p>
           <label className="label-ceq mt-3">
             {t?'Coûts cumulés de production des données (facultatif)':'Cumulative data-generation costs (optional)'}
             <InfoTooltip label={t?'Information sur les coûts cumulés de production':'Information about cumulative data-generation costs'} text={t?'Additionnez les coûts de conception, préparation, collecte et traitement pour le même ensemble d’observations. Ce montant sert à calculer un coût par enregistrement, pas un bénéfice.' : 'Add design, preparation, collection, and processing costs for the same set of observations. This is used to calculate cost per record, not a benefit.'} />
@@ -264,16 +247,6 @@ export default function StepScientifique({ data, onChange, lang }) {
             />
             <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ceq-slate font-medium">CAD</span>
           </div>
-          <p className="text-[11px] text-ceq-slate/70 mt-1">
-            {t
-              ? 'Inclure les coûts de conception, préparation, collecte et traitement, pour le même périmètre de données.'
-              : 'Include design, preparation, collection and processing costs for the same data scope.'}
-          </p>
-          <p className="text-[11px] text-ceq-slate/70 mt-2">
-            {t
-              ? 'La valeur intégrée au total utilise uniquement les observations complémentaires. Le coût par enregistrement est présenté séparément comme indicateur d’efficience.'
-              : 'Only complementary observations contribute to the total value. Cost per record is reported separately as an efficiency indicator.'}
-          </p>
         </div>
       </div>
     </div>

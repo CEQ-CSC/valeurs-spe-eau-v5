@@ -1,7 +1,7 @@
 'use client'
 import InfoTooltip from '@/components/ui/InfoTooltip'
 
-export default function LikertScale({ name, value, onChange, label, aide, info, options }) {
+export default function LikertScale({ name, value, onChange, label, info, options }) {
   const opts = options || [{v:1,l:'1'},{v:2,l:'2'},{v:3,l:'3'},{v:4,l:'4'},{v:5,l:'5'}];
   return (
     <div className="mb-5">
@@ -9,7 +9,6 @@ export default function LikertScale({ name, value, onChange, label, aide, info, 
         {label}
         {info && <InfoTooltip text={info} label={`Information : ${label}`} />}
       </div>
-      {aide && <p className="text-xs text-ceq-slate mb-2 italic">{aide}</p>}
       <div className="flex gap-1.5 flex-wrap">
         {opts.map(opt=>(
           <button key={opt.v} type="button" onClick={()=>onChange(name,opt.v)}

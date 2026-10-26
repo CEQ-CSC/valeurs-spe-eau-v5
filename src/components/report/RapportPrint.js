@@ -241,7 +241,7 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
           {/* 4. Scores par dimension */}
           <section className="print-section">
             <h2 className="font-display text-lg font-bold text-ceq-dark border-b-2 border-ceq-slate pb-2 mb-4">
-              {t ? '4. Évaluation par dimension (MCDA 25/25/25/25)' : '4. Evaluation by Dimension (MCDA 25/25/25/25)'}
+              {t ? '4. Évaluation par dimension' : '4. Evaluation by Dimension'}
             </h2>
             <div className="overflow-x-auto">
               <table className="w-full min-w-[480px] text-sm">

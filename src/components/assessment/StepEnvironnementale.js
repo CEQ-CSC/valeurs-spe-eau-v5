@@ -85,7 +85,7 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
       <LikertScale name="detectionRisques" value={data.detectionRisques} onChange={onChange} options={opts}
         label={t?'Capacité de détection précoce de risques environnementaux':'Early environmental risk detection capacity'}
         info={t?'Évaluez si le projet peut repérer rapidement une anomalie et la transmettre selon une procédure claire; cela ne signifie pas qu’un dommage a été évité.':'Rate whether the project can promptly identify an anomaly and report it through a clear process; this does not mean damage was prevented.'}
-        aide={t?'Protocoles de signalement, liens avec les autorités, historique de détections':'Reporting protocols, links with authorities, detection history'} lang={lang} />
+        lang={lang} />
       <LikertScale name="servicesEco" value={data.servicesEco} onChange={onChange} options={opts}
         label={t?'Documentation des services écosystémiques (épuration, régulation, biodiversité)':'Ecosystem services documentation (purification, regulation, biodiversity)'}
         info={t?'Un service écosystémique est un bénéfice fourni par un écosystème, comme la filtration de l’eau ou la régulation des crues. Évaluez la documentation disponible.':'An ecosystem service is a benefit provided by an ecosystem, such as water filtration or flood regulation. Rate the documentation available.'} lang={lang} />
@@ -103,8 +103,8 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
               </p>
               <p className="mt-1 text-[11px] text-ceq-slate">
                 {t
-                  ? 'Ajoutez un milieu et un service par ligne. La valeur utilise le coût de remplacement que vous saisissez.'
-                  : 'Add one ecosystem and service per row. The value uses the replacement cost you enter.'}
+                  ? 'Ajoutez un milieu et un service par ligne.'
+                  : 'Add one ecosystem and service per row.'}
               </p>
             </div>
             <button
@@ -225,7 +225,7 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
                           ? `Coût de remplacement (CAD/${evaluation.dimension || 'km'})`
                           : `Replacement cost (CAD/${evaluation.dimension || 'km'})`}
                       </label>
-                      <InfoTooltip label={t ? 'Information sur le coût de remplacement' : 'Information about replacement cost'} text={t ? 'Coût estimé pour remplacer ou restaurer le service perdu, exprimé par hectare ou par kilomètre selon l’unité choisie. Indiquez une source et un périmètre comparables.' : 'Estimated cost to replace or restore the service lost, per hectare or kilometre according to the selected unit. Use a comparable source and scope.'} />
+                      <InfoTooltip label={t ? 'Information sur le coût de remplacement' : 'Information about replacement cost'} text={t ? 'Entrez le coût par unité pour remplacer ou restaurer ce service. La valeur estimée est quantité × coût unitaire × facteur de preuve. Appuyez le montant par une source et un périmètre comparables.' : 'Enter the per-unit cost to replace or restore this service. Estimated value is quantity × unit cost × evidence factor. Support the amount with a comparable source and scope.'} />
                     </div>
                     <input
                       id={`ecosystem-cost-${index}`}
@@ -236,11 +236,6 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
                       onChange={event => modifierEvaluationServiceEco(index, 'replacementCost', event.target.value)}
                       className={`${inp} mt-1`}
                     />
-                    <span className="mt-1 block text-[11px]">
-                      {t
-                        ? 'Entrez le coût de remplacement par unité; la valeur estimée est quantité × coût unitaire × facteur de preuve.'
-                        : 'Enter the replacement cost per unit; estimated value is quantity × unit cost × evidence factor.'}
-                    </span>
                   </div>
                 </div>
               </div>
@@ -250,9 +245,8 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
         <div className="mb-4">
           <label className="label-ceq">
             {t?'Valeur écosystémique':'Ecosystem value'}
-            <InfoTooltip label={t?'Information sur le niveau de preuve écologique':'Information about ecosystem evidence level'} text={t?'Choisissez selon la qualité de la preuve associée aux services et aux coûts déclarés. Le niveau sélectionné réduit ou maintient la valeur estimée selon le facteur de preuve.' : 'Choose based on the evidence supporting the reported services and costs. The selected level adjusts the estimate using an evidence factor.'} />
+            <InfoTooltip label={t?'Information sur le niveau de preuve écologique':'Information about ecosystem evidence level'} text={t?'Choisissez selon la qualité de la preuve associée aux services et aux coûts déclarés. Le facteur appliqué est de 100 % pour une mesure, 80 % pour une donnée documentée, 60 % si estimée ou vérifiée par un tiers, 40 % si déclarative et 20 % si inconnue.' : 'Choose based on the evidence supporting the reported services and costs. The factor is 100% for measured data, 80% for documented data, 60% if estimated or third-party verified, 40% if self-reported, and 20% if unknown.'} />
           </label>
-          <p className="text-xs text-ceq-slate mb-2 italic">{t?'Ajuste la valeur estimée (mesurée = 100%, inconnue = 20%)':'Adjusts estimated value (measured = 100%, unknown = 20%)'}</p>
           <select value={data.preuveEcosystemique||'declare'} onChange={e=>onChange('preuveEcosystemique',e.target.value)} className={inp+" cursor-pointer"}>
             {(t?[['mesure','Mesurée (instruments calibrés)'],['documente','Documentée (rapport ou archive)'],['verifie','Estimée ou vérifiée par un tiers'],['declare','Déclarative (sans documentation)'],['inconnu','Non renseignée ou inconnue']]:
             [['mesure','Measured (calibrated instruments)'],['documente','Documented (report or archive)'],['verifie','Estimated or third-party verified'],['declare','Self-reported (no documentation)'],['inconnu','Not specified or unknown']])
@@ -264,13 +258,12 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
           <div className="flex items-center justify-between mb-2">
             <p className="text-xs font-bold text-ceq-dark">
               {t?'Coûts évités':'Avoided costs'}
-              <InfoTooltip label={t?'Information sur les coûts évités':'Information about avoided costs'} text={t?'Estimation probabiliste d’un coût qui aurait pu survenir et que la détection du projet a contribué à réduire. Ne déclarez que les risques appuyés par des éléments vérifiables; ce montant ne prouve pas à lui seul qu’un incident a été évité.' : 'Probabilistic estimate of a cost that might have occurred and that project detection helped reduce. Include only risks supported by evidence; this amount alone does not prove an incident was prevented.'} />
+              <InfoTooltip label={t?'Information sur les coûts évités':'Information about avoided costs'} text={t?'Estimation probabiliste d’un coût qui aurait pu survenir et que la détection du projet a contribué à réduire. Ne déclarez que les risques appuyés par des éléments vérifiables; cela ne prouve pas à lui seul qu’un incident a été évité. Ne comptez pas une même économie dans plusieurs composantes.' : 'Probabilistic estimate of a cost that might have occurred and that project detection helped reduce. Include only risks supported by evidence; this does not prove an incident was prevented. Do not count the same saving in multiple components.'} />
             </p>
             <button type="button" onClick={addRisque} className="text-xs bg-ceq-dark text-white px-3 py-1.5 rounded-lg hover:bg-ceq-slate transition-all">
               + {t?'Ajouter un risque':'Add risk'}
             </button>
           </div>
-          <p className="text-xs text-ceq-slate mb-3 italic">{t?'N\'indiquez que les risques pour lesquels votre projet a joué un rôle de détection documenté.':'Only include risks for which your project has played a documented detection role.'}</p>
           {risques.map((r,i)=>(
             <div key={i} className="bg-white rounded-xl border border-ceq-iceDark p-3 mb-2">
               <div className="flex justify-between items-start mb-2">
@@ -296,7 +289,16 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
               <div className="mb-2">
                 <label className="text-xs text-ceq-slate">
                   {t?'Coût de référence de l’incident (facultatif)':'Incident reference cost (optional)'}
-                  <InfoTooltip label={t?'Information sur le coût de référence':'Information about the reference cost'} text={t?'Saisissez le coût documenté de l’incident ou laissez le champ vide pour conserver la valeur par défaut, lorsqu’elle existe.':'Enter a documented incident cost or leave blank to use the default value when available.'} />
+                  <InfoTooltip
+                    label={t?'Information sur le coût de référence':'Information about the reference cost'}
+                    text={COUTS_EVITES[r.type]
+                      ? (t
+                        ? `Coût documenté de l’incident, ou valeur par défaut de ${formatMontant(COUTS_EVITES[r.type].cout_evenement_base.par_1000_habitants ?? COUTS_EVITES[r.type].cout_evenement_base.forfait)} si le champ reste vide. Saisissez un montant pour remplacer cette valeur.`
+                        : `Documented incident cost, or the default value of ${formatMontant(COUTS_EVITES[r.type].cout_evenement_base.par_1000_habitants ?? COUTS_EVITES[r.type].cout_evenement_base.forfait)} if left blank. Enter an amount to override it.`)
+                      : (t
+                        ? 'Aucun coût par défaut pour cet incident : saisissez un coût de référence et une probabilité de détection pour l’inclure au calcul.'
+                        : 'No default cost is available for this incident; enter a reference cost and detection probability to include it in the calculation.')}
+                  />
                   {r.type==='contamination_eau_potable'
                     ? (t?' — par 1 000 habitants':' — per 1,000 inhabitants')
                     : (t?' — par incident':' — per incident')}
@@ -312,19 +314,8 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
                   onChange={e=>updateRisque(i,'coutReferencePersonnalise',e.target.value)}
                   className="w-full text-xs border rounded-lg px-2 py-1.5 mt-1"
                 />
-                {COUTS_EVITES[r.type] ? (
-                  <p className="text-[11px] text-ceq-slate/70 mt-1">
-                    {t
-                      ? `Valeur par défaut : ${formatMontant(COUTS_EVITES[r.type].cout_evenement_base.par_1000_habitants ?? COUTS_EVITES[r.type].cout_evenement_base.forfait)}. Saisissez un montant pour la remplacer.`
-                      : `Default value: ${formatMontant(COUTS_EVITES[r.type].cout_evenement_base.par_1000_habitants ?? COUTS_EVITES[r.type].cout_evenement_base.forfait)}. Enter an amount to override it.`}
-                  </p>
-                ) : (
+                {!COUTS_EVITES[r.type] && (
                   <>
-                    <p className="text-[11px] text-amber-700 mt-1">
-                      {t
-                        ? 'Aucun coût de référence intégré pour cet incident. Saisissez un coût et une probabilité de détection pour le calculer.'
-                        : 'No built-in reference cost for this incident. Enter a cost and detection probability to include it in the calculation.'}
-                    </p>
                     <label className="text-xs text-ceq-slate mt-2 block">
                       {t?'Probabilité de détection par le projet (0 à 1)':'Project detection probability (0 to 1)'}
                       <InfoTooltip label={t?'Information sur la probabilité de détection':'Information about detection probability'} text={t?'Estimez la probabilité que le projet détecte ce type d’incident à temps, entre 0 (aucune chance) et 1 (certitude). Justifiez cette estimation si possible.' : 'Estimate the chance that the project detects this type of incident in time, from 0 (no chance) to 1 (certainty). Provide a rationale when possible.'} />
@@ -400,11 +391,6 @@ export default function StepEnvironnementale({ data, onChange, lang }) {
               />
             </div>
           </div>
-          <p className="mt-3 text-[11px] leading-relaxed text-ceq-slate">
-            {t
-              ? 'Les coûts évités sont des estimations probabilistes fondées sur des valeurs de référence et votre contribution estimée. Évitez de compter une même économie dans plusieurs composantes.'
-              : 'Avoided costs are probabilistic estimates based on reference values and your estimated contribution. Do not count the same saving in multiple components.'}
-          </p>
         </div>
       </div>
     </div>

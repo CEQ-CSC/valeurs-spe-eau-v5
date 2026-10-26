@@ -1,10 +1,12 @@
 'use client';
+import InfoTooltip from '@/components/ui/InfoTooltip'
 
 export function NumberField({ name, value, onChange, label, unit, placeholder, aide, min = 0 }) {
   return (
     <div className="mb-5">
-      <label htmlFor={name} className="label-ceq">{label}</label>
-      {aide && <p className="text-xs text-ceq-slate/75 mb-1.5">{aide}</p>}
+      <label htmlFor={name} className="label-ceq">
+        {label}{aide && <InfoTooltip label={`Information : ${label}`} text={aide} />}
+      </label>
       <div className="relative">
         <input id={name} type="number" min={min} value={value ?? ''} placeholder={placeholder || ''}
           onChange={e => onChange(name, e.target.value === '' ? '' : Number(e.target.value))}
@@ -24,8 +26,8 @@ export function TextField({ name, value, onChange, label, placeholder, aide, req
     <div className="mb-5">
       <label htmlFor={name} className="label-ceq">
         {label}{required && <span className="ml-1 text-red-700">*</span>}
+        {aide && <InfoTooltip label={`Information : ${label}`} text={aide} />}
       </label>
-      {aide && <p className="text-xs text-ceq-slate/75 mb-1.5">{aide}</p>}
       {rows ? (
         <textarea id={name} rows={rows} value={value ?? ''} placeholder={placeholder || ''}
           onChange={e => onChange(name, e.target.value)}
@@ -42,8 +44,9 @@ export function TextField({ name, value, onChange, label, placeholder, aide, req
 export function SelectField({ name, value, onChange, label, options, aide }) {
   return (
     <div className="mb-5">
-      <label htmlFor={name} className="label-ceq">{label}</label>
-      {aide && <p className="text-xs text-ceq-slate/75 mb-1.5">{aide}</p>}
+      <label htmlFor={name} className="label-ceq">
+        {label}{aide && <InfoTooltip label={`Information : ${label}`} text={aide} />}
+      </label>
       <select id={name} value={value ?? ''} onChange={e => onChange(name, e.target.value)}
         className="input-ceq cursor-pointer">
         <option value="">—</option>
@@ -59,8 +62,9 @@ export function CheckField({ name, value, onChange, label, aide }) {
       <input type="checkbox" id={name} checked={!!value} onChange={e => onChange(name, e.target.checked)}
         className="mt-0.5 h-4 w-4 cursor-pointer accent-ceq-slate" />
       <div>
-        <label htmlFor={name} className="block text-sm font-semibold text-ceq-dark cursor-pointer">{label}</label>
-        {aide && <p className="mt-0.5 text-xs text-ceq-slate/75">{aide}</p>}
+        <label htmlFor={name} className="block text-sm font-semibold text-ceq-dark cursor-pointer">
+          {label}{aide && <InfoTooltip label={`Information : ${label}`} text={aide} />}
+        </label>
       </div>
     </div>
   );

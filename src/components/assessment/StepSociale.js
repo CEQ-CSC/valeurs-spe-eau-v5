@@ -31,8 +31,7 @@ export default function StepSociale({ data, onChange, lang }) {
     <div className="space-y-1">
       <LikertScale name="apprentissage" value={data.apprentissage} onChange={onChange} options={opts}
         label={t?'Apprentissage et développement des compétences des participants':'Learning and skill development of participants'}
-        info={t?'Appréciez les apprentissages ou compétences acquis grâce au projet; privilégiez les résultats observés ou évalués plutôt que le nombre de formations offertes.':'Rate learning or skills gained through the project; focus on observed or assessed outcomes rather than the number of training sessions.'}
-        aide={t?'Formations reçues, nouvelles compétences acquises, changements de connaissances':'Training received, new skills acquired, knowledge changes'} lang={lang} />
+        info={t?'Appréciez les apprentissages ou compétences acquis grâce au projet (formations reçues, nouvelles compétences ou changements de connaissances); privilégiez les résultats observés ou évalués plutôt que le nombre de formations offertes.':'Rate learning or skills gained through the project (training received, new skills, or changes in knowledge); focus on observed or assessed outcomes rather than the number of training sessions.'} lang={lang} />
       <LikertScale name="inclusion" value={data.inclusion} onChange={onChange} options={opts}
         label={t?'Inclusion et diversité des participants (âge, origine, expertise)':'Inclusion and participant diversity (age, background, expertise)'}
         info={t?'Tenez compte de la diversité des personnes rejointes et de l’accessibilité de la participation, selon les groupes pertinents pour votre territoire.':'Consider the diversity of people reached and the accessibility of participation for groups relevant to your area.'} lang={lang} />
@@ -47,12 +46,13 @@ export default function StepSociale({ data, onChange, lang }) {
         <section className="mb-5 rounded-xl border border-ceq-iceDark bg-ceq-ice p-4">
           <h3 className="text-sm font-bold text-ceq-dark">
             {t ? 'Parcours des effets observés' : 'Pathway of observed effects'}
+            <InfoTooltip
+              label={t ? 'Information sur le parcours des effets' : 'Information about the pathway of effects'}
+              text={t
+                ? 'Décrivez les étapes observées, de la sensibilisation aux changements à long terme. Une contribution plausible ne prouve pas à elle seule un lien de causalité; ces champs sont facultatifs et n’influencent pas le score.'
+                : 'Describe observed stages from awareness to long-term change. A plausible contribution alone does not prove causation; these fields are optional and do not affect the score.'}
+            />
           </h3>
-          <p className="mb-3 mt-1 text-xs leading-relaxed text-ceq-slate">
-            {t
-              ? 'Veuillez décrire les étapes observées, de la phase de sensibilisation jusqu’aux changements pérennes. Il est rappelé qu’une contribution du projet ne saurait, à elle seule, établir une causalité démontrée. Le renseignement de ces champs est facultatif et n’influence pas la notation finale.'
-              : 'Please describe the observed stages, from the initial awareness-raising phase through to long-lasting changes. It should be noted that a project’s contribution alone cannot establish a proven causal link. Completing these fields is optional and will not influence the final score.'}
-          </p>
           <div className="space-y-3">
             {PARCOURS_IMPACT[lang].map(([key, label]) => (
               <div key={key} className="grid gap-2 rounded-lg border border-ceq-iceDark bg-white p-3 md:grid-cols-[minmax(0,1fr)_13rem]">
@@ -142,7 +142,10 @@ export default function StepSociale({ data, onChange, lang }) {
           </select>
           {data.tauxHoraireBenevole==='custom' && (
             <div className="mt-2">
-              <label className="label-ceq text-xs">{t?'Taux personnalisé ($/h)':'Custom rate ($/h)'}</label>
+              <label className="label-ceq text-xs">
+                {t?'Taux personnalisé ($/h)':'Custom rate ($/h)'}
+                <InfoTooltip label={t?'Information sur le taux personnalisé':'Information about the custom rate'} text={t?'Saisissez le coût estimé pour remplacer une heure de bénévolat. Si le champ reste vide, le moteur utilise 0 $/h.':'Enter the estimated replacement cost for one volunteer hour. If left blank, the calculator uses $0/hour.'} />
+              </label>
               <input
                 type="number"
                 min="0"
@@ -152,38 +155,39 @@ export default function StepSociale({ data, onChange, lang }) {
                 onChange={e=>onChange('tauxHoraireBenevolePersonnalise',e.target.value)}
                 className={inp}
               />
-              {(data.tauxHoraireBenevolePersonnalise === '' || data.tauxHoraireBenevolePersonnalise === null || data.tauxHoraireBenevolePersonnalise === undefined) && (
-                <p className="text-[11px] text-amber-700 mt-1">
-                  {t?'Saisissez le taux souhaité; un champ vide est calculé à 0 $/h.':'Enter the desired rate; an empty field is calculated as $0/hour.'}
-                </p>
-              )}
             </div>
           )}
         </div>
         
-        <p className="text-xs text-ceq-slate mb-2 italic mt-4">{t?'Sous-totaux optionnels (si connus) :':'Optional sub-totals (if known):'}</p>
+        <div className="mb-2 mt-4 flex items-center text-xs text-ceq-slate">
+          {t?'Sous-totaux optionnels (si connus)':'Optional subtotals (if known)'}
+          <InfoTooltip
+            label={t ? 'Information sur les sous-totaux' : 'Information about subtotals'}
+            text={t ? 'Répartissez le total d’heures entre les catégories ci-dessous si vous les connaissez. Chaque sous-total est déjà compris dans les heures totales; ne les additionnez pas une seconde fois.' : 'Break down total hours into the categories below if known. Each subtotal is already included in total hours; do not add them again.'}
+          />
+        </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div>
-            <label className="label-ceq text-xs">{t?'Formation':'Training'}</label>
+            <label className="label-ceq text-xs">
+              {t?'Formation':'Training'}
+              <InfoTooltip label={t?'Information sur les heures de formation':'Information about training hours'} text={t?'Heures bénévoles consacrées à préparer ou suivre des activités de formation et d’apprentissage des protocoles. Elles sont déjà incluses dans le total.':'Volunteer hours spent preparing or attending training and learning project protocols. These hours are already included in the total.'} />
+            </label>
             <input type="number" min="0" value={data.heuresFormation??''} placeholder="0" onChange={e=>onChange('heuresFormation',e.target.value)} className={inp+" text-sm"} />
-            <p className="text-[11px] text-ceq-slate/70 mt-1 leading-tight">
-              {t?'Heures consacrées à développer, former et apprendre les protocoles.':'Hours spent, to design and implement learning protocols and training.'}
-            </p>
           </div>
           <div>
-            <label className="label-ceq text-xs">{t?'Terrain':'Fieldwork'}</label>
+            <label className="label-ceq text-xs">
+              {t?'Terrain':'Fieldwork'}
+              <InfoTooltip label={t?'Information sur les heures de terrain':'Information about fieldwork hours'} text={t?'Heures bénévoles passées sur le terrain, par exemple pour les prélèvements et l’échantillonnage. Elles sont déjà incluses dans le total.':'Volunteer hours spent in the field, for example collecting samples and observations. These hours are already included in the total.'} />
+            </label>
             <input type="number" min="0" value={data.heuresTerrain??''} placeholder="0" onChange={e=>onChange('heuresTerrain',e.target.value)} className={inp+" text-sm"} />
-            <p className="text-[11px] text-ceq-slate/70 mt-1 leading-tight">
-              {t?'Heures de prélèvement et d\'échantillonnage au bord de l\'eau.':'Hours spent sampling and collecting water data.'}
-            </p>
           </div>
           <div>
-            <label className="label-ceq text-xs">{t?'Coordination':'Coordination'}</label>
+            <label className="label-ceq text-xs">
+              {t?'Coordination':'Coordination'}
+              <InfoTooltip label={t?'Information sur les heures de coordination':'Information about coordination hours'} text={t?'Heures bénévoles consacrées à la gestion, à la logistique et à l’animation du réseau. Elles sont déjà incluses dans le total.':'Volunteer hours spent on management, logistics, and network coordination. These hours are already included in the total.'} />
+            </label>
             <input type="number" min="0" value={data.heuresCoordination??''} placeholder="0" onChange={e=>onChange('heuresCoordination',e.target.value)} className={inp+" text-sm"} />
-            <p className="text-[11px] text-ceq-slate/70 mt-1 leading-tight">
-              {t?'Heures de gestion, logistique et animation du réseau.':'Hours spent on management, logistics, and network facilitation.'}
-            </p>
           </div>
         </div>
 

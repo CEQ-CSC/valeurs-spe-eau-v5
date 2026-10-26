@@ -35,18 +35,14 @@ export default function StepInvestissement({ data, onChange, lang }) {
           {t?'Investissement total cumulatif (toute la durée du projet)':'Total cumulative investment (project lifetime)'}
           <InfoTooltip
             label={t ? 'Information sur l’investissement total cumulatif' : 'Information about cumulative total investment'}
-            text={t ? 'Additionnez les ressources financières et en nature mobilisées depuis le début du projet, sans les compter deux fois. Ce montant sert au calcul du ratio SROI.' : 'Add all financial and in-kind resources mobilized since the project began, without double-counting. This amount is used to calculate the SROI ratio.'}
+            text={t ? 'Additionnez les ressources financières et en nature mobilisées depuis le début du projet, sans les compter deux fois. Ce montant sert au ratio SROI : par exemple, 3:1 signifie 3 $ de valeur estimée par dollar investi.' : 'Add all financial and in-kind resources mobilized since the project began, without double-counting. This is used for the SROI ratio; for example, 3:1 means $3 of estimated value per dollar invested.'}
           />
         </label>
-        <p className="text-xs text-ceq-slate mb-2 italic">{t?'Somme de toutes les ressources investies depuis le début':'Sum of all resources invested since start'}</p>
         <div className="relative">
           <input type="number" min="0" value={data.total??''} placeholder="0"
             onChange={e=>f('total',e.target.value)} className={inp+" pr-12 border-ceq-cyan"} />
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ceq-slate font-medium">$ CAD</span>
         </div>
-      </div>
-      <div className="bg-ceq-ice border border-ceq-iceDark rounded-xl p-4 text-xs text-ceq-slate">
-        <strong>SROI :</strong> {t?'Un SROI de 3:1 signifie que chaque $ investi génère 3 $ de valeur sociale estimée. La moyenne pour la SPE se situe entre 2,5 et 8.':'A SROI of 3:1 means every $1 invested generates $3 of estimated social value. The average for citizen science is 2.5–8.'}
       </div>
     </div>
   );

@@ -23,19 +23,14 @@ export default function StepPolitique({ data, onChange, lang }) {
   ];
   return (
     <div className="space-y-1">
-      <div className="bg-ceq-ice border border-ceq-iceDark rounded-xl p-4 text-xs text-ceq-slate mb-4">
-        <strong>{t?'Échelle d\'influence :':'Influence scale:'}</strong>{' '}
-        {t?'Information → Consultation → Recommandation → Décision → Changement de politique.':'Information → Consultation → Recommendation → Decision → Policy change.'}
-      </div>
       <div className="mb-6">
         <label className="label-ceq">
           {t?'Niveau maximal d\'influence atteint sur les décisions':'Maximum influence level reached on decisions'}
           <InfoTooltip
             label={t ? 'Information sur le niveau d’influence' : 'Information about the influence level'}
-            text={t ? 'Choisissez le niveau le plus élevé appuyé par une preuve. La diffusion seule correspond à l’information; une influence sur une décision exige un lien documenté.' : 'Choose the highest level supported by evidence. Dissemination alone is information; influence on a decision requires a documented link.'}
+            text={t ? 'Choisissez le niveau le plus élevé appuyé par une preuve : information, consultation, recommandation, décision ou changement de politique. La diffusion seule correspond à l’information; une influence sur une décision exige un lien documenté.' : 'Choose the highest level supported by evidence: information, consultation, recommendation, decision, or policy change. Dissemination alone is information; influence on a decision requires a documented link.'}
           />
         </label>
-        <p className="text-xs text-ceq-slate mb-2 italic">{t?'Choisissez le niveau le plus élevé que vous pouvez documenter':'Choose the highest level you can document'}</p>
         <select value={data.niveauInfluence||''} onChange={e=>onChange('niveauInfluence',e.target.value)} className={inp+" cursor-pointer"}>
           <option value="">{t?'— Non renseigné —':'— Not specified —'}</option>
           {influenceOpts.map(o=><option key={o.v} value={o.v}>{o.l}</option>)}
@@ -53,7 +48,7 @@ export default function StepPolitique({ data, onChange, lang }) {
       <LikertScale name="mobilisationReseau" value={data.mobilisationReseau} onChange={onChange} options={opts}
         label={t?'Connexion et contribution au réseau de science participative':'Connection and contribution to the participatory science network'}
         info={t?'Évaluez les échanges, collaborations et ressources partagées avec d’autres projets. Ce facteur favorise la diffusion et n’augmente pas directement le score intrinsèque.':'Rate exchanges, collaborations, and resources shared with other projects. This supports dissemination and does not directly increase the intrinsic score.'}
-        aide={t?'Facteur de diffusion et de mutualisation (n\'augmente pas le score intrinsèque)':'Diffusion and pooling factor (does not increase intrinsic score)'} lang={lang} />
+        lang={lang} />
       <div className="border-t border-ceq-iceDark pt-4 mt-2">
         <p className="text-xs font-bold text-ceq-slate uppercase tracking-wide mb-3">{t?'Données quantitatives':'Quantitative Data'}</p>
         <div className="grid grid-cols-2 gap-4">
@@ -68,19 +63,18 @@ export default function StepPolitique({ data, onChange, lang }) {
             <input type="checkbox" id="membreCEQ" checked={!!data.membreCEQ} onChange={e=>onChange('membreCEQ',e.target.checked)} className="mt-1 w-5 h-5 accent-ceq-cyan rounded cursor-pointer" />
             <label htmlFor="membreCEQ" className="text-sm font-semibold text-ceq-dark cursor-pointer leading-tight">
               {t?'Membre du Collectif Eau Québec':'Member of Collectif Eau Québec'}
-              <span className="block text-xs text-ceq-slate font-normal mt-0.5">{t?'(facteur de diffusion (pas pris en compte dans le score)':'(diffusion factor (not included in score)'}</span>
             </label>
+            <InfoTooltip
+              label={t ? 'Information sur l’adhésion au Collectif' : 'Information about membership'}
+              text={t ? 'Cette information sert de facteur de diffusion et n’est pas incluse dans le score.' : 'This information is used as a dissemination factor and is not included in the score.'}
+            />
           </div>
         </div>
         <div className="mt-4 rounded-xl border border-ceq-iceDark bg-ceq-ice p-4">
           <label className="label-ceq" htmlFor="preuve-influence">
             {t ? 'Référence d’une consultation, décision ou politique (facultatif)' : 'Reference for a consultation, decision or policy (optional)'}
+            <InfoTooltip label={t ? 'Information sur la référence d’influence' : 'Information about the influence reference'} text={t ? 'Indiquez le titre, l’organisme, la date ou le lien qui permet de vérifier le niveau d’influence déclaré.' : 'Provide the title, organization, date, or link that can verify the stated influence level.'} />
           </label>
-          <p className="mb-2 text-xs text-ceq-slate">
-            {t
-              ? 'Indiquez le titre, l’organisme, la date ou le lien permettant de vérifier le niveau d’influence déclaré.'
-              : 'Add the title, organization, date or link to help verify the stated level of influence.'}
-          </p>
           <textarea
             id="preuve-influence"
             rows={2}
