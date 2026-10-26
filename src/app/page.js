@@ -96,12 +96,8 @@ function Header({ lang, onToggle }) {
             width={160}
             height={96}
             priority
-            className="h-20 w-auto rounded-lg bg-white p-1.5 object-contain sm:h-24"
+            className="h-24 w-auto object-contain sm:h-28"
           />
-          <span className="brand-name">
-            <span className="block text-sm font-semibold leading-tight text-ceq-dark">{tr.collectif}</span>
-            <span className="mt-0.5 block text-xs text-ceq-slate">{tr.science}</span>
-          </span>
         </a>
         <button onClick={onToggle} className="language-switch cursor-pointer" aria-label={lang === 'fr' ? 'Switch language to English' : 'Changer la langue pour le français'}>
           <Globe size={15} aria-hidden="true" />
