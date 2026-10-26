@@ -96,7 +96,7 @@ export default function RapportPrint({ resultats, lang = 'fr' }) {
               <div className="report-meta text-xs text-white/60">/100</div>
             </div>
             <div>
-              <p className="font-semibold text-sm">{t ? 'Indice global SPE' : 'SPE Global Index'}</p>
+              <p className="font-semibold text-sm">{t ? 'Indice global moyen' : 'Average Global Index'}</p>
               <p className="report-summary-text text-sm text-white/80 mt-0.5">{t ? interp.fr : interp.en}</p>
             </div>
             {sroi && (
