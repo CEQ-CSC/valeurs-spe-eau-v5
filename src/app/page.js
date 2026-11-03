@@ -41,16 +41,16 @@ import { completionParSection } from '@/lib/validation/assessmentSchema'
 
 // ── Constantes ─────────────────────────────────────────────────────
 const ETAPES = [
-  { id:'info',           icon: Droplets,        fr:'Informations du projet',     en:'Project information' },
-  { id:'investissement', icon: DollarSign,      fr:'Valeur économique',          en:'Economic value' },
-  { id:'scientifique',   icon: Microscope,      fr:'Valeur scientifique',        en:'Scientific value' },
-  { id:'sociale',        icon: Users,           fr:'Valeur sociale',            en:'Social value' },
-  { id:'environnementale', icon: Leaf,          fr:'Valeur environnementale',   en:'Environmental value' },
-  { id:'politique',      icon: Building2,       fr:'Valeur politique',          en:'Political value' },
-  { id:'preuves',        icon: ClipboardList,   fr:'Qualité de l’évidence',     en:'Evidence quality' },
-  { id:'resultats',      icon: BarChart3,       fr:'Impact et synthèse',        en:'Impact and synthesis' },
+  { id:'info',           icon: Droplets,        fr:'Projet',                    en:'Project' },
+  { id:'investissement', icon: DollarSign,      fr:'Économie',                  en:'Economy' },
+  { id:'scientifique',   icon: Microscope,      fr:'Science',                   en:'Science' },
+  { id:'sociale',        icon: Users,           fr:'Social',                    en:'Social' },
+  { id:'environnementale', icon: Leaf,         fr:'Environnement',             en:'Environment' },
+  { id:'politique',      icon: Building2,       fr:'Politique',                 en:'Policy' },
+  { id:'preuves',        icon: ClipboardList,   fr:'Preuves',                   en:'Evidence' },
+  { id:'resultats',      icon: BarChart3,       fr:'Synthèse',                  en:'Summary' },
   { id:'rapport',        icon: FileText,        fr:'Rapport',                   en:'Report' },
-  { id:'reseau',         icon: Network,         fr:'Réseau provincial',         en:'Provincial Network' },
+  { id:'reseau',         icon: Network,         fr:'Réseau',                    en:'Network' },
 ]
 
 const ETAT_INITIAL = {
@@ -120,29 +120,29 @@ function ArchitectureOverview({ lang }) {
       title: lang === 'fr' ? 'Valeur' : 'Value',
       accent: 'bg-ceq-cyan/10 border-ceq-cyan/40 text-ceq-dark',
       items: lang === 'fr'
-        ? ['Valeur économique', 'Valeur scientifique', 'Valeur sociale', 'Valeur environnementale', 'Valeur politique']
-        : ['Economic value', 'Scientific value', 'Social value', 'Environmental value', 'Political value']
+        ? ['Économie', 'Science', 'Social', 'Environnement', 'Politique']
+        : ['Economy', 'Science', 'Social', 'Environment', 'Policy']
     },
     {
       title: lang === 'fr' ? 'Impact' : 'Impact',
       accent: 'bg-ceq-ice border-ceq-iceDark text-ceq-dark',
       items: lang === 'fr'
-        ? ['Effets observés', 'Participation', 'Mobilisation', 'Décisions et usages']
-        : ['Observed effects', 'Participation', 'Mobilization', 'Decision-making and use']
+        ? ['Effets', 'Participation', 'Mobilisation', 'Décisions']
+        : ['Effects', 'Participation', 'Mobilization', 'Decisions']
     },
     {
-      title: lang === 'fr' ? 'Qualité de l’évidence' : 'Evidence quality',
+      title: lang === 'fr' ? 'Preuves' : 'Evidence',
       accent: 'bg-white border-ceq-line text-ceq-dark',
       items: lang === 'fr'
-        ? ['Validation des données', 'Couverture', 'Fréquence', 'Traçabilité']
-        : ['Data validation', 'Coverage', 'Frequency', 'Traceability']
+        ? ['Validation', 'Couverture', 'Fréquence', 'Traçabilité']
+        : ['Validation', 'Coverage', 'Frequency', 'Traceability']
     },
     {
-      title: lang === 'fr' ? 'Synthèse globale' : 'Overall synthesis',
+      title: lang === 'fr' ? 'Synthèse' : 'Summary',
       accent: 'bg-ceq-slate/10 border-ceq-slate/30 text-ceq-dark',
       items: lang === 'fr'
-        ? ['Indice global', 'Niveau de confiance', 'Résumé du projet']
-        : ['Global index', 'Confidence level', 'Project summary']
+        ? ['Indice', 'Confiance', 'Résumé']
+        : ['Index', 'Confidence', 'Summary']
     }
   ]
 
@@ -307,21 +307,21 @@ export default function Home() {
           {isValuePhase && (
             <div className="mb-5 border-b border-ceq-line pb-3">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ceq-slate/80">
-                {lang === 'fr' ? 'Évaluation de la valeur' : 'Value assessment'}
+                {lang === 'fr' ? 'Valeur' : 'Value'}
               </p>
             </div>
           )}
           {isEvidencePhase && (
             <div className="mb-5 border-b border-ceq-line pb-3">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ceq-slate/80">
-                {lang === 'fr' ? 'Qualité de l’évidence' : 'Evidence quality'}
+                {lang === 'fr' ? 'Preuves' : 'Evidence'}
               </p>
             </div>
           )}
           {isImpactPhase && (
             <div className="mb-5 border-b border-ceq-line pb-3">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ceq-slate/80">
-                {lang === 'fr' ? 'Impact du projet et synthèse' : 'Project impact and synthesis'}
+                {lang === 'fr' ? 'Impact' : 'Impact'}
               </p>
             </div>
           )}
