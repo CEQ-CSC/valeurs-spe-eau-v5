@@ -114,6 +114,57 @@ function Header({ lang, onToggle }) {
   )
 }
 
+function ArchitectureOverview({ lang }) {
+  const blocks = [
+    {
+      title: lang === 'fr' ? 'Valeur' : 'Value',
+      accent: 'bg-ceq-cyan/10 border-ceq-cyan/40 text-ceq-dark',
+      items: lang === 'fr'
+        ? ['Valeur économique', 'Valeur scientifique', 'Valeur sociale', 'Valeur environnementale', 'Valeur politique']
+        : ['Economic value', 'Scientific value', 'Social value', 'Environmental value', 'Political value']
+    },
+    {
+      title: lang === 'fr' ? 'Impact' : 'Impact',
+      accent: 'bg-ceq-ice border-ceq-iceDark text-ceq-dark',
+      items: lang === 'fr'
+        ? ['Effets observés', 'Participation', 'Mobilisation', 'Décisions et usages']
+        : ['Observed effects', 'Participation', 'Mobilization', 'Decision-making and use']
+    },
+    {
+      title: lang === 'fr' ? 'Qualité de l’évidence' : 'Evidence quality',
+      accent: 'bg-white border-ceq-line text-ceq-dark',
+      items: lang === 'fr'
+        ? ['Validation des données', 'Couverture', 'Fréquence', 'Traçabilité']
+        : ['Data validation', 'Coverage', 'Frequency', 'Traceability']
+    },
+    {
+      title: lang === 'fr' ? 'Synthèse globale' : 'Overall synthesis',
+      accent: 'bg-ceq-slate/10 border-ceq-slate/30 text-ceq-dark',
+      items: lang === 'fr'
+        ? ['Indice global', 'Niveau de confiance', 'Résumé du projet']
+        : ['Global index', 'Confidence level', 'Project summary']
+    }
+  ]
+
+  return (
+    <div className="mb-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+      {blocks.map((block) => (
+        <div key={block.title} className={`rounded-2xl border p-3 shadow-sm ${block.accent}`}>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em]">{block.title}</p>
+          <ul className="space-y-1 text-sm leading-relaxed">
+            {block.items.map((item) => (
+              <li key={item} className="flex items-start gap-2">
+                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-current opacity-80" aria-hidden="true" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 // ── Stepper ────────────────────────────────────────────────────────
 function Stepper({ etapeId, onGo, completion, lang }) {
   return (
@@ -230,6 +281,7 @@ export default function Home() {
 
       <main id="contenu" className="mx-auto max-w-6xl px-4 py-7 sm:px-6 md:py-9">
         <Stepper etapeId={etapeId} onGo={setEtapeId} completion={completion} lang={lang}/>
+        <ArchitectureOverview lang={lang} />
 
         <div className="step-context">
           <div className="step-context-title">
