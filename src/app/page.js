@@ -119,12 +119,12 @@ function Stepper({ etapeId, onGo, completion, lang }) {
   const blocks = [
     {
       id: 'projet',
-      title: lang === 'fr' ? 'Projet' : 'Project',
-      steps: [{ id: 'info', label: lang === 'fr' ? 'Informations' : 'Overview' }],
+      title: 'PROJET',
+      steps: [{ id: 'info', label: lang === 'fr' ? 'Informations' : 'Information' }],
     },
     {
       id: 'valeur',
-      title: lang === 'fr' ? 'Valeur' : 'Value',
+      title: 'VALEUR',
       steps: [
         { id: 'investissement', label: lang === 'fr' ? 'Économie' : 'Economy' },
         { id: 'scientifique', label: lang === 'fr' ? 'Science' : 'Science' },
@@ -135,12 +135,12 @@ function Stepper({ etapeId, onGo, completion, lang }) {
     },
     {
       id: 'preuve',
-      title: lang === 'fr' ? 'Qualité de l’évidence' : 'Evidence quality',
+      title: lang === 'fr' ? 'QUALITÉ DE L’ÉVIDENCE' : 'QUALITY OF EVIDENCE',
       steps: [{ id: 'preuves', label: lang === 'fr' ? 'Preuves' : 'Evidence' }],
     },
     {
       id: 'synthese',
-      title: lang === 'fr' ? 'Synthèse globale' : 'Overall synthesis',
+      title: lang === 'fr' ? 'SYNTHÈSE GLOBALE' : 'GLOBAL SYNTHESIS',
       steps: [
         { id: 'resultats', label: lang === 'fr' ? 'Synthèse' : 'Summary' },
         { id: 'rapport', label: lang === 'fr' ? 'Rapport' : 'Report' },
