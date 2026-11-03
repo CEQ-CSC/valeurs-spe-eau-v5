@@ -42,11 +42,11 @@ import { completionParSection } from '@/lib/validation/assessmentSchema'
 // ── Constantes ─────────────────────────────────────────────────────
 const ETAPES = [
   { id:'info',           icon: Droplets,        fr:'Projet',                    en:'Project' },
-  { id:'investissement', icon: DollarSign,      fr:'Économie',                  en:'Economy' },
-  { id:'scientifique',   icon: Microscope,      fr:'Science',                   en:'Science' },
-  { id:'sociale',        icon: Users,           fr:'Social',                    en:'Social' },
-  { id:'environnementale', icon: Leaf,         fr:'Environnement',             en:'Environment' },
-  { id:'politique',      icon: Building2,       fr:'Politique',                 en:'Policy' },
+  { id:'investissement', icon: DollarSign,      fr:'Valeur',                    en:'Value' },
+  { id:'scientifique',   icon: Microscope,      fr:'Valeur',                    en:'Value' },
+  { id:'sociale',        icon: Users,           fr:'Valeur',                    en:'Value' },
+  { id:'environnementale', icon: Leaf,         fr:'Valeur',                    en:'Value' },
+  { id:'politique',      icon: Building2,       fr:'Valeur',                    en:'Value' },
   { id:'preuves',        icon: ClipboardList,   fr:'Preuves',                   en:'Evidence' },
   { id:'resultats',      icon: BarChart3,       fr:'Synthèse',                  en:'Summary' },
   { id:'rapport',        icon: FileText,        fr:'Rapport',                   en:'Report' },
@@ -120,7 +120,7 @@ function Stepper({ etapeId, onGo, completion, lang }) {
     {
       id: 'projet',
       title: lang === 'fr' ? 'Projet' : 'Project',
-      steps: [{ id: 'info', label: lang === 'fr' ? 'Projet' : 'Project' }],
+      steps: [{ id: 'info', label: lang === 'fr' ? 'Informations' : 'Overview' }],
     },
     {
       id: 'valeur',
@@ -135,16 +135,16 @@ function Stepper({ etapeId, onGo, completion, lang }) {
     },
     {
       id: 'preuve',
-      title: lang === 'fr' ? 'Preuves' : 'Evidence',
+      title: lang === 'fr' ? 'Qualité de l’évidence' : 'Evidence quality',
       steps: [{ id: 'preuves', label: lang === 'fr' ? 'Preuves' : 'Evidence' }],
     },
     {
       id: 'synthese',
-      title: lang === 'fr' ? 'Synthèse' : 'Summary',
+      title: lang === 'fr' ? 'Synthèse globale' : 'Overall synthesis',
       steps: [
-        { id: 'resultats', label: lang === 'fr' ? 'Impact' : 'Impact' },
+        { id: 'resultats', label: lang === 'fr' ? 'Synthèse' : 'Summary' },
         { id: 'rapport', label: lang === 'fr' ? 'Rapport' : 'Report' },
-        { id: 'reseau', label: lang === 'fr' ? 'Réseau' : 'Network' },
+        { id: 'reseau', label: lang === 'fr' ? 'Réseau provincial' : 'Provincial network' },
       ],
     },
   ]
