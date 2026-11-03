@@ -41,16 +41,16 @@ import { completionParSection } from '@/lib/validation/assessmentSchema'
 
 // ── Constantes ─────────────────────────────────────────────────────
 const ETAPES = [
-  { id:'info',           icon: Droplets,        fr:'Identification',       en:'Project Info' },
-  { id:'investissement',   icon: DollarSign,      fr:'Investissements',      en:'Investment' },
-  { id:'scientifique',     icon: Microscope,      fr:'Scientifique',         en:'Scientific' },
-  { id:'sociale',          icon: Users,           fr:'Sociale',              en:'Social' },
-  { id:'environnementale', icon: Leaf,            fr:'Environnementale',     en:'Environmental' },
-  { id:'politique',        icon: Building2,       fr:'Politique',            en:'Political' },
-  { id:'preuves',          icon: ClipboardList,   fr:'Preuves',              en:'Evidence' },
-  { id:'resultats',        icon: BarChart3,       fr:'Résultats',            en:'Results' },
-  { id:'rapport',          icon: FileText,        fr:'Rapport',              en:'Report' },
-  { id:'reseau',           icon: Network,         fr:'Réseau provincial',    en:'Provincial Network' },
+  { id:'info',           icon: Droplets,        fr:'Informations du projet',     en:'Project information' },
+  { id:'investissement', icon: DollarSign,      fr:'Valeur économique',          en:'Economic value' },
+  { id:'scientifique',   icon: Microscope,      fr:'Valeur scientifique',        en:'Scientific value' },
+  { id:'sociale',        icon: Users,           fr:'Valeur sociale',            en:'Social value' },
+  { id:'environnementale', icon: Leaf,          fr:'Valeur environnementale',   en:'Environmental value' },
+  { id:'politique',      icon: Building2,       fr:'Valeur politique',          en:'Political value' },
+  { id:'preuves',        icon: ClipboardList,   fr:'Qualité de l’évidence',     en:'Evidence quality' },
+  { id:'resultats',      icon: BarChart3,       fr:'Impact et synthèse',        en:'Impact and synthesis' },
+  { id:'rapport',        icon: FileText,        fr:'Rapport',                   en:'Report' },
+  { id:'reseau',         icon: Network,         fr:'Réseau provincial',         en:'Provincial Network' },
 ]
 
 const ETAT_INITIAL = {
@@ -198,6 +198,9 @@ export default function Home() {
 
   const isLastFormStep = etapeId==='preuves'
   const showPrint = etapeId==='rapport'
+  const isValuePhase = ['investissement','scientifique','sociale','environnementale','politique'].includes(etapeId)
+  const isEvidencePhase = etapeId==='preuves'
+  const isImpactPhase = etapeId==='resultats'
 
   // ── Rendu de l'étape ────────────────────────────────────────────
   const renderStep = () => {
@@ -249,6 +252,27 @@ export default function Home() {
         </div>
 
         <section className="card step-card mb-5 animate-fade-in" aria-label={lang === 'fr' ? titreEtape?.fr : titreEtape?.en}>
+          {isValuePhase && (
+            <div className="mb-5 border-b border-ceq-line pb-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ceq-slate/80">
+                {lang === 'fr' ? 'Évaluation de la valeur' : 'Value assessment'}
+              </p>
+            </div>
+          )}
+          {isEvidencePhase && (
+            <div className="mb-5 border-b border-ceq-line pb-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ceq-slate/80">
+                {lang === 'fr' ? 'Qualité de l’évidence' : 'Evidence quality'}
+              </p>
+            </div>
+          )}
+          {isImpactPhase && (
+            <div className="mb-5 border-b border-ceq-line pb-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-ceq-slate/80">
+                {lang === 'fr' ? 'Impact du projet et synthèse' : 'Project impact and synthesis'}
+              </p>
+            </div>
+          )}
           {renderStep()}
         </section>
 
