@@ -114,87 +114,78 @@ function Header({ lang, onToggle }) {
   )
 }
 
-function ArchitectureOverview({ lang }) {
+// ── Stepper ────────────────────────────────────────────────────────
+function Stepper({ etapeId, onGo, completion, lang }) {
   const blocks = [
     {
+      id: 'projet',
+      title: lang === 'fr' ? 'Projet' : 'Project',
+      steps: [{ id: 'info', label: lang === 'fr' ? 'Projet' : 'Project' }],
+    },
+    {
+      id: 'valeur',
       title: lang === 'fr' ? 'Valeur' : 'Value',
-      accent: 'bg-ceq-cyan/10 border-ceq-cyan/40 text-ceq-dark',
-      items: lang === 'fr'
-        ? ['Économie', 'Science', 'Social', 'Environnement', 'Politique']
-        : ['Economy', 'Science', 'Social', 'Environment', 'Policy']
+      steps: [
+        { id: 'investissement', label: lang === 'fr' ? 'Économie' : 'Economy' },
+        { id: 'scientifique', label: lang === 'fr' ? 'Science' : 'Science' },
+        { id: 'sociale', label: lang === 'fr' ? 'Social' : 'Social' },
+        { id: 'environnementale', label: lang === 'fr' ? 'Environnement' : 'Environment' },
+        { id: 'politique', label: lang === 'fr' ? 'Politique' : 'Policy' },
+      ],
     },
     {
-      title: lang === 'fr' ? 'Impact' : 'Impact',
-      accent: 'bg-ceq-ice border-ceq-iceDark text-ceq-dark',
-      items: lang === 'fr'
-        ? ['Effets', 'Participation', 'Mobilisation', 'Décisions']
-        : ['Effects', 'Participation', 'Mobilization', 'Decisions']
-    },
-    {
+      id: 'preuve',
       title: lang === 'fr' ? 'Preuves' : 'Evidence',
-      accent: 'bg-white border-ceq-line text-ceq-dark',
-      items: lang === 'fr'
-        ? ['Validation', 'Couverture', 'Fréquence', 'Traçabilité']
-        : ['Validation', 'Coverage', 'Frequency', 'Traceability']
+      steps: [{ id: 'preuves', label: lang === 'fr' ? 'Preuves' : 'Evidence' }],
     },
     {
+      id: 'synthese',
       title: lang === 'fr' ? 'Synthèse' : 'Summary',
-      accent: 'bg-ceq-slate/10 border-ceq-slate/30 text-ceq-dark',
-      items: lang === 'fr'
-        ? ['Indice', 'Confiance', 'Résumé']
-        : ['Index', 'Confidence', 'Summary']
-    }
+      steps: [
+        { id: 'resultats', label: lang === 'fr' ? 'Impact' : 'Impact' },
+        { id: 'rapport', label: lang === 'fr' ? 'Rapport' : 'Report' },
+        { id: 'reseau', label: lang === 'fr' ? 'Réseau' : 'Network' },
+      ],
+    },
   ]
 
   return (
-    <div className="mb-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-      {blocks.map((block) => (
-        <div key={block.title} className={`rounded-2xl border p-3 shadow-sm ${block.accent}`}>
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em]">{block.title}</p>
-          <ul className="space-y-1 text-sm leading-relaxed">
-            {block.items.map((item) => (
-              <li key={item} className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-current opacity-80" aria-hidden="true" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-// ── Stepper ────────────────────────────────────────────────────────
-function Stepper({ etapeId, onGo, completion, lang }) {
-  return (
     <nav className="stepper-shell no-print" aria-label={lang === 'fr' ? 'Étapes de l’évaluation' : 'Assessment steps'}>
-      <ol className="stepper-list">
-        {ETAPES.map((e, index) => {
-          const pct = completion[e.id] ?? 0
-          const isActive = e.id === etapeId
-          const isDone = pct >= 80
-          const IconComponent = e.icon
+      <div className="stepper-grid">
+        {blocks.map((block) => {
+          const activeStep = block.steps.some((s) => s.id === etapeId)
           return (
-            <li key={e.id} className="stepper-item">
-              <button
-                type="button"
-                onClick={() => onGo(e.id)}
-                aria-current={isActive ? 'step' : undefined}
-                aria-label={`${lang === 'fr' ? 'Étape' : 'Step'} ${index + 1}: ${lang === 'fr' ? e.fr : e.en}`}
-                title={lang === 'fr' ? e.fr : e.en}
-                className={`stepper-step ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}`}
-              >
-                <IconComponent className="stepper-icon" aria-hidden="true" />
-                <span className="stepper-label">{lang === 'fr' ? e.fr : e.en}</span>
-                <span className="stepper-progress" aria-hidden="true">
-                  <span style={{ width: `${pct}%` }} />
-                </span>
-              </button>
-            </li>
+            <div key={block.id} className={`stepper-block ${activeStep ? 'active' : ''}`}>
+              <div className="stepper-block-header">{block.title}</div>
+              <div className="stepper-block-actions">
+                {block.steps.map((step) => {
+                  const current = ETAPES.find((item) => item.id === step.id)
+                  const pct = completion[step.id] ?? 0
+                  const isActive = step.id === etapeId
+                  const isDone = pct >= 80
+                  const IconComponent = current?.icon || Droplets
+                  return (
+                    <button
+                      key={step.id}
+                      type="button"
+                      onClick={() => onGo(step.id)}
+                      aria-current={isActive ? 'step' : undefined}
+                      className={`stepper-chip ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}`}
+                      title={lang === 'fr' ? current?.fr : current?.en}
+                    >
+                      <IconComponent className="stepper-icon" aria-hidden="true" />
+                      <span className="stepper-label">{step.label}</span>
+                      <span className="stepper-progress" aria-hidden="true">
+                        <span style={{ width: `${pct}%` }} />
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
           )
         })}
-      </ol>
+      </div>
     </nav>
   )
 }
@@ -281,7 +272,6 @@ export default function Home() {
 
       <main id="contenu" className="mx-auto max-w-6xl px-4 py-7 sm:px-6 md:py-9">
         <Stepper etapeId={etapeId} onGo={setEtapeId} completion={completion} lang={lang}/>
-        <ArchitectureOverview lang={lang} />
 
         <div className="step-context">
           <div className="step-context-title">
