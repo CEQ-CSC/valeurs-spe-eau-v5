@@ -57,6 +57,7 @@ export function completionParSection(formData) {
     sociale:         ['nbParticipants','nbBenevoles','heuresTotal','apprentissage'],
     environnementale:['couvertureTerritoriale','diversiteMilieux','detectionRisques'],
     politique:       ['niveauInfluence','instancesGouvernance'],
+    impact:          ['environnementalNiveau','socialNiveau','politiqueNiveau','scientifiqueNiveau'],
     preuves:         ['preuveEcosystemique'],
   };
   return Object.fromEntries(Object.entries(req).map(([sec,champs])=>{

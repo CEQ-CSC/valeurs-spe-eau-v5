@@ -28,6 +28,7 @@ import StepScientifique   from '@/components/assessment/StepScientifique'
 import StepSociale        from '@/components/assessment/StepSociale'
 import StepEnvironnementale from '@/components/assessment/StepEnvironnementale'
 import StepPolitique      from '@/components/assessment/StepPolitique'
+import StepImpact         from '@/components/assessment/StepImpact'
 import StepPreuves        from '@/components/assessment/StepPreuves'
 
 // Recharts n'est pas SSR-compatible → import dynamique
@@ -47,6 +48,7 @@ const ETAPES = [
   { id:'sociale',        icon: Users,           fr:'Valeur',                    en:'Value' },
   { id:'environnementale', icon: Leaf,         fr:'Valeur',                    en:'Value' },
   { id:'politique',      icon: Building2,       fr:'Valeur',                    en:'Value' },
+  { id:'impact',         icon: Sparkles,        fr:'Impact',                    en:'Impact' },
   { id:'preuves',        icon: ClipboardList,   fr:'Preuves',                   en:'Evidence' },
   { id:'resultats',      icon: BarChart3,       fr:'Synthèse',                  en:'Summary' },
   { id:'rapport',        icon: FileText,        fr:'Rapport',                   en:'Report' },
@@ -55,7 +57,7 @@ const ETAPES = [
 
 const ETAT_INITIAL = {
   info:{}, investissement:{}, scientifique:{}, sociale:{},
-  environnementale:{ risquesActifs:[] }, politique:{}, preuves:{}
+  environnementale:{ risquesActifs:[] }, politique:{}, impact:{}, preuves:{}
 }
 
 // ── Labels traduits ────────────────────────────────────────────────
@@ -132,6 +134,11 @@ function Stepper({ etapeId, onGo, completion, lang }) {
         { id: 'environnementale', label: lang === 'fr' ? 'Environnement' : 'Environment' },
         { id: 'politique', label: lang === 'fr' ? 'Politique' : 'Policy' },
       ],
+    },
+    {
+      id: 'impact',
+      title: lang === 'fr' ? 'IMPACT' : 'IMPACT',
+      steps: [{ id: 'impact', label: lang === 'fr' ? 'Impact par dimension' : 'Impact by dimension' }],
     },
     {
       id: 'preuve',
@@ -241,8 +248,8 @@ export default function Home() {
   const isLastFormStep = etapeId==='preuves'
   const showPrint = etapeId==='rapport'
   const isValuePhase = ['investissement','scientifique','sociale','environnementale','politique'].includes(etapeId)
+  const isImpactPhase = etapeId==='impact'
   const isEvidencePhase = etapeId==='preuves'
-  const isImpactPhase = etapeId==='resultats'
 
   // ── Rendu de l'étape ────────────────────────────────────────────
   const renderStep = () => {
@@ -255,6 +262,7 @@ export default function Home() {
       case 'sociale':         return <StepSociale data={d.sociale||{}} onChange={fn('sociale')} lang={lang}/>
       case 'environnementale':return <StepEnvironnementale data={d.environnementale||{}} onChange={fn('environnementale')} lang={lang}/>
       case 'politique':       return <StepPolitique data={d.politique||{}} onChange={fn('politique')} lang={lang}/>
+      case 'impact':          return <StepImpact data={d.impact||{}} onChange={fn('impact')} lang={lang}/>
       case 'preuves':         return <StepPreuves data={d.preuves||{}} onChange={fn('preuves')} lang={lang}/>
       case 'resultats':       return <Dashboard resultats={resultats} lang={lang}/>
       case 'rapport':         return <RapportPrint resultats={resultats} lang={lang}/>
