@@ -283,20 +283,22 @@ textarea {
   border-radius: 1rem;
   box-shadow: var(--ceq-shadow);
   margin-bottom: 1rem;
-  overflow: hidden;
+  overflow-x: auto;
   padding: 0.62rem;
 }
 
 .stepper-grid {
-  display: grid;
+  display: flex;
   gap: 0.7rem;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  min-width: 760px;
 }
 
 .stepper-block {
   background: #edf3f6;
   border: 1px solid var(--ceq-line);
   border-radius: 0.8rem;
+  flex: 1 1 0;
+  min-width: 150px;
   padding: 0.55rem 0.5rem 0.45rem;
   transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
 }
@@ -383,25 +385,19 @@ textarea {
   transition: width 350ms ease;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 900px) {
   .stepper-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    min-width: 640px;
   }
 }
 
-@media (max-width: 720px) {
-  .stepper-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 520px) {
+@media (max-width: 640px) {
   .stepper-shell {
     padding: 0.5rem;
   }
 
   .stepper-grid {
-    grid-template-columns: 1fr;
+    min-width: 560px;
   }
 }
 
