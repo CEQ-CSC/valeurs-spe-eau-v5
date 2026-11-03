@@ -118,78 +118,46 @@ function Header({ lang, onToggle }) {
 
 // ── Stepper ────────────────────────────────────────────────────────
 function Stepper({ etapeId, onGo, completion, lang }) {
-  const blocks = [
-    {
-      id: 'projet',
-      title: 'PROJET',
-      steps: [{ id: 'info', label: lang === 'fr' ? 'Informations' : 'Information' }],
-    },
-    {
-      id: 'valeur',
-      title: 'VALEUR',
-      steps: [
-        { id: 'investissement', label: lang === 'fr' ? 'Économie' : 'Economy' },
-        { id: 'scientifique', label: lang === 'fr' ? 'Science' : 'Science' },
-        { id: 'sociale', label: lang === 'fr' ? 'Social' : 'Social' },
-        { id: 'environnementale', label: lang === 'fr' ? 'Environnement' : 'Environment' },
-        { id: 'politique', label: lang === 'fr' ? 'Politique' : 'Policy' },
-      ],
-    },
-    {
-      id: 'impact',
-      title: lang === 'fr' ? 'IMPACT' : 'IMPACT',
-      steps: [{ id: 'impact', label: lang === 'fr' ? 'Impact par dimension' : 'Impact by dimension' }],
-    },
-    {
-      id: 'preuve',
-      title: lang === 'fr' ? 'QUALITÉ DE L’ÉVIDENCE' : 'QUALITY OF EVIDENCE',
-      steps: [{ id: 'preuves', label: lang === 'fr' ? 'Preuves' : 'Evidence' }],
-    },
-    {
-      id: 'synthese',
-      title: lang === 'fr' ? 'SYNTHÈSE GLOBALE' : 'GLOBAL SYNTHESIS',
-      steps: [
-        { id: 'resultats', label: lang === 'fr' ? 'Synthèse' : 'Summary' },
-        { id: 'rapport', label: lang === 'fr' ? 'Rapport' : 'Report' },
-        { id: 'reseau', label: lang === 'fr' ? 'Réseau provincial' : 'Provincial network' },
-      ],
-    },
-  ]
+  const labels = {
+    info: lang === 'fr' ? 'Informations du projet' : 'Project information',
+    investissement: lang === 'fr' ? 'Valeur économique' : 'Economic value',
+    scientifique: lang === 'fr' ? 'Valeur scientifique' : 'Scientific value',
+    sociale: lang === 'fr' ? 'Valeur sociale' : 'Social value',
+    environnementale: lang === 'fr' ? 'Valeur environnementale' : 'Environmental value',
+    politique: lang === 'fr' ? 'Valeur politique' : 'Policy value',
+    impact: lang === 'fr' ? 'Impact et synthèse' : 'Impact and synthesis',
+    preuves: lang === 'fr' ? 'Qualité de l’évidence' : 'Evidence quality',
+    resultats: lang === 'fr' ? 'Synthèse globale' : 'Global synthesis',
+    rapport: lang === 'fr' ? 'Rapport' : 'Report',
+    reseau: lang === 'fr' ? 'Réseau provincial' : 'Provincial network',
+  }
 
   return (
     <nav className="stepper-shell no-print" aria-label={lang === 'fr' ? 'Étapes de l’évaluation' : 'Assessment steps'}>
       <div className="stepper-grid">
-        {blocks.map((block) => {
-          const activeStep = block.steps.some((s) => s.id === etapeId)
+        {ETAPES.map((step) => {
+          const isActive = step.id === etapeId
+          const pct = completion[step.id] ?? 0
+          const isDone = pct >= 80 || ETAPES.findIndex(item => item.id === etapeId) > ETAPES.findIndex(item => item.id === step.id)
+          const IconComponent = step.icon || Droplets
+
           return (
-            <div key={block.id} className={`stepper-block ${activeStep ? 'active' : ''}`}>
-              <div className="stepper-block-header">{block.title}</div>
-              <div className="stepper-block-actions">
-                {block.steps.map((step) => {
-                  const current = ETAPES.find((item) => item.id === step.id)
-                  const pct = completion[step.id] ?? 0
-                  const isActive = step.id === etapeId
-                  const isDone = pct >= 80
-                  const IconComponent = current?.icon || Droplets
-                  return (
-                    <button
-                      key={step.id}
-                      type="button"
-                      onClick={() => onGo(step.id)}
-                      aria-current={isActive ? 'step' : undefined}
-                      className={`stepper-chip ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}`}
-                      title={lang === 'fr' ? current?.fr : current?.en}
-                    >
-                      <IconComponent className="stepper-icon" aria-hidden="true" />
-                      <span className="stepper-label">{step.label}</span>
-                      <span className="stepper-progress" aria-hidden="true">
-                        <span style={{ width: `${pct}%` }} />
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
+            <button
+              key={step.id}
+              type="button"
+              onClick={() => onGo(step.id)}
+              aria-current={isActive ? 'step' : undefined}
+              className={`stepper-item ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}`}
+              title={lang === 'fr' ? step.fr : step.en}
+            >
+              <span className="stepper-item-top">
+                <IconComponent className="stepper-icon" aria-hidden="true" />
+              </span>
+              <span className="stepper-item-label">{labels[step.id]}</span>
+              <span className="stepper-progress" aria-hidden="true">
+                <span style={{ width: `${pct}%` }} />
+              </span>
+            </button>
           )
         })}
       </div>
